@@ -17,7 +17,8 @@ export type Match = {
     sides?: Side[],
     matchStatus?: string, // Meant for statuses like 'Cancelled' | 'Scheduled' | '19.05.2022 18:30'
     isLive?: boolean,
-    isBronzeMatch?: boolean,
+    prediction: string,
+    result: string,
 }
 
 type Score = {
@@ -28,7 +29,7 @@ type Score = {
 
 // Side is a match-specific data for contestant: his id, his scores ...
 export type Side = {
-    title?: string,
+    team?: string,
     contestantId?: string,
     scores?: Score[],
 
@@ -37,8 +38,7 @@ export type Side = {
         is surrounded by border and is higlighted with green if match 'isLive'
     */
     currentScore?: number | string,
-    isServing?: boolean, // (for tennis) If 'true', a tennis ball icon will be drawn on the very left of a side
-    isWinner?: boolean
+    isWinner?: boolean,
 }
 
 // Contestant is an individual player OR an array of individual players (e.g., single tennis player or double tennis team)
