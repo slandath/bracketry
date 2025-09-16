@@ -8,13 +8,12 @@
   "module": "dist/esm/index.js",
   "mode": "production",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "vite preview",
-    "test": "jest --passWithNoTests",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "test": "jest --silent",
+    "cypress": "npx cypress run",
+    "btest": "rollup -c && jest --silent",
+    "build": "rollup -c",
+    "start": "http-server -p 3000",
+    "watch": "rollup -c --watch"
   },
   "repository": {
     "type": "git",
