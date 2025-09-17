@@ -1,4 +1,4 @@
-# [bracketry](https://sbachinin.github.io/bracketry-site) &middot; [![test workflow](https://github.com/sbachinin/bracketry/actions/workflows/main.yml/badge.svg)](https://github.com/sbachinin/bracketry/actions/) [![npm](https://img.shields.io/npm/v/bracketry.svg?style=flat-square)](https://www.npmjs.com/package/bracketry) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/sbachinin/bracketry/blob/main/LICENSE.md)
+[![test workflow](https://github.com/slandath/bracketry/actions/workflows/main.yml/badge.svg)](https://github.com/slandath/bracketry/actions/)[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/sbachinin/bracketry/blob/main/LICENSE.md)
 
 JavaScript library that takes your data and draws the tree of a knockout tournament in the browser. Suitable (hopefully) for any kind of sport
 
