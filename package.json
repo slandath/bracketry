@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "start": "vite preview",
     "test": "jest --silent",
+    "test:file": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },

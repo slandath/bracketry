@@ -1,0 +1,123 @@
+📌 CONTEXT PROMPT FOR NEXT CHAT
+
+
+I am Tom, a web developer/project manager working on a fork of the open‑source project Bracketry.
+
+
+- Upstream Bracketry is a library for rendering tournament brackets, built with Rollup and published to npm.
+
+- I forked it and am converting it into my own standalone app (for predicting sports brackets & scoring them).
+
+- I no longer want to treat it as a library (no Rollup, no dist builds, no npm publish). Instead:
+	- Use Vite as the dev/build tool.
+
+	- Use ESM (ECMAScript Modules) everywhere (import/export), no CommonJS.
+
+	- Keep Jest only for lightweight logic/unit testing.
+
+	- Use Cypress for real browser E2E tests (style/layout checks, user UI workflows).
+
+
+- The app should support predictions vs results, display correct/wrong picks, and calculate a scoring system.
+
+
+---
+
+✅ Work Already Done
+
+- Package.json cleanup: removed Rollup/exports stuff, added Vite + React + Jest 29 + ts-jest + Cypress.
+
+- Dist removal: deleted dist/, created index.js at root to re‑export from lib/lib.mjs, tests point there.
+
+- Jest config fixed for ESM:
+	- preset: ts-jest/presets/default-esm
+
+	- useESM: true
+
+	- testEnvironment: 'jsdom'
+
+	- mocks for styles with __mocks__/styleMock.js (export default {})
+
+
+- Setup file (setupTests.js): added ResizeObserver polyfill, matchMedia mock, imports from @jest/globals.
+
+- Tests migrated to ESM:
+	- Converted one test file (data.test.js) completely to ESM and passing.
+
+	- Converted tests/utils.js to ESM exports.
+
+
+- deep_clone_object: replaced unsafe new obj.constructor() version with a JSON‑safe clone or recursive plain JS clone.
+
+- All 37 tests now run under Jest, but need systematic CJS → ESM migration and cleanup.
+
+- Discovered some failing tests that check CSS styles (height: 0px) — these fail in Jest/jsdom because stylesheets are mocked and layout isn’t computed. These should be migrated to Cypress if still needed.
+
+
+---
+
+🎯 Goals
+
+1. Finalize Package Structure Cleanup
+	- No references to dist/.
+
+	- Only vite, react, jest, cypress setup.
+
+
+2. Migrate Tests to ESM
+	- Convert ~37 test files from require/exports → import/export.
+
+	- Add explicit imports from @jest/globals for jest, test, expect, etc.
+
+	- Drop or rewrite tests that only check style/layout → move to Cypress.
+
+
+3. Refocus Tests on App Goals
+	- Jest: unit tests for scoring, prediction vs result logic, data normalization.
+
+	- Cypress: UI flow, CSS/visual verification.
+
+
+4. Refactor Bracketry for App Use
+	- Add prediction/result support in match data.
+
+	- Display correctness in bracket.
+
+	- Implement scoring rules (e.g. 1/2/4/8 points per round).
+
+	- Customize for basketball & other sports.
+
+
+5. Modern project setup
+	- Dev via npm run dev (Vite).
+
+	- Tests via npm test (Jest).
+
+	- CI with GitHub Actions (runs Jest + Cypress).
+
+
+
+---
+
+🚀 Where We Are Now
+
+- Environment is working: Vite dev server, Jest (ESM mode), Cypress in CI.
+
+- One test suite (data.test.js) fully migrated and passing.
+
+- Remaining ~36 tests need ESM conversion and cleanup.
+
+- Style/layout testing strategy needs to be shifted from Jest to Cypress.
+
+
+---
+
+👉 Use this prompt to continue helping me:
+
+- Give me guidance on systematically migrating the rest of the tests to ESM.
+
+- Help me design new unit tests focused on predictions, results, and scoring.
+
+- Suggest ways to simplify/replace or move legacy style/layout checks into Cypress.
+
+- Keep me on track with my app goals, not falling back into old library logic.
