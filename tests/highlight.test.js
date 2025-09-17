@@ -1,10 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-
-global.ResizeObserver = require('resize-observer-polyfill')
-const finished_ucl = require('./data/ucl-finished.js').default
-const { deep_clone_object, create_wrapper, init } = require('./utils.js')
+import { test, expect } from '@jest/globals';
+import finished_ucl from './data/ucl-finished.js'
+import { init, deep_clone_object, create_wrapper } from './utils.js'
+import ResizeObserver from 'resize-observer-polyfill'
+global.ResizeObserver = ResizeObserver
 
 
 test(`highlights team history (add "highlighted" class to .match-wrapper and .side-wrapper)`, () => {

@@ -2,10 +2,11 @@
  * @jest-environment jsdom
  */
 
-global.ResizeObserver = require('resize-observer-polyfill')
-const finished_ucl = require('./data/ucl-finished.js').default
-const { deep_clone_object, init } = require('./utils.js')
-
+import { test, expect } from '@jest/globals';
+import { init, deep_clone_object } from './utils.js';
+import finished_ucl from './data/ucl-finished.js';
+import ResizeObserver from 'resize-observer-polyfill';
+global.ResizeObserver = ResizeObserver;
 
 test(`draws new data supplied via replaceData`, () => {
     const { wrapper, bracket } = init(finished_ucl)

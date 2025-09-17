@@ -1,11 +1,12 @@
 /**
  * @jest-environment jsdom
  */
-
-global.ResizeObserver = require('resize-observer-polyfill')
-const { init } = require('./utils.js')
-const { createBracket } = require('../dist/cjs/index.js')
-const finished_ucl = require('./data/ucl-finished.js').default
+import { jest, test, expect } from '@jest/globals';
+import { createBracket } from '../index.js'
+import finished_ucl from './data/ucl-finished.js'
+import { init } from './utils.js'
+import ResizeObserver from 'resize-observer-polyfill'
+global.ResizeObserver = ResizeObserver
 
 
 test(`uninstalls old bracket when new bracket is installed into the same wrapper`, () => {

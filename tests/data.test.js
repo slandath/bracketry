@@ -1,11 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-
-global.ResizeObserver = require('resize-observer-polyfill')
-const finished_ucl = require('./data/ucl-finished.js').default
-const { init, deep_clone_object } = require('./utils.js')
-
+import finished_ucl from './data/ucl-finished.js'
+import { init, deep_clone_object } from './utils.js'
+import ResizeObserver from 'resize-observer-polyfill'
+global.ResizeObserver = ResizeObserver
 
 test(`does not mutate data which wass passed to createBracket`, () => {
     const cloned_ucl = deep_clone_object(finished_ucl)

@@ -1,4 +1,4 @@
-exports.default = {
+export default {
     "rounds": [
         {
             "name": "Round of 16"
