@@ -1,10 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-
-global.ResizeObserver = require('resize-observer-polyfill')
-const { init } = require('./utils.js')
-const finished_ucl = require('./data/ucl-finished.js').default
+import { jest, test, expect, afterEach } from '@jest/globals';
+import { init } from "./utils.js"
+import finished_ucl from './data/ucl-finished.js'
+import ResizeObserver from 'resize-observer-polyfill';
+global.ResizeObserver = ResizeObserver;
 
 const consoleWarn = jest.spyOn(console, 'warn')
 afterEach(jest.clearAllMocks)

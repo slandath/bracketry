@@ -1,9 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-
-global.ResizeObserver = require('resize-observer-polyfill')
-const { init } = require('./utils.js')
+import { test, expect } from '@jest/globals';
+import { init } from './utils.js'
+import ResizeObserver from 'resize-observer-polyfill'
+global.ResizeObserver = ResizeObserver
 
 test('renders what possible when non-string name is provided for a round', () => {
     expect.assertions(1)

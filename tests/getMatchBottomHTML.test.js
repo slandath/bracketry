@@ -1,9 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-
-global.ResizeObserver = require('resize-observer-polyfill')
-const { init } = require('./utils.js')
+import { jest, test, expect } from '@jest/globals';
+import { init } from './utils.js'
+import ResizeObserver from 'resize-observer-polyfill'
+global.ResizeObserver = ResizeObserver
 
 test(`if getMatchBottomHTML returns a string, a .match-bottom element is rendered with this string`, () => {
 
