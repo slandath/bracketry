@@ -2,9 +2,11 @@
  * @jest-environment jsdom
  */
 
-global.ResizeObserver = require('resize-observer-polyfill')
-const { init } = require('./utils.js')
-const finished_ucl = require('./data/ucl-finished.js').default
+import { jest, test, expect } from '@jest/globals';
+import { init } from './utils.js';
+import finished_ucl from './data/ucl-finished.js';
+import ResizeObserver from 'resize-observer-polyfill';
+global.ResizeObserver = ResizeObserver;
 
 
 test('calls onMatchSideClick when .side-wrapper is clicked', () => {
