@@ -1,6 +1,8 @@
 // 1. Import @jest/globals helpers (in ESM you need this for jest.fn, etc.)
 import { jest } from '@jest/globals';
 
+console.log('✅ setupTests.js loaded');
+
 // 2. Polyfill window.matchMedia (JSDOM doesn’t provide it)
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
