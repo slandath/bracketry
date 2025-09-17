@@ -213,34 +213,6 @@ test(`renders no .single-score-wrapper for various invalid score entries`, () =>
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // SUBSCORE
 
 test(`renders no subscore if no mainScore`, () => {
