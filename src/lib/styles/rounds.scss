@@ -283,8 +283,31 @@
         color: var(--highlightedPlayerTitleColor);
       }
     }
+    &.predicted {
+      border-left: 3px solid #999;
+    }
+    &.predicted-correct {
+      border-left-color: #2e7d32;
+      .player-title {
+        color: #2e7d32;
+        font-weight: 600;
+      }
+    }
+    &.predicted-incorrect {
+      border-left-color: #c62828;
+    }
 
-    &.looser:not(.highlighted) .player-title,
+    &.looser:not(.highlighted),
+    &.looser.predicted,
+    &.looser.predicted-correct {
+      .player-title {
+        opacity: 0.54;
+        text-decoration: line-through;
+        color: #999; // overrides green prediction color
+        font-weight: normal; // cancels bold from predicted-correct
+      }
+    }
+
     & .single-score-wrapper:not(.winner) {
       opacity: 0.54;
     }
