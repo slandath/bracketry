@@ -293,32 +293,7 @@ export const get_match_element = (
   if (body) {
     match_wrapper_element.prepend(body);
   }
-
-  // add prediction/result as sibling under .match-wrapper (not inside match-body)
-  if (
-    maybe_match_data &&
-    ((typeof maybe_match_data.prediction === 'string' &&
-      maybe_match_data.prediction.length) ||
-      (typeof maybe_match_data.result === 'string' &&
-        maybe_match_data.result.length))
-  ) {
-    const extraEl = create_element_from_Html(`
-      <div class="match-extra">
-        ${
-          maybe_match_data.prediction
-            ? `<div class="prediction">Prediction: ${maybe_match_data.prediction}</div>`
-            : ''
-        }
-        ${
-          maybe_match_data.result
-            ? `<div class="result">Result: ${maybe_match_data.result}</div>`
-            : ''
-        }
-      </div>
-    `);
-    match_wrapper_element.append(extraEl);
-  }
-
+  
   if (maybe_match_data.prediction && maybe_match_data.result) {
     if (maybe_match_data.prediction === maybe_match_data.result) {
       match_wrapper_element.classList.add('result-correct');
