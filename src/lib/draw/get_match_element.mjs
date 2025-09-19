@@ -46,6 +46,7 @@ const get_side_html = (match, side_index, all_data, get_option) => {
   let empty_class = '';
   let looser_class = '';
   let winner_class = '';
+  let predicted_class = '';
   let contestantId = '';
   let entry_status = '';
   let players_html = '';
@@ -55,7 +56,6 @@ const get_side_html = (match, side_index, all_data, get_option) => {
   let transparent_serving_class = 'transparent';
 
   if (is_non_empty_object(this_side)) {
-
     if (this_side.isWinner === true) {
       winner_class = 'winner';
     } else if (
@@ -63,6 +63,24 @@ const get_side_html = (match, side_index, all_data, get_option) => {
       this_side.contestantId === match.result
     ) {
       winner_class = 'winner';
+    }
+
+    if (
+      typeof match.prediction === 'string' &&
+      this_side.contestantId === match.prediction
+    ) {
+      if (
+        typeof match.result === 'string' &&
+        match.result === match.prediction
+      ) {
+        predicted_class = 'predicted predicted-correct';
+      } else if (
+        typeof match.result === 'string' && this_side.contestantId !== match.result
+      ) {
+        predicted_class = 'predicted predicted-incorrect';
+      } else {
+        predicted_class = 'predicted';
+      }
     }
 
     if (typeof this_side.contestantId === 'string') {
@@ -127,14 +145,15 @@ const get_side_html = (match, side_index, all_data, get_option) => {
     empty_class = 'empty-side';
   }
 
-  if (other_side) {
-    if (other_side.isWinner === true) {
+  if (
+    other_side.isWinner === true || (
+      typeof match.result === 'string' && other_side.contestantId === match.result)
+    ) {
       looser_class = 'looser';
     }
-  }
 
   return `
-        <div class="side-wrapper ${empty_class} ${looser_class} ${winner_class}"  ${contestantId}>
+        <div class="side-wrapper ${empty_class} ${looser_class} ${winner_class} ${predicted_class}"  ${contestantId}>
             <div class="side-info-item entry-status">${entry_status}</div>
             <div class="side-info-item players-info">${players_html}</div>
             <div class="side-info-item winner-mark">${checkmark_svg}</div>
@@ -274,32 +293,7 @@ export const get_match_element = (
   if (body) {
     match_wrapper_element.prepend(body);
   }
-
-  // add prediction/result as sibling under .match-wrapper (not inside match-body)
-  if (
-    maybe_match_data &&
-    ((typeof maybe_match_data.prediction === 'string' &&
-      maybe_match_data.prediction.length) ||
-      (typeof maybe_match_data.result === 'string' &&
-        maybe_match_data.result.length))
-  ) {
-    const extraEl = create_element_from_Html(`
-      <div class="match-extra">
-        ${
-          maybe_match_data.prediction
-            ? `<div class="prediction">Prediction: ${maybe_match_data.prediction}</div>`
-            : ''
-        }
-        ${
-          maybe_match_data.result
-            ? `<div class="result">Result: ${maybe_match_data.result}</div>`
-            : ''
-        }
-      </div>
-    `);
-    match_wrapper_element.append(extraEl);
-  }
-
+  
   if (maybe_match_data.prediction && maybe_match_data.result) {
     if (maybe_match_data.prediction === maybe_match_data.result) {
       match_wrapper_element.classList.add('result-correct');
