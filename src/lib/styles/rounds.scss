@@ -1,0 +1,459 @@
+.bracket-root {
+  .round-wrapper {
+    position: relative;
+    display: grid;
+    grid-auto-rows: minmax(0, 1fr);
+    align-items: stretch;
+    min-width: 180px;
+    max-width: 100%;
+
+    &:first-of-type .match-lines-area {
+      /* reduce the connection lines of marginal rounds to indicate that they are marginal  */
+      left: var(--matchHorMargin);
+    }
+
+    &:last-of-type {
+      .match-lines-area {
+        right: var(--matchHorMargin);
+      }
+    }
+
+    &.collapsed {
+      visibility: hidden;
+    }
+  }
+
+  .matches-positioner.is-scrolling * {
+    cursor: auto !important;
+  }
+
+  .bronze-round-wrapper {
+    display: flex;
+    overflow: hidden;
+
+    .pseudo-round-wrapper {
+      display: grid;
+      grid-auto-rows: minmax(0, 1fr);
+
+      /* to make its horizontal line appear on top of next vertical lines */
+      z-index: 2;
+
+      .match-wrapper {
+        padding: 0;
+      }
+
+      &:first-child {
+        width: calc(var(--matchHorMargin) * 1.2);
+        min-width: 0;
+
+        .match-wrapper {
+          padding: 0;
+
+          .match-lines-area {
+            left: 0;
+            width: 100%;
+
+            .line-wrapper {
+              box-shadow: none;
+            }
+          }
+        }
+      }
+    }
+
+    .round-wrapper {
+      flex: 1;
+
+      .match-wrapper {
+        padding-left: calc(var(--matchHorMargin) * 0.3);
+
+        &.even {
+          align-self: end;
+          padding-top: var(--matchMinVerticalGap);
+          padding-bottom: var(--matchMinVerticalGap);
+        }
+
+        &.odd {
+          align-self: start;
+          padding-top: calc(
+            var(--matchMinVerticalGap) + var(--matchFontSize) * 1.5
+          );
+          padding-bottom: calc(
+            var(--matchMinVerticalGap) + var(--matchFontSize) * 1.5
+          );
+        }
+
+        &.odd .line-wrapper.upper,
+        &.even .line-wrapper.lower {
+          box-shadow: calc(var(--connectionLinesWidth) * -1) 0px 0px 0px;
+        }
+
+        &.highlighted .line-wrapper {
+          /* SHIT. It's to override the .last-highlighted style which tells not to highlight */
+          color: var(--highlightedConnectionLinesColor);
+        }
+      }
+    }
+    --matchMaxWidth: 220px;
+  }
+
+  .match-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: calc(var(--matchMinVerticalGap) / 2) var(--matchHorMargin);
+
+    &.odd .line-wrapper.upper {
+      box-shadow: var(--connectionLinesWidth) 0px 0px 0px;
+      border-bottom: var(--connectionLinesWidth) solid
+        var(--connectionLinesColor);
+    }
+
+    &.even .line-wrapper.lower {
+      box-shadow: var(--connectionLinesWidth) 0px 0px 0px;
+      border-top: var(--connectionLinesWidth) solid var(--connectionLinesColor);
+    }
+
+    &.highlighted {
+      .match-status {
+        border-color: var(--highlightedConnectionLinesColor);
+      }
+
+      .match-lines-area .line-wrapper {
+        /* for box-shadow color, not text */
+        color: var(--highlightedConnectionLinesColor);
+        border-color: var(--highlightedConnectionLinesColor);
+      }
+    }
+
+    &.last-highlighted {
+      .match-lines-area .line-wrapper {
+        color: var(--connectionLinesColor);
+      }
+    }
+    .match-extra {
+      text-align: center;
+      margin-top: 0.25rem;
+
+      .prediction {
+        font-size: calc(var(--matchFontSize) * 0.7);
+        color: #555;
+      }
+
+      .result {
+        font-size: calc(var(--matchFontSize) * 0.8);
+        font-weight: bold;
+        margin-top: 0.15rem;
+        color: #2a6;
+      }
+    }
+
+    &.result-incorrect .match-extra .result {
+      color: #d33; // red for incorrect predictions
+    }
+  }
+
+  .match-status {
+    display: flex;
+    z-index: 2;
+    align-self: center;
+    transition: border-color 0.1s ease-out;
+
+    font-size: calc(var(--matchFontSize) * 0.85);
+    padding: calc(var(--matchFontSize) / 6) calc(var(--matchFontSize) / 2);
+    margin: 0 calc(var(--matchFontSize) / 2);
+    border-width: var(--connectionLinesWidth);
+    border-style: solid;
+    border-color: var(--connectionLinesColor);
+    /* "fallback" color if background option is invalid: */
+    background: #fff;
+    box-shadow: 0 0 0 1000px var(--matchStatusBgColor) inset;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .match-body {
+    display: flex;
+    width: 100%;
+    max-width: var(--matchMaxWidth);
+    justify-content: center;
+    z-index: 2;
+
+    transition: border-color 0.1s ease-out;
+    pointer-events: auto;
+
+    border-width: var(--connectionLinesWidth, 2);
+    border-style: solid;
+    border-color: transparent;
+    position: relative;
+
+    &:empty {
+      /* otherwise, when onMatchClick is set, a border will appear around an empty match :hover */
+      pointer-events: none;
+    }
+
+    .sides {
+      flex: 1;
+      display: grid;
+      /* two sides will always be of same height */
+      grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
+      grid-row-gap: var(--connectionLinesWidth);
+    }
+
+    &.live:not(:empty) {
+      border-color: var(--liveMatchBorderColor, var(--rootBorderColor));
+      background-color: var(--liveMatchBgColor);
+
+      .current-score {
+        border-color: var(--liveMatchBorderColor, var(--rootBorderColor));
+      }
+    }
+  }
+
+  .match-top,
+  .match-bottom {
+    position: absolute;
+    left: 0;
+    color: #c1c1c1;
+    padding-left: calc(var(--matchFontSize) / 2);
+    font-size: calc(var(--matchFontSize) * 0.7);
+    width: 100%;
+  }
+
+  .match-top {
+    bottom: calc(100% + var(--connectionLinesWidth) + 1px);
+  }
+
+  .match-bottom {
+    top: calc(100% + var(--connectionLinesWidth) + 1px);
+  }
+
+  .match-lines-area {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    z-index: 1;
+
+    .line-wrapper {
+      /* each of 2 empty guys takes 50% height */
+      flex: 1;
+      transition: color 0.1s ease-out, border-color 0.1s ease-out;
+      /* for box-shadow color, not text */
+      color: var(--connectionLinesColor);
+    }
+  }
+
+  .matches-positioner > .round-wrapper:last-of-type .line-wrapper {
+    /* do not show right vertical line for last round */
+    color: transparent;
+  }
+
+  .side-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    pointer-events: auto;
+
+    padding-top: var(--matchAxisMargin);
+    padding-bottom: var(--matchAxisMargin);
+    padding-right: calc(var(--matchFontSize) / 3 * 2);
+    padding-left: calc(var(--matchFontSize) / 2);
+    /* defined at this depth because on upper levels color property is used for box-shadow tricks */
+    color: var(--matchTextColor);
+
+    &.empty-side,
+    &:not([contestant-id]) {
+      pointer-events: none;
+    }
+
+    &.highlighted {
+      .player-title {
+        color: var(--highlightedPlayerTitleColor);
+      }
+    }
+
+    &.looser:not(.highlighted) .player-title,
+    & .single-score-wrapper:not(.winner) {
+      opacity: 0.54;
+    }
+
+    &:not(.winner) .winner-mark {
+      display: none;
+    }
+  }
+
+  .side-info-item {
+    display: grid;
+    /* equal height rows */
+    grid-auto-rows: minmax(0, 1fr);
+    grid-template-columns: auto;
+    align-items: center;
+
+    * {
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    &.serving-mark {
+      width: calc(var(--matchFontSize) / 2.5);
+      height: calc(var(--matchFontSize) / 2.5);
+      margin-left: calc(var(--distanceBetweenScorePairs) * 0.8);
+      border-radius: 50%;
+      background-color: #b7cf15;
+
+      &.hidden {
+        display: none;
+      }
+
+      &.transparent {
+        opacity: 0;
+      }
+    }
+
+    &.side-scores {
+      grid-auto-flow: column;
+      font-family: var(--scoreFontFamily, var(--rootFontFamily));
+      grid-column-gap: var(--distanceBetweenScorePairs);
+    }
+
+    &.current-score {
+      border-width: 1px;
+      border-style: solid;
+      text-align: center;
+
+      border-color: var(--matchTextColor);
+      padding: 0 calc(var(--matchFontSize) / 3);
+      margin-left: calc(var(--distanceBetweenScorePairs) * 0.8);
+
+      &:empty {
+        display: none;
+      }
+    }
+
+    &.entry-status:not(:empty) {
+      margin-right: calc(var(--matchFontSize) / 2);
+    }
+
+    &.players-info {
+      flex: 1;
+      min-width: 0;
+      grid-row-gap: var(--oneSidePlayersGap);
+    }
+
+    &.winner-mark {
+      padding-right: var(--distanceBetweenScorePairs);
+
+      svg {
+        fill: var(--matchTextColor, #000000);
+      }
+    }
+  }
+
+  .player-wrapper {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+
+    .nationality {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+
+      &:not(:empty) {
+        margin-right: calc(var(--matchFontSize) / 2);
+      }
+    }
+
+    .player-title {
+      flex: 1;
+      transition: color 0.1s ease-out, opacity 0.1s ease-out;
+      text-align: left;
+      text-overflow: ellipsis;
+      /* it will make it shrink in case of narrow .player-wrapper */
+      min-width: 0;
+      overflow: hidden;
+      padding-right: calc(var(--matchFontSize) * 1.5);
+      font-family: var(--playerTitleFontFamily, var(--rootFontFamily));
+    }
+  }
+
+  .single-score-wrapper {
+    display: flex;
+    overflow: visible;
+    flex-direction: column;
+    align-items: center;
+
+    .side-own-single-score {
+      display: flex;
+    }
+
+    .opponent-single-score {
+      display: flex;
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  .subscore {
+    padding-left: 1px;
+    font-size: calc(var(--matchFontSize) / 3 * 2);
+    margin-top: calc(var(--matchFontSize) / 5 * -1);
+    margin-right: calc(var(--matchFontSize) / 5 * -1);
+  }
+
+  svg.default-winner-svg {
+    width: auto;
+    height: var(--matchFontSize);
+  }
+
+  // FEATURE STYLES
+
+  &.with-onMatchClick {
+    .match-body:not(:empty) {
+      cursor: pointer;
+
+      &:hover {
+        border-color: var(--hoveredMatchBorderColor, var(--rootBorderColor));
+
+        .player-title {
+          color: var(--highlightedPlayerTitleColor);
+        }
+      }
+
+      * {
+        /* handle click/hover only on whole body */
+        pointer-events: none;
+      }
+    }
+  }
+
+  &:not(.with-classical-layout) {
+    .round-wrapper.collapsed {
+      height: 0;
+      overflow: hidden;
+    }
+  }
+
+  &.with-clickable-sides {
+    .side-wrapper {
+      cursor: pointer;
+
+      &:hover .player-title {
+        color: var(--highlightedPlayerTitleColor);
+      }
+    }
+  }
+}

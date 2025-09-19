@@ -1,15 +1,10 @@
 import { create_element_from_Html, update_styles } from './utils.mjs'
-import buttons_styles from './styles/buttons.scss'
-import main_styles from './styles/main.scss'
-import rounds_styles from './styles/rounds.scss'
+import './styles/buttons.scss'
+import './styles/main.scss'
+import './styles/rounds.scss'
 
 
 export const create_html_shell = (user_wrapper_el) => {
-    update_styles(
-        'root',
-        'permanent-styles',
-        [buttons_styles, main_styles, rounds_styles].join('\n')
-    )
 
     const the_root_element = create_element_from_Html(`
         <div class="bracket-root">

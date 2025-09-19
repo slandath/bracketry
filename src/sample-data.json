@@ -1,0 +1,44 @@
+{
+  "rounds": [
+    {
+      "name": "Final"
+    }
+  ],
+  "matches": [
+    {
+      "roundIndex": 0,
+      "order": 0,
+      "sides": [
+        {
+          "contestantId": "163911",
+          "scores": [
+            {
+              "mainScore": "6",
+              "isWinner": true
+            }
+          ]
+        },
+        {
+          "contestantId": "163806",
+          "scores": [
+            {
+              "mainScore": "3"
+            }
+          ]
+        }
+      ],
+      "prediction": "163911",
+      "result": "163911"
+    }
+  ],
+  "contestants": {
+    "163911": {
+      "entryStatus": "1",
+      "players": [{ "title": "J. Sinners" }]
+    },
+    "163806": {
+      "entryStatus": "2",
+      "players": [{ "title": "C. Alcaraz" }]
+    }
+  }
+}
