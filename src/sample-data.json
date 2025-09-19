@@ -13,7 +13,7 @@
           "contestantId": "163911",
           "scores": [
             {
-              "mainScore": "3",
+              "mainScore": "6",
               "isWinner": true
             }
           ]
@@ -22,7 +22,7 @@
           "contestantId": "163806",
           "scores": [
             {
-              "mainScore": "0"
+              "mainScore": "3"
             }
           ]
         }
@@ -34,11 +34,11 @@
   "contestants": {
     "163911": {
       "entryStatus": "1",
-      "players": [{ "title": "Celtics" }]
+      "players": [{ "title": "J. Sinners" }]
     },
     "163806": {
-      "entryStatus": "4",
-      "players": [{ "title": "Lakers" }]
+      "entryStatus": "2",
+      "players": [{ "title": "C. Alcaraz" }]
     }
   }
 }
