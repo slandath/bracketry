@@ -26,7 +26,6 @@ export default function App() {
 
   return (
     <div>
-      <h1>March Madness Bracket</h1>
       {/* This div is where createBracket will render */}
       <div ref={bracketContainerRef} />
     </div>
