@@ -390,13 +390,20 @@
     min-width: 0;
     overflow: hidden;
 
-    .nationality {
+    .logo {
       display: flex;
       align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+      width: 24px; // or 16px, tweak how big you want them
+      height: 24px;
+      margin-right: calc(var(--matchFontSize) / 2);
 
-      &:not(:empty) {
-        margin-right: calc(var(--matchFontSize) / 2);
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
       }
     }
 
