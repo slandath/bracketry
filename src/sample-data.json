@@ -1,44 +1,169 @@
 {
   "rounds": [
-    {
-      "name": "Final"
-    }
+    { "name": "Quarterfinals" },
+    { "name": "Semifinals" },
+    { "name": "Finals" }
   ],
   "matches": [
     {
+      "id": "m1",
       "roundIndex": 0,
       "order": 0,
       "sides": [
         {
-          "contestantId": "163911",
-          "scores": [
-            {
-              "mainScore": "6",
-              "isWinner": true
-            }
-          ]
+          "team": { "id": "t1", "name": "Lions", "seed": 1 },
+          "score": 88,
+          "isWinner": true
         },
         {
-          "contestantId": "163806",
-          "scores": [
-            {
-              "mainScore": "3"
-            }
-          ]
+          "team": { "id": "t8", "name": "Bears", "seed": 8 },
+          "score": 72,
+          "isWinner": false
         }
       ],
-      "prediction": "163911",
-      "result": "163911"
-    }
-  ],
-  "contestants": {
-    "163911": {
-      "entryStatus": "1",
-      "players": [{ "title": "J. Sinners" }]
+      "matchStatus": "final",
+      "result": "t1",
+      "prediction": "t1"
     },
-    "163806": {
-      "entryStatus": "2",
-      "players": [{ "title": "C. Alcaraz" }]
+    {
+      "id": "m2",
+      "roundIndex": 0,
+      "order": 1,
+      "sides": [
+        {
+          "team": { "id": "t4", "name": "Hawks", "seed": 4 },
+          "score": 91,
+          "isWinner": false
+        },
+        {
+          "team": { "id": "t5", "name": "Wolves", "seed": 5 },
+          "score": 95,
+          "isWinner": true
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t5",
+      "prediction": "t4"
+    },
+    {
+      "id": "m3",
+      "roundIndex": 0,
+      "order": 2,
+      "sides": [
+        {
+          "team": { "id": "t3", "name": "Sharks", "seed": 3 },
+          "score": 86,
+          "isWinner": false
+        },
+        {
+          "team": { "id": "t6", "name": "Eagles", "seed": 6 },
+          "score": 90,
+          "isWinner": true
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t6",
+      "prediction": "t6"
+    },
+    {
+      "id": "m4",
+      "roundIndex": 0,
+      "order": 3,
+      "sides": [
+        {
+          "team": { "id": "t2", "name": "Tigers", "seed": 2 },
+          "score": 84,
+          "isWinner": true
+        },
+        {
+          "team": { "id": "t7", "name": "Falcons", "seed": 7 },
+          "score": 77,
+          "isWinner": false
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t2",
+      "prediction": "t2"
+    },
+    {
+      "id": "m5",
+      "roundIndex": 1,
+      "order": 0,
+      "sides": [
+        {
+          "team": { "id": "t1", "name": "Lions", "seed": 1 },
+          "score": 92,
+          "isWinner": true
+        },
+        {
+          "team": { "id": "t5", "name": "Wolves", "seed": 5 },
+          "score": 81,
+          "isWinner": false
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t1",
+      "prediction": "t1"
+    },
+    {
+      "id": "m6",
+      "roundIndex": 1,
+      "order": 1,
+      "sides": [
+        {
+          "team": { "id": "t6", "name": "Eagles", "seed": 6 },
+          "score": 89,
+          "isWinner": false
+        },
+        {
+          "team": { "id": "t2", "name": "Tigers", "seed": 2 },
+          "score": 94,
+          "isWinner": true
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t2",
+      "prediction": "t6"
+    },
+    {
+      "id": "m7",
+      "roundIndex": 2,
+      "order": 0,
+      "sides": [
+        {
+          "team": { "id": "t1", "name": "Lions", "seed": 1 },
+          "score": 101,
+          "isWinner": false
+        },
+        {
+          "team": { "id": "t2", "name": "Tigers", "seed": 2 },
+          "score": 108,
+          "isWinner": true
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t2",
+      "prediction": "t1"
+    },
+    {
+      "id": "m8",
+      "roundIndex": 3,
+      "order": 0,
+      "sides": [
+        {
+          "team": { "id": "t2", "name": "Tigers", "seed": 2 },
+          "score": 110,
+          "isWinner": true
+        },
+        {
+          "team": { "id": "t1", "name": "Lions", "seed": 1 },
+          "score": 102,
+          "isWinner": false
+        }
+      ],
+      "matchStatus": "final",
+      "result": "t2",
+      "prediction": "t1"
     }
-  }
+  ]
 }

@@ -3,4 +3,4 @@ dist/**/index.js
 dist/**/index.js.map
 writings/
 .DS_Store
-gpt.txt
+gpt.md
