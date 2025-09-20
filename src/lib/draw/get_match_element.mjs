@@ -11,14 +11,14 @@ const get_side_html = (match, side_index, all_data) => {
   const side = match.sides?.[side_index];
   const other = match.sides?.[side_index === 0 ? 1 : 0];
 
-  if (!side || !side.team) {
+  if (!side || !side.teamId) {
     return `<div class="side-wrapper empty-side"><span class="placeholder">TBD</span></div>`;
   }
 
-  const team =
-    all_data.teams?.[side.team.id] !== undefined
-      ? all_data.teams[side.team.id]
-      : side.team;
+  const team = all_data.teams?.[side.teamId];
+  if (!team) {
+    return `<div class="side-wrapper empty-side"><span class="placeholder">TBD</span></div>`;
+  }
 
   // CSS classes
   let winner_class = '';
@@ -47,7 +47,7 @@ const get_side_html = (match, side_index, all_data) => {
     ? `<img src="${team.logoUrl}" alt="${team.name} logo"/>`
     : '';
 
-  const title = `${team.seed}. ${team.name}`;
+  const title = `${team.seed} ${team.name}`;
   const score = side.score ?? '';
 
   return `

@@ -21,7 +21,7 @@ export type Match = {
 
 // Match-specific team context (score, winner flag, etc.)
 export type Side = {
-  team?: Team;   // undefined = slot not filled yet
+  teamId?: string;   // undefined = slot not filled yet
   score?: number;
   isWinner?: boolean;
 };

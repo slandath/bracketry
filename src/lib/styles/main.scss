@@ -1,186 +1,179 @@
 .stop-scrolling {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
-
-
-
-
 .bracket-root {
-    display: grid;
+  display: grid;
 
-    /* for default layout with navButtonsPosition === 'gutters': */
-    grid-template-columns: auto 1fr 1fr 0 auto;
-    grid-template-rows: auto auto auto 1fr auto;
-    min-width: 260px;
-    min-height: 250px;
+  /* for default layout with navButtonsPosition === 'gutters': */
+  grid-template-columns: auto 1fr 1fr 0 auto;
+  grid-template-rows: auto auto auto 1fr auto;
+  min-width: 260px;
+  min-height: 250px;
 
-    /* otherwise, if you set width option to "max-content", bracket will become non-responsive */
-    max-width: 100%;
-    
-    width: var(--width);
-    height: var(--height);
-    text-align: left;
-    border-width: 1px;
-    border-style: solid;
-    border-color: var(--wrapperBorderColor, var(--rootBorderColor));
+  /* otherwise, if you set width option to "max-content", bracket will become non-responsive */
+  max-width: 100%;
+
+  width: var(--width);
+  height: var(--height);
+  text-align: left;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--wrapperBorderColor, var(--rootBorderColor));
+  box-sizing: border-box;
+  font-family: var(--rootFontFamily);
+  background-color: var(--rootBgColor);
+
+  /* "SHIELD AGAINST EXTERNAL STYLES" */
+  * {
     box-sizing: border-box;
-    font-family: var(--rootFontFamily);
-    background-color: var(--rootBgColor);
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    border: none;
+    border-radius: 0;
+    align-content: unset;
+    align-items: unset;
+    align-self: unset;
+    bottom: unset;
+    top: unset;
+    left: unset;
+    right: unset;
+    box-shadow: none;
+    outline: none;
+    text-decoration: none;
+    white-space: initial;
+    line-height: initial;
+  }
 
-    /* "SHIELD AGAINST EXTERNAL STYLES" */
-    * {
-        box-sizing: border-box;
-        user-select: none;
-        margin: 0;
-        padding: 0;
-        width: auto;
-        height: auto;
-        border: none;
-        border-radius: 0;
-        align-content: unset;
-        align-items: unset;
-        align-self: unset;
-        bottom: unset;
-        top: unset;
-        left: unset;
-        right: unset;
-        box-shadow: none;
-        outline: none;
-        text-decoration: none;
-        white-space: initial;
-        line-height: initial;
+  .zero-width {
+    width: 0;
+  }
+
+  .full-width-grid-column {
+    /* (a column that takes full width of the parent grid el) */
+    grid-column: 1 / -1;
+  }
+
+  .equal-width-columns-grid {
+    /* all columns acquire the width of the widest column */
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  /* this wrapper was the only found solution to prevent overflow */
+  .round-titles-grid-item {
+    /* forbid round titles to stretch the main content: */
+    width: 0;
+    min-width: 100%;
+
+    grid-row: 2;
+    grid-column: 2 / span 2;
+    overflow: hidden;
+    padding-bottom: 1px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--roundTitlesBorderColor, var(--rootBorderColor));
+    /* box-sizing: content-box; */
+  }
+
+  .round-titles-wrapper {
+    height: 100%;
+    min-width: 100%;
+
+    font-size: var(--roundTitlesFontSize);
+    font-family: var(--roundTitlesFontFamily, var(--rootFontFamily));
+    color: var(--roundTitleColor);
+  }
+
+  .round-title {
+    padding: var(--roundTitlesVerticalPadding) var(--matchHorMargin);
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    white-space: nowrap;
+  }
+
+  .matches-scroller {
+    grid-column: 2 / span 2;
+    grid-row: 4;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    pointer-events: none;
+
+    /* hide scrollbar */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    &::-webkit-scrollbar {
+      display: none;
+      /* For Chrome, Safari, and Opera */
     }
+  }
 
-    .zero-width {
-        width: 0;
-    }
+  .matches-scroller.scroll-y-enabled {
+    pointer-events: auto;
+  }
 
-    .full-width-grid-column {
-        /* (a column that takes full width of the parent grid el) */
-        grid-column: 1 / -1;
-    }
+  .matches-positioner {
+    position: relative;
+    z-index: 2; // makes no sense but happens to mitigate the "Chromium scrolling lagginess when >1 brackets"
+    display: grid;
+    min-width: 100%;
+    min-height: 100%;
+    grid-template-rows: 100%;
+    overflow: hidden;
 
-    .equal-width-columns-grid {
-        /* all columns acquire the width of the widest column */
-        display: grid;
-        grid-auto-flow: column;
-        grid-auto-columns: minmax(0, 1fr);
-    }
+    padding: var(--mainVerticalPadding, 0) 0;
+    font-size: var(--matchFontSize);
+  }
 
-    /* this wrapper was the only found solution to prevent overflow */
-    .round-titles-grid-item {
+  .scrollbar-parent {
+    grid-column: 4;
+    grid-row: 4;
+    position: relative;
+    display: none;
+    z-index: 3;
+  }
 
-        /* forbid round titles to stretch the main content: */
-        width: 0;
-        min-width: 100%;
+  .scrollbar-overflow-preventer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: var(--scrollbarWidth);
+    overflow-y: hidden;
+  }
 
-        grid-row: 2;
-        grid-column: 2/span 2;
-        overflow: hidden;
-        padding-bottom: 1px;
-        border-bottom-width: 1px;
-        border-bottom-style: solid;
-        border-bottom-color: var(--roundTitlesBorderColor, var(--rootBorderColor));
-        /* box-sizing: content-box; */
-    }
+  .scrollbar {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    background: var(--scrollbarColor);
+  }
 
-    .round-titles-wrapper {
-        height: 100%;
-        min-width: 100%;
-
-
-        font-size: var(--roundTitlesFontSize);
-        font-family: var(--roundTitlesFontFamily, var(--rootFontFamily));
-        color: var(--roundTitleColor);
-    }
-
-    .round-title {
-        padding: var(--roundTitlesVerticalPadding) var(--matchHorMargin);
-        display: flex;
-        overflow: hidden;
-        justify-content: center;
-        white-space: nowrap;
-    }
-
-    .matches-scroller {
-        grid-column: 2/span 2;
-        grid-row: 4;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        pointer-events: none;
-
-        /* hide scrollbar */
-        scrollbar-width: none; /* For Firefox */
-        -ms-overflow-style: none; /* For Internet Explorer and Edge */
-        &::-webkit-scrollbar {
-            display: none;
-            /* For Chrome, Safari, and Opera */
-        }
-    }
-
-    .matches-scroller.scroll-y-enabled {
-        pointer-events: auto;
-    }
-
-    .matches-positioner {
-        position: relative;
-        z-index: 2; // makes no sense but happens to mitigate the "Chromium scrolling lagginess when >1 brackets"
-        display: grid;
-        min-width: 100%;
-        min-height: 100%;
-        grid-template-rows: 100%;
-        overflow: hidden;
-
-        padding: var(--mainVerticalPadding, 0) 0;
-        font-size: var(--matchFontSize);
-    }
-
+  &.with-visible-scrollbar {
     .scrollbar-parent {
-        grid-column: 4;
-        grid-row: 4;
-        position: relative;
-        display: none;
-        z-index: 3;
+      display: block;
     }
+  }
 
-    .scrollbar-overflow-preventer {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        width: var(--scrollbarWidth);
-        overflow-y: hidden;
+  &.with-native-scroll {
+    .matches-scroller.scroll-y-enabled {
+      overflow-y: scroll;
     }
+  }
 
-    .scrollbar {
-        position: absolute;
-        right: 0;
-        width: 100%;
-        background: var(--scrollbarColor);
+  &.with-vertical-scroll-buttons {
+    .matches-positioner {
+      // will-change: transform; // removed to mitigate chromium lagginess when >1 brackets
+
+      &.is-scrolling {
+        transition: transform var(--scroll-transition-duration) ease-out;
+      }
     }
-
-
-    &.with-visible-scrollbar {
-        .scrollbar-parent {
-            display: block;
-        }
-    }
-
-    &.with-native-scroll {
-        .matches-scroller.scroll-y-enabled {
-            overflow-y: scroll;
-        }
-    }
-
-    &.with-vertical-scroll-buttons {
-        .matches-positioner {
-            // will-change: transform; // removed to mitigate chromium lagginess when >1 brackets
-
-            &.is-scrolling {
-                transition: transform var(--scroll-transition-duration) ease-out;
-            }
-        }
-    }
+  }
 }
