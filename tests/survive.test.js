@@ -2,73 +2,66 @@
  * @jest-environment jsdom
  */
 
-import { test, expect } from '@jest/globals';
-import { init } from './utils.js';
-import finished_ucl from './data/ucl-finished.js';
-import ResizeObserver from 'resize-observer-polyfill';
+import { test, expect } from "@jest/globals";
+import { init } from "./utils.js";
+import finished_ucl from "./data/ucl-finished.js";
+import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
+test("survives non-object options", () => {
+  expect.assertions(1);
+  init({ rounds: [{}] }, null);
+  expect(true).toBe(true);
+});
 
-test('survives non-object options', () => {
-
-    expect.assertions(1)
-    init({ rounds: [{}] }, null)
-    expect(true).toBe(true)
-})
-
-
-test('survives non-existent options keys', () => {
-
-    expect.assertions(1)
-    init(
+test("survives non-existent options keys", () => {
+  expect.assertions(1);
+  init(
+    {
+      rounds: [{}],
+      matches: [
         {
-            rounds: [{}],
-            matches: [{
-                roundIndex: 0, order: 0,
-                sides: [{ contestantId: 'contestant1', scores: [] }]
-            }
-            ],
-            contestants: {
-                contestant1: { players: [{ title: 'Josh' }] }
-            }
+          roundIndex: 0,
+          order: 0,
+          sides: [{ contestantId: "contestant1", scores: [] }],
         },
-        { fsdfsd: false }
-    )
-    expect(true).toBe(true);
-})
+      ],
+      contestants: {
+        contestant1: { players: [{ title: "Josh" }] },
+      },
+    },
+    { fsdfsd: false },
+  );
+  expect(true).toBe(true);
+});
 
+test("returns the same set of functions if createBracket is called with invalid arguments", () => {
+  const { bracket: br1 } = init(finished_ucl);
 
-test('returns the same set of functions if createBracket is called with invalid arguments', () => {
+  const { bracket: br2 } = init("invalid data", "invalid options");
 
-    const { bracket: br1 } = init(finished_ucl)
+  expect(Object.keys(br1)).toEqual(Object.keys(br2));
 
-    const { bracket: br2 } = init('invalid data', 'invalid options')
+  const pl1_functions_count = Object.values(br1).filter(
+    (v) => typeof v === "function",
+  ).length;
+  const pl2_functions_count = Object.values(br2).filter(
+    (v) => typeof v === "function",
+  ).length;
+  expect(pl1_functions_count).toBe(pl2_functions_count);
+});
 
-    expect(Object.keys(br1)).toEqual(Object.keys(br2))
+test("returns the same set of functions if 0 rounds", () => {
+  const { bracket: br1 } = init(finished_ucl);
+  const { bracket: br2 } = init({ rounds: [] });
+  expect(Object.keys(br1)).toEqual(Object.keys(br2));
+});
 
-    const pl1_functions_count = Object.values(br1).filter(v => typeof v === 'function').length
-    const pl2_functions_count = Object.values(br2).filter(v => typeof v === 'function').length
-    expect(pl1_functions_count).toBe(pl2_functions_count)
-})
+test("after initialization has failed, returned functions may be called without unhandled errors", () => {
+  expect.assertions(2);
 
-
-test('returns the same set of functions if 0 rounds', () => {
-
-    const { bracket: br1 } = init(finished_ucl)
-    const { bracket: br2 } = init({ rounds: [] })
-    expect(Object.keys(br1)).toEqual(Object.keys(br2))
-})
-
-
-test('after initialization has failed, returned functions may be called without unhandled errors', () => {
-
-    expect.assertions(2)
-
-    const { bracket: br } = init(
-        'invalid data',
-        'invalid options'
-    )
-    Object.values(br).forEach(v => typeof v === 'function' && v())
-    expect(br.getAllData()).toBe('invalid data')
-    expect(br.getUserOptions()).toBe('invalid options')
-})
+  const { bracket: br } = init("invalid data", "invalid options");
+  Object.values(br).forEach((v) => typeof v === "function" && v());
+  expect(br.getAllData()).toBe("invalid data");
+  expect(br.getUserOptions()).toBe("invalid options");
+});

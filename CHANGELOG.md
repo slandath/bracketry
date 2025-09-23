@@ -28,4 +28,3 @@
 ### Changed
 
 - Add skippedLastRoundsCount option to render tournaments with missing last rounds
-

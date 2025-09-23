@@ -1,10 +1,10 @@
 // 1. Import @jest/globals helpers (in ESM you need this for jest.fn, etc.)
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 
-console.log('✅ setupTests.js loaded');
+console.log("✅ setupTests.js loaded");
 
 // 2. Polyfill window.matchMedia (JSDOM doesn’t provide it)
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
     matches: false,
@@ -19,7 +19,7 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // 3. Polyfill ResizeObserver (used in your bracket layout)
-import ResizeObserver from 'resize-observer-polyfill';
+import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
 // 4. (Optional) Silence noisy console warnings from React 18 strict mode

@@ -4,7 +4,6 @@ JavaScript library that takes your data and draws the tree of a knockout tournam
 
 <br>
 
-
 ![alt text](https://github.com/sbachinin/bracketry/blob/main/images/example.jpg?raw=true)
 
 <br>
@@ -16,9 +15,9 @@ Bracketry is designed to draw _single elimination_ brackets. Technically you can
 ## Basic usage
 
 ```javascript
-import { createBracket } from 'bracketry'
+import { createBracket } from "bracketry";
 
-createBracket(your_data, your_wrapper_element)
+createBracket(your_data, your_wrapper_element);
 ```
 
 _You only need a wrapper element (advisably with explicit <a href="https://bracketry.app/create-bracket/#problem-of-height">height</a>) and some properly formatted <a href="https://bracketry.app/data-shape">data</a>_
@@ -38,12 +37,12 @@ _You only need a wrapper element (advisably with explicit <a href="https://brack
 
 ## Plenty of options (<a href="https://bracketry.app/options">try</a>)
 
-* Sizes, margins and fonts are quite <a href="https://bracketry.app/fonts-colors-sizes">flexible</a>
-* Navigation between rounds can be <a href="https://bracketry.app/adjust-nav-buttons">adjusted</a> or <a href="https://bracketry.app/external-navigation">built from scratch</a>  
-* <a href="https://bracketry.app/scroll-modes">Vertical scroll</a> can work with mousewheel or buttons or both  
-* You can <a href="https://bracketry.app/inject-markup">inject</a> your own markup here and there. You may also choose to render matches yourself and use bracketry only as a positioning mechanism  
-* You can attach <a href="https://bracketry.app/click-handlers">click handlers</a> to matches (or their sides)  
-* It's possible to specify a <a href="https://bracketry.app/rounds-count">number of rounds</a> visible at a time
+- Sizes, margins and fonts are quite <a href="https://bracketry.app/fonts-colors-sizes">flexible</a>
+- Navigation between rounds can be <a href="https://bracketry.app/adjust-nav-buttons">adjusted</a> or <a href="https://bracketry.app/external-navigation">built from scratch</a>
+- <a href="https://bracketry.app/scroll-modes">Vertical scroll</a> can work with mousewheel or buttons or both
+- You can <a href="https://bracketry.app/inject-markup">inject</a> your own markup here and there. You may also choose to render matches yourself and use bracketry only as a positioning mechanism
+- You can attach <a href="https://bracketry.app/click-handlers">click handlers</a> to matches (or their sides)
+- It's possible to specify a <a href="https://bracketry.app/rounds-count">number of rounds</a> visible at a time
 
 <br>
 
@@ -57,11 +56,9 @@ yarn add bracketry
 
 <br>
 
-
 Minified bundle is 48k, gzipped is 12k.
 
-
-Includes a __d.ts__ file for ease of TypeScript development
+Includes a **d.ts** file for ease of TypeScript development
 
 <br>
 

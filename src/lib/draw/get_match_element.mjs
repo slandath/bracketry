@@ -1,6 +1,5 @@
-import { create_element_from_Html } from '../utils.mjs';
-import { get_default_or_custom_html } from './get_default_or_custom_html.mjs';
-import { try_get_custom_element } from './try_get_custom_element.mjs';
+import { create_element_from_Html } from "../utils.mjs";
+import { try_get_custom_element } from "./try_get_custom_element.mjs";
 
 const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M21 6.285l-11.16 12.733-6.84-6.018 1.319-1.49 5.341 4.686 9.865-11.196 1.475 1.285z"/></svg>`;
 
@@ -21,34 +20,34 @@ const get_side_html = (match, side_index, all_data) => {
   }
 
   // CSS classes
-  let winner_class = '';
-  let loser_class = '';
-  let predicted_class = '';
+  let winner_class = "";
+  let loser_class = "";
+  let predicted_class = "";
 
   if (side.isWinner || match.result === team.id) {
-    winner_class = 'winner';
+    winner_class = "winner";
   }
   if (other && (other.isWinner || match.result === other.team?.id)) {
-    loser_class = 'looser';
+    loser_class = "looser";
   }
   if (match.prediction === team.id) {
     if (match.result) {
       predicted_class =
         match.result === team.id
-          ? 'predicted predicted-correct'
-          : 'predicted predicted-incorrect';
+          ? "predicted predicted-correct"
+          : "predicted predicted-incorrect";
     } else {
-      predicted_class = 'predicted';
+      predicted_class = "predicted";
     }
   }
 
   // Simple logo + title markup
   const logo = team.logoUrl
     ? `<img src="${team.logoUrl}" alt="${team.name} logo"/>`
-    : '';
+    : "";
 
   const title = `${team.seed} ${team.name}`;
-  const score = side.score ?? '';
+  const score = side.score ?? "";
 
   return `
     <div class="side-wrapper ${winner_class} ${loser_class} ${predicted_class}">
@@ -72,18 +71,16 @@ export const get_match_content = (
   all_data,
   round_index,
   match_order,
-  get_option
+  get_option,
 ) => {
   const custom_match_element = try_get_custom_element(
-    get_option('getMatchElement'),
+    get_option("getMatchElement"),
     [round_index, match_order],
-    'getMatchElement'
+    "getMatchElement",
   );
   if (custom_match_element === null) return null;
 
-  const match_body = create_element_from_Html(
-    `<div class="match-body"></div>`
-  );
+  const match_body = create_element_from_Html(`<div class="match-body"></div>`);
 
   if (custom_match_element instanceof Element) {
     match_body.append(custom_match_element);
@@ -106,7 +103,7 @@ export const get_match_content = (
 
   // Live flag
   if (maybe_match_data.isLive) {
-    match_body.classList.add('live');
+    match_body.classList.add("live");
   }
 
   // Match status display
@@ -124,17 +121,17 @@ export const get_match_element = (
   round_index,
   match_order,
   all_data,
-  get_option
+  get_option,
 ) => {
   const maybe_match_data = all_data.matches?.find(
-    (m) => m.roundIndex === round_index && m.order === match_order
+    (m) => m.roundIndex === round_index && m.order === match_order,
   );
 
   const is_even = match_order % 2 === 0;
 
   const wrapper = create_element_from_Html(`
     <div
-      class="match-wrapper ${is_even ? 'even' : 'odd'}"
+      class="match-wrapper ${is_even ? "even" : "odd"}"
       match-order="${match_order}"
     >
       <div class="match-lines-area">
@@ -149,16 +146,16 @@ export const get_match_element = (
     all_data,
     round_index,
     match_order,
-    get_option
+    get_option,
   );
   if (body) wrapper.prepend(body);
 
   // result correctness
   if (maybe_match_data?.prediction && maybe_match_data?.result) {
     if (maybe_match_data.prediction === maybe_match_data.result) {
-      wrapper.classList.add('result-correct');
+      wrapper.classList.add("result-correct");
     } else {
-      wrapper.classList.add('result-incorrect');
+      wrapper.classList.add("result-incorrect");
     }
   }
 
