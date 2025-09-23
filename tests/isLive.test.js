@@ -6,7 +6,6 @@ import { init } from './utils.js'
 import ResizeObserver from 'resize-observer-polyfill'
 global.ResizeObserver = ResizeObserver
 
-const consoleWarn = jest.spyOn(console, 'warn')
 afterEach(jest.clearAllMocks)
 
 

@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { jest, test, expect } from '@jest/globals';
-import { init } from './utils.js'
-import ResizeObserver from 'resize-observer-polyfill'
+import { expect, jest, test } from '@jest/globals';
+import ResizeObserver from 'resize-observer-polyfill';
+import { init } from './utils.js';
 global.ResizeObserver = ResizeObserver
 
 test(`fills .side-scores element with a string returned from getScoresHTML`, () => {
@@ -49,7 +49,7 @@ test(`inserts HTML returned by getScoresHTML to the DOM`, () => {
         rounds: [{}],
         matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }] }],
     }
-    const { wrapper } = init(data, { getScoresHTML: (s) => `<div class="user-score">1</div>` })
+    const { wrapper } = init(data, { getScoresHTML: () => `<div class="user-score">1</div>` })
     expect(wrapper.querySelector('.side-wrapper[contestant-id="c1"] .user-score').textContent).toBe('1')
 })
 
@@ -143,7 +143,7 @@ test(`calls getScoresHTML even if side.scores is an empty array`, () => {
 
 
 test(`side and match objects passed to getScoresHTML are protected from modification by a user`, () => {
-    
+
     const data = {
         rounds: [{}],
         matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1', scores: [] }] }],

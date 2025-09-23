@@ -117,6 +117,6 @@ test(`renders default match layout if getMatchElement throws`, () => {
     }
 
     const { wrapper } = init(data, { getMatchElement: () => { very.bad() } })
-    expect(wrapper.querySelector('.match-body').innerHTML).toBe('<div class=\"match-status\">Scheduled</div>')
+    expect(wrapper.querySelector('.match-body').innerHTML).toBe('<div class="match-status">Scheduled</div>')
     expect(consoleWarn.mock.calls[0][0]).toMatch(`Failed to get a valid return from getMatchElement`)
 })

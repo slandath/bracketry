@@ -25,7 +25,7 @@ try {
     window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
         get() { supportsPassive = true }
     }))
-} catch (e) { }
+} catch (e) { console.debug("Passive events not supported:", e); }
 
 var wheelOpt = supportsPassive ? { passive: false } : false
 var wheelEvent = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel'
@@ -57,4 +57,3 @@ export const restrict_native_scroll = (el, make_scroll_jump) => {
 
     return release_native_scroll
 }
-

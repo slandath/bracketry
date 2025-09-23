@@ -1,11 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-import { test, expect } from '@jest/globals';
-import { init } from './utils.js';
+import { expect, test } from '@jest/globals';
+import ResizeObserver from 'resize-observer-polyfill';
 import { createBracket } from '../index.js';
 import finished_ucl from './data/ucl-finished.js';
-import ResizeObserver from 'resize-observer-polyfill';
+import { init } from './utils.js';
 global.ResizeObserver = ResizeObserver;
 
 afterEach(() => {
@@ -56,7 +56,7 @@ test('Returned methods are called without errors after another bracket is instal
 
 
 test('Nothing changes after wrapper is reassigned', () => {
-    let { wrapper, bracket: br } = init(finished_ucl)
+    let { bracket: br } = init(finished_ucl)
     br.setBaseRoundIndex(2)
     wrapper = 'something else'
     expect(br.getNavigationState().baseRoundIndex).toBe(2)

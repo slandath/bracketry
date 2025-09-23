@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { jest, test, expect } from '@jest/globals';
-import { init } from './utils.js';
+import { expect, jest, test } from '@jest/globals';
 import ResizeObserver from 'resize-observer-polyfill';
+import { init } from './utils.js';
 global.ResizeObserver = ResizeObserver;
 
 
@@ -82,7 +82,7 @@ test(`appends  to the DOM all Elements returned from getRoundTitleElement`, () =
 test(`renders bare round.name if getRoundTitleElement returns a string`, () => {
 
     const data = { rounds: [{ name: '1' }] }
-    const { wrapper } = init(data, { getRoundTitleElement: (r) => 'oops' })
+    const { wrapper } = init(data, { getRoundTitleElement: () => 'oops' })
     expect(wrapper.querySelector('.round-title').innerHTML).toBe('1')
 })
 
@@ -90,7 +90,7 @@ test(`renders bare round.name if getRoundTitleElement returns a string`, () => {
 test(`renders bare round.name if getRoundTitleElement returns null`, () => {
 
     const data = { rounds: [{ name: '1' }] }
-    const { wrapper } = init(data, { getRoundTitleElement: (r) => null })
+    const { wrapper } = init(data, { getRoundTitleElement: () => null })
     expect(wrapper.querySelector('.round-title').innerHTML).toBe('1')
 })
 
@@ -106,7 +106,7 @@ test(`renders bare round.name if getRoundTitleElement returns undefined`, () => 
 test(`renders default round name if no round.name was given and getRoundTitleELement returned invalid stuff`, () => {
 
     const data = { rounds: [{}] }
-    const { wrapper } = init(data, { getRoundTitleElement: (r) => true })
+    const { wrapper } = init(data, { getRoundTitleElement: () => true })
     expect(wrapper.querySelector('.round-title').innerHTML).toBe('Final')
 })
 

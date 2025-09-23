@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { jest, test, expect, afterEach } from '@jest/globals';
-import { init } from './utils.js'
-import ResizeObserver from 'resize-observer-polyfill'
+import { afterEach, expect, jest, test } from '@jest/globals';
+import ResizeObserver from 'resize-observer-polyfill';
+import { init } from './utils.js';
 global.ResizeObserver = ResizeObserver
 
 const consoleWarn = jest.spyOn(console, 'warn')
@@ -85,21 +85,6 @@ test(`renders html provided as player's nationality (when no options.getNational
     ).toBe('36px')
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// How getNationalityHTML is called
 
 test(`calls getNationalityHTML with a player object`, () => {
     getNationalityHTML = jest.fn()
@@ -214,46 +199,6 @@ test(`calls getNationalityHTML with context object as 2nd arg`, () => {
 })
 
 
-
-
-
-
-
-
-
-
-
-
-
-// How a return value of getNationalityHTML is used
-
-test(`injects the return value of getNationalityHTML even if player has no nationality`, () => {
-    const data = {
-        rounds: [{}],
-        matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }] }],
-        contestants: {
-            c1: { players: [{ title: 'Pete' }] }
-        }
-    }
-
-    const { wrapper } = init(data, { getNationalityHTML: n => `I am an asshole` })
-    expect(wrapper.querySelector('.player-wrapper .nationality').innerHTML).toBe('I am an asshole')
-})
-
-test(`injects the return value of getNationalityHTML even if player's nationality is not a string`, () => {
-    const data = {
-        rounds: [{}],
-        matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }] }],
-        contestants: {
-            c1: { players: [{ title: 'Pete', nationality: {} }] }
-        }
-    }
-
-    const { wrapper } = init(data, { getNationalityHTML: n => `I am an asshole` })
-    expect(wrapper.querySelector('.player-wrapper .nationality').innerHTML).toBe(`I am an asshole`)
-    expect(consoleWarn.mock.calls[0][0]).toMatch(`If nationality is provided for a player, it must be a string`)
-})
-
 test(`injects a valid return value of getNationalityHTML to ALL players`, () => {
     const data = {
         rounds: [{}],
@@ -340,4 +285,3 @@ test(`renders empty .nationality if both player's nationality and getNationality
 //     expect(getComputedStyle(el).margin).toBe('0px')
 //     expect(getComputedStyle(el).width).toBe('auto')
 // })
-

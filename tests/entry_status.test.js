@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { jest, test, expect, afterEach } from '@jest/globals';
-import { init } from './utils.js'
-import ResizeObserver from 'resize-observer-polyfill'
+import { afterEach, expect, jest, test } from '@jest/globals';
+import ResizeObserver from 'resize-observer-polyfill';
+import { init } from './utils.js';
 global.ResizeObserver = ResizeObserver
 
 const consoleWarn = jest.spyOn(console, 'warn')
@@ -177,14 +177,6 @@ test(`calls getEntryStatusHTML with context object as 2nd arg`, () => {
 })
 
 
-
-
-
-
-
-
-
-
 test(`injects the return value of getEntryStatusHTML even if contestant has no entryStatus`, () => {
     const data = {
         rounds: [{}],
@@ -192,7 +184,7 @@ test(`injects the return value of getEntryStatusHTML even if contestant has no e
         contestants: { c1: {} }
     }
 
-    const { wrapper } = init(data, { getEntryStatusHTML: n => `I am an asshole` })
+    const { wrapper } = init(data)
     expect(wrapper.querySelector('.entry-status').innerHTML).toBe('I am an asshole')
 })
 
@@ -204,7 +196,7 @@ test(`injects the return value of getEntryStatusHTML even if contestant's entryS
         contestants: { c1: { entryStatus: {} } }
     }
 
-    const { wrapper } = init(data, { getEntryStatusHTML: n => `I am an asshole` })
+    const { wrapper } = init(data, {})
     expect(wrapper.querySelector('.entry-status').innerHTML).toBe(`I am an asshole`)
     expect(consoleWarn.mock.calls[0][0]).toMatch(`If entryStatus is provided for a contestant, it must be a string`)
 })
@@ -265,20 +257,3 @@ test(`renders empty .entry-status if both contestant.entryStatus and getEntrySta
     const { wrapper } = init(data, { getEntryStatusHTML: () => 23232 })
     expect(wrapper.querySelector('.entry-status').innerHTML).toBe('')
 })
-
-
-// test(`entry-status element takes no space if empty string is returned from getEntryStatusHTML
-//     (even if there is a valid entryStatus for contestant)`, () => {
-//     const data = {
-//         rounds: [{}],
-//         matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }] }],
-//         contestants: { c1: { entryStatus: 'WC' } }
-//     }
-
-//     const { wrapper } = init(data, { getEntryStatusHTML: () => '' })
-//     const el = wrapper.querySelector('.side-wrapper[contestant-id="c1"] .entry-status')
-//     expect(el.innerHTML).toBe('')
-//     expect(getComputedStyle(el).padding).toBe('0px')
-//     expect(getComputedStyle(el).margin).toBe('0px')
-//     expect(getComputedStyle(el).width).toBe('auto')
-// })

@@ -1,10 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-import { test, expect } from '@jest/globals';
-import { init } from './utils.js';
-import finished_ucl from './data/ucl-finished.js';
+import { expect, test } from '@jest/globals';
 import ResizeObserver from 'resize-observer-polyfill';
+import finished_ucl from './data/ucl-finished.js';
+import { init } from './utils.js';
 global.ResizeObserver = ResizeObserver;
 
 test(`sets width according to options.visibleRoundsCount`, () => {
@@ -29,7 +29,7 @@ test(`sets marginLeft according to base round index`, () => {
 });
 
 test(`renders fractional number of rounds if fractional visibleRoundsCount`, () => {
-  const { wrapper, bracket: br } = init(finished_ucl, {
+  const { wrapper } = init(finished_ucl, {
     visibleRoundsCount: 2.5,
   });
   expect(wrapper.querySelector('.matches-positioner').style.width).toBe('160%');

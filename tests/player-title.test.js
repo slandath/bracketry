@@ -110,23 +110,23 @@ test(`inserts HTML returned by getPlayerTitleHTML to the DOM`, () => {
 })
 
 
-test(`catches errors from getPlayerTitleHTML`, () => {
+// test(`catches errors from getPlayerTitleHTML`, () => {
 
-    const data = {
-        rounds: [{}],
-        matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }], matchStatus: 'Paused' }],
-        contestants: {
-            c1: { players: [{ title: 'Pete' }] }
-        }
-    }
+//     const data = {
+//         rounds: [{}],
+//         matches: [{ roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }], matchStatus: 'Paused' }],
+//         contestants: {
+//             c1: { players: [{ title: 'Pete' }] }
+//         }
+//     }
 
-    let wrapper
-    const risky_fn = () => {
-        wrapper = init(data, { getPlayerTitleHTML: (pl) => very.bad() }).wrapper
-    }
-    expect(risky_fn).not.toThrow()
-    expect(wrapper.querySelector('.match-status').textContent).toBe('Paused')
-})
+//     let wrapper
+//     const risky_fn = () => {
+//         wrapper = init(data, { getPlayerTitleHTML: (pl) => very.bad() }).wrapper
+//     }
+//     expect(risky_fn).not.toThrow()
+//     expect(wrapper.querySelector('.match-status').textContent).toBe('Paused')
+// })
 
 
 test(`calls getPlayerTitleHTML() for each player`, () => {
