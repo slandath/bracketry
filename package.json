@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "npx prettier . --write",
+    "format:check": "npx prettier . --check",
     "lint": "oxlint --fix",
     "type-check": "tsc --noEmit",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
