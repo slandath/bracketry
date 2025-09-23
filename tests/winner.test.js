@@ -1,37 +1,44 @@
 /**
  * @jest-environment jsdom
  */
-import { test, expect } from '@jest/globals';
-import { init } from './utils.js';
-import ResizeObserver from 'resize-observer-polyfill';
+import { test, expect } from "@jest/globals";
+import { init } from "./utils.js";
+import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
-
 test(`does not add a "winner" class to a side-wrapper for which isWinner is false`, () => {
-
-    const data = {
-        rounds: [{}],
-        matches: [{
-            roundIndex: 0, order: 0, sides: [{ contestantId: 'c1' }]
-        }]
-    }
-    const { wrapper } = init(data)
-    expect(wrapper.querySelector('.side-wrapper[contestant-id="c1"].winner')).toBe(null)
-})
-
+  const data = {
+    rounds: [{}],
+    matches: [
+      {
+        roundIndex: 0,
+        order: 0,
+        sides: [{ contestantId: "c1" }],
+      },
+    ],
+  };
+  const { wrapper } = init(data);
+  expect(
+    wrapper.querySelector('.side-wrapper[contestant-id="c1"].winner'),
+  ).toBe(null);
+});
 
 test(`adds "winner" class to a side-wrapper for which isWinner is true`, () => {
-
-    const data = {
-        rounds: [{}],
-        matches: [{
-            roundIndex: 0, order: 0, sides: [{ contestantId: 'c1', isWinner: true }]
-        }]
-    }
-    const { wrapper } = init(data)
-    expect(wrapper.querySelector('.side-wrapper[contestant-id="c1"].winner')).not.toBe(null)
-})
-
+  const data = {
+    rounds: [{}],
+    matches: [
+      {
+        roundIndex: 0,
+        order: 0,
+        sides: [{ contestantId: "c1", isWinner: true }],
+      },
+    ],
+  };
+  const { wrapper } = init(data);
+  expect(
+    wrapper.querySelector('.side-wrapper[contestant-id="c1"].winner'),
+  ).not.toBe(null);
+});
 
 // test(`adds 'looser' class to a side whose opponent has {isWinner: true}`, () => {
 

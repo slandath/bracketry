@@ -1,199 +1,184 @@
 .bracket-root {
+  .navigation-button,
+  .scroll-button {
+    justify-content: center;
+    align-items: center;
 
-    .navigation-button,
-    .scroll-button {
-        justify-content: center;
-        align-items: center;
+    cursor: auto;
+    user-select: none;
 
-        cursor: auto;
-        user-select: none;
+    z-index: 3;
 
-        z-index: 3;
+    &.active {
+      cursor: pointer;
 
-        &.active {
-            cursor: pointer;
-
-            &>* {
-                opacity: 1;
-            }
-        }
-
-        &>* {
-            opacity: 0.15;
-        }
+      & > * {
+        opacity: 1;
+      }
     }
 
+    & > * {
+      opacity: 0.15;
+    }
+  }
 
+  .navigation-button {
+    display: grid;
+    &.left {
+      grid-column: 1;
+    }
 
+    &.right {
+      grid-column: 5;
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  svg.default-nav-icon {
+    fill: var(--navButtonSvgColor);
+    box-sizing: content-box;
+    padding: var(--navButtonPadding, 0);
+    width: var(--navButtonArrowSize);
+    height: var(--navButtonArrowSize);
+  }
+
+  svg.default-scroll-icon {
+    fill: var(--scrollButtonSvgColor);
+    box-sizing: content-box;
+    padding: var(--scrollButtonPadding, 0);
+    width: var(--scrollButtonArrowSize);
+    height: var(--scrollButtonArrowSize);
+  }
+
+  .scroll-button {
+    grid-column: 2 / span 2;
+    display: none;
+
+    &.button-up {
+      grid-row: 3;
+      border-bottom: 1px solid
+        var(--scrollGutterBorderColor, var(--rootBorderColor));
+    }
+
+    &.button-down {
+      grid-row: 5;
+      border-top: 1px solid
+        var(--scrollGutterBorderColor, var(--rootBorderColor));
+    }
+  }
+
+  /* FEATURE STYLES */
+
+  &.with-scroll-buttons-over-matches {
+    .scroll-button {
+      border: none;
+      height: 0;
+    }
+
+    .button-up {
+      align-items: flex-start;
+    }
+
+    .button-down {
+      align-items: flex-end;
+    }
+  }
+
+  &.with-vertical-scroll-buttons {
+    .scroll-button {
+      display: flex;
+    }
+
+    .scrollbar.animated {
+      transition:
+        top 0.3s ease-out,
+        height 0.3s ease-out;
+    }
+  }
+
+  &.with-nav-buttons-before-titles {
     .navigation-button {
-        display: grid;
-        &.left {
-            grid-column: 1;
-        }
+      border-bottom: 1px solid
+        var(--roundTitlesBorderColor, var(--rootBorderColor));
 
-        &.right {
-            grid-column: 5;
-        }
-        
-        &.hidden {
-            display: none;
-        }
+      &.left {
+        grid-column: 2;
+        justify-content: flex-start;
+      }
+
+      &.right {
+        grid-column: 3;
+        justify-content: flex-end;
+      }
     }
+  }
 
+  &.with-nav-buttons-over-titles {
+    .navigation-button {
+      grid-row: 2;
+      width: 0;
+      border: none;
+      position: relative;
+      margin-bottom: 1px; /* otherwise a background of custom HTML hides the round titles' border-bottom when "overTitles" */
 
-    svg.default-nav-icon  {
-        fill: var(--navButtonSvgColor);
-        box-sizing: content-box;
-        padding: var(--navButtonPadding, 0);
-        width: var(--navButtonArrowSize);
-        height: var(--navButtonArrowSize);
+      &.left {
+        justify-content: flex-start;
+      }
+
+      &.right {
+        justify-content: flex-end;
+      }
     }
+  }
 
-    svg.default-scroll-icon  {
-        fill: var(--scrollButtonSvgColor);
-        box-sizing: content-box;
-        padding: var(--scrollButtonPadding, 0);
-        width: var(--scrollButtonArrowSize);
-        height: var(--scrollButtonArrowSize);
+  &.with-hidden-nav-buttons {
+    .navigation-button {
+      display: none !important;
     }
+  }
 
+  &.with-gutter-nav-buttons {
+    .navigation-button {
+      grid-row: 1/-1;
 
-    .scroll-button {
-        grid-column: 2/span 2;
-        display: none;
+      &.left {
+        border-right: 1px solid
+          var(--navGutterBorderColor, var(--rootBorderColor));
+      }
 
-        &.button-up {
-            grid-row: 3;
-            border-bottom: 1px solid var(--scrollGutterBorderColor, var(--rootBorderColor));
-        }
-
-        &.button-down {
-            grid-row: 5;
-            border-top: 1px solid var(--scrollGutterBorderColor, var(--rootBorderColor));
-        }
+      &.right {
+        border-left: 1px solid
+          var(--navGutterBorderColor, var(--rootBorderColor));
+      }
     }
+  }
 
+  &.with-nav-buttons-over_matches {
+    .navigation-button {
+      &:not(.hidden) {
+        display: flex;
+        border: none;
+        width: 0;
+        position: relative;
+        grid-row: 4;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* FEATURE STYLES */
-
-    &.with-scroll-buttons-over-matches {
-        .scroll-button {
-            border: none;
-            height: 0;
+        & > *:first-child {
+          position: absolute;
+          top: var(--navButtonsTopDistance, 50%);
+          transform: translate(0, -50%);
         }
 
-        .button-up {
-            align-items: flex-start;
+        &.left > *:first-child {
+          left: 0;
         }
 
-        .button-down {
-            align-items: flex-end;
+        &.right > *:first-child {
+          right: 0;
         }
+      }
     }
-
-    &.with-vertical-scroll-buttons {
-        .scroll-button {
-            display: flex;
-        }
-
-        .scrollbar.animated {
-            transition: top 0.3s ease-out, height 0.3s ease-out;
-        }
-    }
-
-
-
-
-    &.with-nav-buttons-before-titles {
-        .navigation-button {
-            border-bottom: 1px solid var(--roundTitlesBorderColor, var(--rootBorderColor));
-
-            &.left {
-                grid-column: 2;
-                justify-content: flex-start;
-            }
-
-            &.right {
-                grid-column: 3;
-                justify-content: flex-end;
-            }
-        }
-    }
-
-    &.with-nav-buttons-over-titles {
-        .navigation-button {
-            grid-row: 2;
-            width: 0;
-            border: none;
-            position: relative;
-            margin-bottom: 1px; /* otherwise a background of custom HTML hides the round titles' border-bottom when "overTitles" */
-
-            &.left {
-                justify-content: flex-start;
-            }
-
-            &.right {
-                justify-content: flex-end;
-            }
-        }
-    }
-
-    &.with-hidden-nav-buttons {
-        .navigation-button {
-            display: none !important;
-        }
-    }
-
-    &.with-gutter-nav-buttons {
-        .navigation-button {
-            grid-row: 1/-1;
-
-            &.left {
-                border-right: 1px solid var(--navGutterBorderColor, var(--rootBorderColor));
-            }
-
-            &.right {
-                border-left: 1px solid var(--navGutterBorderColor, var(--rootBorderColor));
-            }
-        }
-    }
-
-    &.with-nav-buttons-over_matches {
-        .navigation-button {
-            &:not(.hidden) {
-                display: flex;
-                border: none;
-                width: 0;
-                position: relative;
-                grid-row: 4;
-
-                & > *:first-child {
-                    position: absolute;
-                    top: var(--navButtonsTopDistance, 50%);
-                    transform: translate(0, -50%);
-                }
-
-                &.left > *:first-child {
-                    left: 0;
-                }
-
-                &.right > *:first-child {
-                    right: 0;
-                }
-            }
-        }
-    }
+  }
 }

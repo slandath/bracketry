@@ -1,9 +1,9 @@
 /**
  * @jest-environment jsdom
  */
-import { test, expect } from '@jest/globals';
-import { init } from './utils.js';
-import ResizeObserver from 'resize-observer-polyfill';
+import { test, expect } from "@jest/globals";
+import { init } from "./utils.js";
+import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
 test(`renders valid currentScore`, () => {
@@ -13,15 +13,15 @@ test(`renders valid currentScore`, () => {
       {
         roundIndex: 0,
         order: 0,
-        sides: [{ currentScore: '15' }],
+        sides: [{ currentScore: "15" }],
       },
     ],
   };
   const { wrapper } = init(data);
   expect(
-    wrapper.querySelector('.current-score .side-own-single-score .main-score')
-      .textContent
-  ).toBe('15');
+    wrapper.querySelector(".current-score .side-own-single-score .main-score")
+      .textContent,
+  ).toBe("15");
 });
 
 test(`renders empty .current-score if invalid`, () => {
@@ -46,7 +46,7 @@ test(`renders empty .current-score if invalid`, () => {
     ],
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.current-score:empty').length).toBe(6);
+  expect(wrapper.querySelectorAll(".current-score:empty").length).toBe(6);
 });
 
 // test(`.opponent-single-score in .current-score is made invisible`, () => {

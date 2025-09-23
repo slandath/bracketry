@@ -1,17 +1,17 @@
 /**
  * @jest-environment jsdom
  */
-import { expect, test } from '@jest/globals';
-import ResizeObserver from 'resize-observer-polyfill';
-import finished_ucl from './data/ucl-finished.js';
-import { init } from './utils.js';
+import { expect, test } from "@jest/globals";
+import ResizeObserver from "resize-observer-polyfill";
+import finished_ucl from "./data/ucl-finished.js";
+import { init } from "./utils.js";
 global.ResizeObserver = ResizeObserver;
 
 test(`sets width according to options.visibleRoundsCount`, () => {
   const { wrapper } = init(finished_ucl, { visibleRoundsCount: 2 });
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('200%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '200%'
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("200%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "200%",
   );
 });
 
@@ -20,11 +20,11 @@ test(`sets marginLeft according to base round index`, () => {
     visibleRoundsCount: 2,
   });
   br.setBaseRoundIndex(1);
-  expect(wrapper.querySelector('.matches-positioner').style.marginLeft).toBe(
-    '-50%'
+  expect(wrapper.querySelector(".matches-positioner").style.marginLeft).toBe(
+    "-50%",
   );
-  expect(wrapper.querySelector('.round-titles-wrapper').style.marginLeft).toBe(
-    '-50%'
+  expect(wrapper.querySelector(".round-titles-wrapper").style.marginLeft).toBe(
+    "-50%",
   );
 });
 
@@ -32,26 +32,26 @@ test(`renders fractional number of rounds if fractional visibleRoundsCount`, () 
   const { wrapper } = init(finished_ucl, {
     visibleRoundsCount: 2.5,
   });
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('160%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '160%'
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("160%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "160%",
   );
 });
 
 test(`limits number of visible rounds if visibleRoundsCount is greater than actual rounds.length `, () => {
   const { wrapper } = init(finished_ucl, { visibleRoundsCount: 250 });
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(4);
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('100%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '100%'
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(4);
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("100%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "100%",
   );
 });
 
 test(`renders content with negative visibleRoundsCount`, () => {
   const { wrapper } = init(finished_ucl, { visibleRoundsCount: -2.5 });
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(4);
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe('');
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(4);
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe("");
 });
 
 test(`shows more rounds (sets smaller width)
@@ -59,15 +59,15 @@ test(`shows more rounds (sets smaller width)
   const { wrapper, bracket: br } = init(finished_ucl, {
     visibleRoundsCount: 2,
   });
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('200%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '200%'
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("200%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "200%",
   );
 
   br.applyNewOptions({ visibleRoundsCount: 4 });
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('100%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '100%'
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("100%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "100%",
   );
 });
 
@@ -76,15 +76,15 @@ test(`shows less rounds (sets greater width)
   const { wrapper, bracket: br } = init(finished_ucl, {
     visibleRoundsCount: 4,
   });
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('100%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '100%'
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("100%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "100%",
   );
 
   br.applyNewOptions({ visibleRoundsCount: 2 });
-  expect(wrapper.querySelector('.matches-positioner').style.width).toBe('200%');
-  expect(wrapper.querySelector('.round-titles-wrapper').style.width).toBe(
-    '200%'
+  expect(wrapper.querySelector(".matches-positioner").style.width).toBe("200%");
+  expect(wrapper.querySelector(".round-titles-wrapper").style.width).toBe(
+    "200%",
   );
 });
 
@@ -98,7 +98,7 @@ test(`shows more rounds when
   br.setBaseRoundIndex(2);
   br.applyNewOptions({ visibleRoundsCount: 3 });
   expect(
-    wrapper.querySelectorAll('.round-wrapper:not(.collapsed)').length
+    wrapper.querySelectorAll(".round-wrapper:not(.collapsed)").length,
   ).toBe(3);
 });
 
@@ -127,11 +127,11 @@ test(`allows to set fractional base round index`, () => {
     visibleRoundsCount: 2,
   });
   br.setBaseRoundIndex(1.5);
-  expect(wrapper.querySelector('.matches-positioner').style.marginLeft).toBe(
-    '-75%'
+  expect(wrapper.querySelector(".matches-positioner").style.marginLeft).toBe(
+    "-75%",
   );
-  expect(wrapper.querySelector('.round-titles-wrapper').style.marginLeft).toBe(
-    '-75%'
+  expect(wrapper.querySelector(".round-titles-wrapper").style.marginLeft).toBe(
+    "-75%",
   );
 });
 
@@ -143,9 +143,9 @@ test(`moves to next round when "moveToNextRound" is called`, () => {
   br.moveToNextRound();
   expect(br.getNavigationState().baseRoundIndex).toBe(1);
 
-  const all_rounds = [...wrapper.querySelectorAll('.round-wrapper')];
-  expect(all_rounds[0].classList.contains('collapsed')).toBe(true);
-  expect(all_rounds[2].classList.contains('collapsed')).toBe(false);
+  const all_rounds = [...wrapper.querySelectorAll(".round-wrapper")];
+  expect(all_rounds[0].classList.contains("collapsed")).toBe(true);
+  expect(all_rounds[2].classList.contains("collapsed")).toBe(false);
 });
 
 test(`moves to next round when right button is clicked`, () => {
@@ -154,14 +154,14 @@ test(`moves to next round when right button is clicked`, () => {
   });
 
   wrapper
-    .querySelector('.navigation-button.right')
-    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    .querySelector(".navigation-button.right")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
   expect(br.getNavigationState().baseRoundIndex).toBe(1);
 
-  const all_rounds = [...wrapper.querySelectorAll('.round-wrapper')];
-  expect(all_rounds[0].classList.contains('collapsed')).toBe(true);
-  expect(all_rounds[2].classList.contains('collapsed')).toBe(false);
+  const all_rounds = [...wrapper.querySelectorAll(".round-wrapper")];
+  expect(all_rounds[0].classList.contains("collapsed")).toBe(true);
+  expect(all_rounds[2].classList.contains("collapsed")).toBe(false);
 });
 
 test(`moves to previous round`, () => {
@@ -196,9 +196,9 @@ test(`moves to last round when moveToLastRound is called`, () => {
   expect(br.getNavigationState().baseRoundIndex).toBe(2);
   expect(br.getNavigationState().lastRoundIsFullyVisible).toBe(true);
   expect(
-    getComputedStyle(wrapper.querySelector('.round-wrapper:last-of-type'))
-      .display
-  ).not.toBe('none');
+    getComputedStyle(wrapper.querySelector(".round-wrapper:last-of-type"))
+      .display,
+  ).not.toBe("none");
 });
 
 test(`tells that it reached right edge when it is so`, () => {
@@ -215,8 +215,8 @@ test(`does nothing on navigation-buttons click if all rounds are visible`, () =>
   });
 
   wrapper
-    .querySelector('.navigation-button.right')
-    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    .querySelector(".navigation-button.right")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
   expect(br.getNavigationState().baseRoundIndex).toBe(0);
 });
@@ -232,17 +232,17 @@ test(`ignores non-numeric values passed to setBaseRoundIndex()`, () => {
     visibleRoundsCount: 2,
   });
   br.setBaseRoundIndex(1);
-  br.setBaseRoundIndex('shit');
+  br.setBaseRoundIndex("shit");
   expect(br.getNavigationState().baseRoundIndex).toBe(1);
   expect(
     wrapper
-      .querySelectorAll('.round-wrapper')[0]
-      .classList.contains('collapsed')
+      .querySelectorAll(".round-wrapper")[0]
+      .classList.contains("collapsed"),
   ).toBe(true);
   expect(
     wrapper
-      .querySelectorAll('.round-wrapper')[1]
-      .classList.contains('collapsed')
+      .querySelectorAll(".round-wrapper")[1]
+      .classList.contains("collapsed"),
   ).toBe(false);
 });
 
@@ -253,9 +253,9 @@ test(`ignores NaN passed to setBaseRoundIndex()`, () => {
   br.setBaseRoundIndex(1);
   br.setBaseRoundIndex(NaN);
   expect(br.getNavigationState().baseRoundIndex).toBe(1);
-  const rounds = wrapper.querySelectorAll('.round-wrapper');
-  expect(rounds[0].classList.contains('collapsed')).toBe(true);
-  expect(rounds[1].classList.contains('collapsed')).toBe(false);
+  const rounds = wrapper.querySelectorAll(".round-wrapper");
+  expect(rounds[0].classList.contains("collapsed")).toBe(true);
+  expect(rounds[1].classList.contains("collapsed")).toBe(false);
 });
 
 test(`returns stub values if getNavigationState is called after elements were removed`, () => {

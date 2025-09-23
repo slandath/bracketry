@@ -2,114 +2,110 @@
  * @jest-environment jsdom
  */
 
-import { test, expect} from '@jest/globals';
-import { init } from './utils.js'
-import finished_ucl from './data/ucl-finished.js'
-import ResizeObserver from 'resize-observer-polyfill'
-global.ResizeObserver = ResizeObserver
+import { test, expect } from "@jest/globals";
+import { init } from "./utils.js";
+import finished_ucl from "./data/ucl-finished.js";
+import ResizeObserver from "resize-observer-polyfill";
+global.ResizeObserver = ResizeObserver;
 
+test("disables left navigation buttons on initialization", () => {
+  const { wrapper } = init(finished_ucl, { visibleRoundsCount: 2 });
 
-test('disables left navigation buttons on initialization', () => {
+  const left_button = wrapper.querySelector(".navigation-button.left");
+  expect(left_button.classList.contains("active")).toBe(false);
+});
 
-    const { wrapper } = init(finished_ucl, { visibleRoundsCount: 2 })
+test("enables right nav buttons on initialization if rounds count is greater than options.visibleRoundsCount", () => {
+  const { wrapper } = init(finished_ucl, { visibleRoundsCount: 2 });
 
-    const left_button = wrapper.querySelector('.navigation-button.left')
-    expect(left_button.classList.contains('active')).toBe(false)
-})
+  const right_button = wrapper.querySelector(".navigation-button.right");
+  expect(right_button.classList.contains("active")).toBe(true);
+});
 
+test("hides nav buttons on initialization if rounds count is <= options.visibleRoundsCount", () => {
+  const { wrapper } = init(finished_ucl, { visibleRoundsCount: 4 });
+  expect(wrapper.querySelectorAll(".navigation-button.hidden").length).toBe(2);
+});
 
-test('enables right nav buttons on initialization if rounds count is greater than options.visibleRoundsCount', () => {
+test("hides nav buttons when applyNewOptions is called with visibleRoundsCount which is >= rounds.length", () => {
+  const { wrapper, bracket: br } = init(finished_ucl, {
+    visibleRoundsCount: 2,
+  });
 
-    const { wrapper } = init(finished_ucl, { visibleRoundsCount: 2 })
+  br.applyNewOptions({ visibleRoundsCount: 4 });
 
-    const right_button = wrapper.querySelector('.navigation-button.right')
-    expect(right_button.classList.contains('active')).toBe(true)
-})
+  expect(wrapper.querySelectorAll(".navigation-button.hidden").length).toBe(2);
+});
 
+test("enables left nav button when base_round_index becomes more than 0", () => {
+  const { wrapper, bracket: br } = init(finished_ucl, {
+    visibleRoundsCount: 2,
+  });
 
-test('hides nav buttons on initialization if rounds count is <= options.visibleRoundsCount', () => {
+  br.setBaseRoundIndex(1);
 
-    const { wrapper } = init(finished_ucl, { visibleRoundsCount: 4 })
-    expect(wrapper.querySelectorAll('.navigation-button.hidden').length).toBe(2)
-})
+  expect(
+    wrapper
+      .querySelector(".navigation-button.left")
+      .classList.contains("active"),
+  ).toBe(true);
+});
 
+test("disables right nav button when right edge is reached", () => {
+  const { wrapper, bracket: br } = init(finished_ucl, {
+    visibleRoundsCount: 2,
+  });
 
-test('hides nav buttons when applyNewOptions is called with visibleRoundsCount which is >= rounds.length', () => {
+  br.moveToNextRound();
 
-    const { wrapper, bracket: br } = init(finished_ucl, { visibleRoundsCount: 2 })
+  expect(
+    wrapper
+      .querySelector(".navigation-button.right")
+      .classList.contains("active"),
+  ).toBe(true);
 
-    br.applyNewOptions({ visibleRoundsCount: 4 })
+  br.moveToLastRound();
+  expect(
+    wrapper
+      .querySelector(".navigation-button.right")
+      .classList.contains("active"),
+  ).toBe(false);
+});
 
-    expect(wrapper.querySelectorAll('.navigation-button.hidden').length).toBe(2)
-})
+test("injects leftNavButtonHTML to left buttons on initialization", () => {
+  const { wrapper } = init(finished_ucl, {
+    leftNavButtonHTML: "<p>PREVIOUS ROUND</p>",
+  });
+  expect(wrapper.querySelector(".navigation-button.left").innerHTML).toBe(
+    "<p>PREVIOUS ROUND</p>",
+  );
+});
 
+test("injects rightNavButtonHTML to right buttons on initialization", () => {
+  const { wrapper } = init(finished_ucl, {
+    rightNavButtonHTML: "<p>NEXT ROUND</p>",
+  });
+  expect(wrapper.querySelector(".navigation-button.right").innerHTML).toBe(
+    "<p>NEXT ROUND</p>",
+  );
+});
 
-test('enables left nav button when base_round_index becomes more than 0', () => {
+test("injects leftNavButtonHTML to left buttons on applyNewOptions", () => {
+  const { wrapper, bracket: br } = init(finished_ucl);
 
-    const { wrapper, bracket: br } = init(finished_ucl, { visibleRoundsCount: 2 })
+  br.applyNewOptions({ leftNavButtonHTML: "<p>PREVIOUS ROUND</p>" });
 
-    br.setBaseRoundIndex(1)
+  expect(wrapper.querySelector(".navigation-button.left").innerHTML).toBe(
+    "<p>PREVIOUS ROUND</p>",
+  );
+});
 
-    expect(
-        wrapper.querySelector('.navigation-button.left').classList.contains('active')
-    ).toBe(true)
-})
+test("injects rightNavButtonHTML to right button on applyNewOptions", () => {
+  const { wrapper, bracket: br } = init(finished_ucl);
 
+  br.applyNewOptions({ rightNavButtonHTML: "<p>NEXT ROUND</p>" });
 
-test('disables right nav button when right edge is reached', () => {
-
-    const { wrapper, bracket: br } = init(finished_ucl, { visibleRoundsCount: 2 })
-
-    br.moveToNextRound()
-
-    expect(
-        wrapper.querySelector('.navigation-button.right').classList.contains('active')
-    ).toBe(true)
-
-    br.moveToLastRound()
-    expect(
-        wrapper.querySelector('.navigation-button.right').classList.contains('active')
-    ).toBe(false)
-})
-
-
-test('injects leftNavButtonHTML to left buttons on initialization', () => {
-
-    const { wrapper } = init(finished_ucl, { leftNavButtonHTML: '<p>PREVIOUS ROUND</p>' })
-    expect(
-        wrapper.querySelector('.navigation-button.left').innerHTML
-    ).toBe('<p>PREVIOUS ROUND</p>')
-})
-
-
-test('injects rightNavButtonHTML to right buttons on initialization', () => {
-
-    const { wrapper } = init(finished_ucl, { rightNavButtonHTML: '<p>NEXT ROUND</p>' })
-    expect(
-        wrapper.querySelector('.navigation-button.right').innerHTML
-    ).toBe('<p>NEXT ROUND</p>')
-})
-
-
-test('injects leftNavButtonHTML to left buttons on applyNewOptions', () => {
-
-    const { wrapper, bracket: br } = init(finished_ucl)
-
-    br.applyNewOptions({ leftNavButtonHTML: '<p>PREVIOUS ROUND</p>' })
-
-    expect(
-        wrapper.querySelector('.navigation-button.left'
-    ).innerHTML).toBe('<p>PREVIOUS ROUND</p>')
-})
-
-
-test('injects rightNavButtonHTML to right button on applyNewOptions', () => {
-
-    const { wrapper, bracket: br } = init(finished_ucl)
-
-    br.applyNewOptions({ rightNavButtonHTML: '<p>NEXT ROUND</p>' })
-
-    expect(
-        wrapper.querySelector('.navigation-button.right').innerHTML
-    ).toBe('<p>NEXT ROUND</p>')
-})
+  expect(wrapper.querySelector(".navigation-button.right").innerHTML).toBe(
+    "<p>NEXT ROUND</p>",
+  );
+});

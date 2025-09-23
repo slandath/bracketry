@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import { jest, test, expect } from '@jest/globals';
-import { init } from './utils.js';
-import ResizeObserver from 'resize-observer-polyfill';
+import { jest, test, expect } from "@jest/globals";
+import { init } from "./utils.js";
+import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
 afterEach(jest.clearAllMocks);
@@ -15,11 +15,11 @@ test(`renders normal number of rounds and matches when skippedLastRoundsCount is
     matches: [],
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(3);
-  expect(wrapper.querySelectorAll('.round-title').length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-title").length).toBe(3);
   expect(
     wrapper.querySelectorAll('.round-wrapper[round-index="0"] .match-wrapper')
-      .length
+      .length,
   ).toBe(4);
 });
 
@@ -30,11 +30,11 @@ test(`renders normal number of rounds and matches when skippedLastRoundsCount is
     skippedLastRoundsCount: 0,
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(3);
-  expect(wrapper.querySelectorAll('.round-title').length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-title").length).toBe(3);
   expect(
     wrapper.querySelectorAll('.round-wrapper[round-index="0"] .match-wrapper')
-      .length
+      .length,
   ).toBe(4);
 });
 
@@ -45,8 +45,8 @@ test(`does not trim rounds from data.rounds`, () => {
     skippedLastRoundsCount: 2,
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(3);
-  expect(wrapper.querySelectorAll('.round-title').length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-title").length).toBe(3);
 });
 
 test(`does not trim rounds from data.rounds when data.matches isn't provided`, () => {
@@ -55,8 +55,8 @@ test(`does not trim rounds from data.rounds when data.matches isn't provided`, (
     skippedLastRoundsCount: 2,
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(3);
-  expect(wrapper.querySelectorAll('.round-title').length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(3);
+  expect(wrapper.querySelectorAll(".round-title").length).toBe(3);
 });
 
 test(`increases the "breadth" of a tree when skippedLastRoundsCount is specified as non-0`, () => {
@@ -68,7 +68,7 @@ test(`increases the "breadth" of a tree when skippedLastRoundsCount is specified
   const { wrapper } = init(data);
   expect(
     wrapper.querySelectorAll('.round-wrapper[round-index="0"] .match-wrapper')
-      .length
+      .length,
   ).toBe(16);
 });
 
@@ -84,8 +84,8 @@ test(`trims the number of round elements inferred from 1st round matches`, () =>
     skippedLastRoundsCount: 2,
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(5);
-  expect(wrapper.querySelectorAll('.round-title').length).toBe(5);
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(5);
+  expect(wrapper.querySelectorAll(".round-title").length).toBe(5);
 });
 
 test(`does not increase the "breadth" of a tree when data.rounds length was inferred from 1st round matches`, () => {
@@ -102,7 +102,7 @@ test(`does not increase the "breadth" of a tree when data.rounds length was infe
   const { wrapper } = init(data);
   expect(
     wrapper.querySelectorAll('.round-wrapper[round-index="0"] .match-wrapper')
-      .length
+      .length,
   ).toBe(64);
 });
 
@@ -118,8 +118,8 @@ test(`renders a number of rounds inferred from matches minus skippedLastRoundsCo
     skippedLastRoundsCount: 3,
   };
   const { wrapper } = init(data);
-  expect(wrapper.querySelectorAll('.round-wrapper').length).toBe(4);
-  expect(wrapper.querySelectorAll('.round-title').length).toBe(4);
+  expect(wrapper.querySelectorAll(".round-wrapper").length).toBe(4);
+  expect(wrapper.querySelectorAll(".round-title").length).toBe(4);
 });
 
 test(`When n last rounds gets dropped, navigation on click is limited accordingly`, () => {
@@ -136,24 +136,24 @@ test(`When n last rounds gets dropped, navigation on click is limited accordingl
   const { wrapper, bracket: br } = init(data, { visibleRoundsCount: 2 });
 
   wrapper
-    .querySelector('.navigation-button.right')
-    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    .querySelector(".navigation-button.right")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
   wrapper
-    .querySelector('.navigation-button.right')
-    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    .querySelector(".navigation-button.right")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
   wrapper
-    .querySelector('.navigation-button.right')
-    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    .querySelector(".navigation-button.right")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
   wrapper
-    .querySelector('.navigation-button.right')
-    .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    .querySelector(".navigation-button.right")
+    .dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
   expect(br.getNavigationState().baseRoundIndex).toBe(3);
 
-  const all_rounds = [...wrapper.querySelectorAll('.round-wrapper')];
-  expect(all_rounds[0].classList.contains('collapsed')).toBe(true); // dropped
-  expect(all_rounds[3].classList.contains('collapsed')).toBe(false); // still visible
-  expect(all_rounds[4].classList.contains('collapsed')).toBe(false); // still visible
+  const all_rounds = [...wrapper.querySelectorAll(".round-wrapper")];
+  expect(all_rounds[0].classList.contains("collapsed")).toBe(true); // dropped
+  expect(all_rounds[3].classList.contains("collapsed")).toBe(false); // still visible
+  expect(all_rounds[4].classList.contains("collapsed")).toBe(false); // still visible
 });
 
 test(`When n last rounds gets dropped, navigation by moveToNextRound is limited accordingly`, () => {
@@ -175,9 +175,9 @@ test(`When n last rounds gets dropped, navigation by moveToNextRound is limited 
 
   expect(br.getNavigationState().baseRoundIndex).toBe(2);
 
-  const all_rounds = [...wrapper.querySelectorAll('.round-wrapper')];
-  expect(all_rounds[0].classList.contains('collapsed')).toBe(true); // hidden
-  expect(all_rounds[2].classList.contains('collapsed')).toBe(false); // visible
+  const all_rounds = [...wrapper.querySelectorAll(".round-wrapper")];
+  expect(all_rounds[0].classList.contains("collapsed")).toBe(true); // hidden
+  expect(all_rounds[2].classList.contains("collapsed")).toBe(false); // visible
 });
 
 test(`When n last rounds gets dropped, moveToLastRound navigates to the reduced last round`, () => {
@@ -216,7 +216,7 @@ test(`When n last rounds gets dropped, lastRoundIsFullyVisible is correct`, () =
   expect(br.getNavigationState().lastRoundIsFullyVisible).toBe(true);
 });
 
-test('hides nav buttons on initialization if reduced rounds count is <= options.visibleRoundsCount', () => {
+test("hides nav buttons on initialization if reduced rounds count is <= options.visibleRoundsCount", () => {
   const data = {
     rounds: [],
     matches: [
@@ -229,7 +229,7 @@ test('hides nav buttons on initialization if reduced rounds count is <= options.
   };
 
   const { wrapper } = init(data, { visibleRoundsCount: 3 });
-  expect(wrapper.querySelectorAll('.navigation-button.hidden').length).toBe(2);
+  expect(wrapper.querySelectorAll(".navigation-button.hidden").length).toBe(2);
 });
 
 test(`When n last rounds gets dropped, right nav button is disabled when necessary`, () => {
@@ -248,14 +248,14 @@ test(`When n last rounds gets dropped, right nav button is disabled when necessa
   br.moveToNextRound();
   expect(
     wrapper
-      .querySelector('.navigation-button.right')
-      .classList.contains('active')
+      .querySelector(".navigation-button.right")
+      .classList.contains("active"),
   ).toBe(true);
 
   br.moveToNextRound();
   expect(
     wrapper
-      .querySelector('.navigation-button.right')
-      .classList.contains('active')
+      .querySelector(".navigation-button.right")
+      .classList.contains("active"),
   ).toBe(false);
 });

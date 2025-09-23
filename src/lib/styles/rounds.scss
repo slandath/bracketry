@@ -249,7 +249,9 @@
     .line-wrapper {
       /* each of 2 empty guys takes 50% height */
       flex: 1;
-      transition: color 0.1s ease-out, border-color 0.1s ease-out;
+      transition:
+        color 0.1s ease-out,
+        border-color 0.1s ease-out;
       /* for box-shadow color, not text */
       color: var(--connectionLinesColor);
     }
@@ -409,7 +411,9 @@
 
     .player-title {
       flex: 1;
-      transition: color 0.1s ease-out, opacity 0.1s ease-out;
+      transition:
+        color 0.1s ease-out,
+        opacity 0.1s ease-out;
       text-align: left;
       text-overflow: ellipsis;
       /* it will make it shrink in case of narrow .player-wrapper */

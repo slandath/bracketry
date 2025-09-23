@@ -1,182 +1,202 @@
-import { handle_data_errors } from './data/handle_errors.mjs'
-import { ananlyze_data } from './data/analyze_data.mjs'
-import { deep_clone_object, is_valid_number } from './utils.mjs'
-import { create_html_shell } from './html_shell.mjs'
-import { install_ui_events } from './ui_events/ui_events.mjs'
-import { update_highlight } from './ui_events/highlight.mjs'
-import { apply_options, filter_updatable_options } from './options/apply_options.mjs'
-import { create_options_dealer } from './options/options_dealer.mjs'
-import { create_navigation } from './navigation/navigation.mjs'
-import { render_content } from './draw/render_content.mjs'
-import { create_scrolla } from './scroll/scrolla.mjs'
-import { handle_images } from './handle_images.mjs'
-import { apply_matches_updates } from './apply_matches_updates.mjs'
+import { handle_data_errors } from "./data/handle_errors.mjs";
+import { ananlyze_data } from "./data/analyze_data.mjs";
+import { deep_clone_object, is_valid_number } from "./utils.mjs";
+import { create_html_shell } from "./html_shell.mjs";
+import { install_ui_events } from "./ui_events/ui_events.mjs";
+import { update_highlight } from "./ui_events/highlight.mjs";
+import {
+  apply_options,
+  filter_updatable_options,
+} from "./options/apply_options.mjs";
+import { create_options_dealer } from "./options/options_dealer.mjs";
+import { create_navigation } from "./navigation/navigation.mjs";
+import { render_content } from "./draw/render_content.mjs";
+import { create_scrolla } from "./scroll/scrolla.mjs";
+import { handle_images } from "./handle_images.mjs";
+import { apply_matches_updates } from "./apply_matches_updates.mjs";
 
-const all_bracketry_instances = []
+const all_bracketry_instances = [];
 
 const try_assign_new_data = (old_data, new_data) => {
-    const { have_critical_error } = handle_data_errors(ananlyze_data(new_data))
-    if (have_critical_error) return false
+  const { have_critical_error } = handle_data_errors(ananlyze_data(new_data));
+  if (have_critical_error) return false;
 
-    Object.keys(old_data).forEach(key => delete old_data[key])
-    Object.assign(old_data, deep_clone_object(new_data))
-    return true
-}
+  Object.keys(old_data).forEach((key) => delete old_data[key]);
+  Object.assign(old_data, deep_clone_object(new_data));
+  return true;
+};
 
+export const createBracket = (
+  initial_user_data,
+  user_wrapper_el,
+  user_options,
+) => {
+  let alive = false;
+  let options_dealer = create_options_dealer();
+  let actual_data = {};
 
-export const createBracket = (initial_user_data, user_wrapper_el, user_options) => {
-    let alive = false
-    let options_dealer = create_options_dealer()
-    let actual_data = {}
+  const stub = {
+    moveToPreviousRound: () => void 0,
+    moveToNextRound: () => void 0,
+    moveToLastRound: () => void 0,
+    setBaseRoundIndex: () => void 0,
+    getNavigationState: () => void 0,
+    applyNewOptions: () => void 0,
+    replaceData: () => void 0,
+    applyMatchesUpdates: () => void 0,
+    getAllData: () => deep_clone_object(initial_user_data || {}),
+    getUserOptions: () => deep_clone_object(user_options),
+    highlightContestantHistory: () => void 0,
+    uninstall: () => void 0,
+    user_wrapper_el,
+  };
 
-    const stub = {
-        moveToPreviousRound: () => void 0,
-        moveToNextRound: () => void 0,
-        moveToLastRound: () => void 0,
-        setBaseRoundIndex: () => void 0,
-        getNavigationState: () => void 0,
-        applyNewOptions: () => void 0,
-        replaceData: () => void 0,
-        applyMatchesUpdates: () => void 0,
-        getAllData: () => deep_clone_object(initial_user_data || {}),
-        getUserOptions: () => deep_clone_object(user_options),
-        highlightContestantHistory: () => void 0,
-        uninstall: () => void 0,
-        user_wrapper_el
+  if (
+    !user_wrapper_el ||
+    !(user_wrapper_el instanceof Element) ||
+    !user_wrapper_el.closest("html")
+  ) {
+    console.warn(
+      "Could not install bracket because invalid element is provided: ",
+      user_wrapper_el,
+    );
+    return stub;
+  }
+
+  // destroy old bracket in this wrapper
+  all_bracketry_instances.forEach((inst) => {
+    if (inst.user_wrapper_el === user_wrapper_el) {
+      inst.uninstall();
     }
+  });
 
+  let html_shell = create_html_shell(user_wrapper_el);
+  apply_options(user_options, options_dealer, html_shell);
 
-    if (!user_wrapper_el
-        || !(user_wrapper_el instanceof Element)
-        || !user_wrapper_el.closest('html')
-    ) {
-        console.warn('Could not install bracket because invalid element is provided: ', user_wrapper_el)
-        return stub
-    }
+  const merge_succeeded = try_assign_new_data(actual_data, initial_user_data);
 
-// destroy old bracket in this wrapper
-    all_bracketry_instances.forEach((inst) => {
-        if (inst.user_wrapper_el === user_wrapper_el) {
-            inst.uninstall()
-        }
-    })
+  if (!merge_succeeded) {
+    return stub;
+  }
 
-    let html_shell = create_html_shell(user_wrapper_el)
-    apply_options(user_options, options_dealer, html_shell)
+  alive = true;
 
-    const merge_succeeded = try_assign_new_data(actual_data, initial_user_data)
+  render_content(actual_data, html_shell, options_dealer.get_final_value);
 
-    if (!merge_succeeded) {
-        return stub
-    }
+  let scrolla = create_scrolla(html_shell, options_dealer.get_final_value);
 
-    alive = true
+  let navigation = create_navigation(
+    html_shell,
+    options_dealer.get_final_value,
+    scrolla,
+  );
 
-    render_content(actual_data, html_shell, options_dealer.get_final_value)
+  const unhandle_images = handle_images(
+    html_shell.matches_positioner,
+    navigation.repaint,
+  );
 
-    let scrolla = create_scrolla(html_shell, options_dealer.get_final_value)
+  const uninstall = () => {
+    if (!alive) return;
 
-    let navigation = create_navigation(html_shell, options_dealer.get_final_value, scrolla)
+    unhandle_images();
+    ui_events.uninstall();
+    scrolla.uninstall();
+    navigation.uninstall();
+    html_shell.uninstall();
+    html_shell = null;
+    options_dealer = null;
+    actual_data = null;
+    initial_user_data = null;
+    ui_events = null;
+    scrolla = null;
+    navigation = null;
+    const instance_i = all_bracketry_instances.indexOf(instance);
+    instance_i > -1 && all_bracketry_instances.splice(instance_i, 1);
+    instance = null;
 
-    const unhandle_images = handle_images(html_shell.matches_positioner, navigation.repaint)
+    alive = false;
+  };
 
-    const uninstall = () => {
-        if (!alive) return
+  let ui_events = install_ui_events(
+    actual_data,
+    options_dealer.get_final_value,
+    html_shell,
+    navigation,
+  );
 
-        unhandle_images()
-        ui_events.uninstall()
-        scrolla.uninstall()
-        navigation.uninstall()
-        html_shell.uninstall()
-        html_shell = null
-        options_dealer = null
-        actual_data = null
-        initial_user_data = null
-        ui_events = null
-        scrolla = null
-        navigation = null
-        const instance_i = all_bracketry_instances.indexOf(instance)
-        instance_i > -1 && all_bracketry_instances.splice(instance_i, 1)
-        instance = null
+  // expose stuff
+  let instance = {
+    moveToPreviousRound: () => alive && navigation.move_left(),
 
-        alive = false
-    }
+    moveToNextRound: () => alive && navigation.move_right(),
 
-    let ui_events = install_ui_events(
-        actual_data,
-        options_dealer.get_final_value,
+    moveToLastRound: () => alive && navigation.set_base_round_index(Infinity),
+
+    setBaseRoundIndex: (i) => {
+      if (!is_valid_number(i)) {
+        console.warn(
+          "setBaseRoundIndex accepts only numbers, instead got: ",
+          i,
+        );
+        return;
+      }
+      return alive && navigation.set_base_round_index(i);
+    },
+
+    getNavigationState: navigation.get_state,
+
+    applyNewOptions: (new_options) => {
+      if (!alive) return;
+      apply_options(
+        filter_updatable_options(new_options),
+        options_dealer,
         html_shell,
-        navigation
-    )
+      );
+      navigation.repaint();
+    },
 
-// expose stuff
-    let instance = {
-        moveToPreviousRound: () => alive && navigation.move_left(),
+    replaceData: (new_data) => {
+      if (!alive) return;
+      const merge_succeeded = try_assign_new_data(actual_data, new_data);
+      if (!merge_succeeded) {
+        console.warn("Failed to apply new data");
+        return;
+      }
 
-        moveToNextRound: () => alive && navigation.move_right(),
+      render_content(actual_data, html_shell, options_dealer.get_final_value);
 
-        moveToLastRound: () => alive && navigation.set_base_round_index(Infinity),
+      navigation.set_base_round_index(0);
+      scrolla.adjust_offset(0);
+      navigation.repaint();
+    },
 
-        setBaseRoundIndex: (i) => {
-            if (!is_valid_number(i)) {
-                console.warn('setBaseRoundIndex accepts only numbers, instead got: ', i)
-                return
-            }
-            return alive && navigation.set_base_round_index(i)
-        },
+    applyMatchesUpdates: (u) => {
+      if (!alive) return;
+      apply_matches_updates(
+        u,
+        actual_data,
+        html_shell,
+        options_dealer.get_final_value,
+        navigation.repaint,
+      );
+    },
 
-        getNavigationState: navigation.get_state,
+    getAllData: () => deep_clone_object(actual_data || {}),
 
-        applyNewOptions: (new_options) => {
-            if (!alive) return
-            apply_options(
-                filter_updatable_options(new_options),
-                options_dealer,
-                html_shell
-            )
-            navigation.repaint()
-        },
+    getUserOptions: () =>
+      deep_clone_object(options_dealer?.get_user_options() || {}),
 
-        replaceData: (new_data) => {
-            if (!alive) return
-            const merge_succeeded = try_assign_new_data(actual_data, new_data)
-            if (!merge_succeeded) {
-                console.warn('Failed to apply new data')
-                return
-            }
+    highlightContestantHistory: (contestantId) => {
+      alive && update_highlight(html_shell.matches_positioner, contestantId);
+    },
 
-            render_content(actual_data, html_shell, options_dealer.get_final_value)
+    uninstall: () => alive && uninstall(),
 
-            navigation.set_base_round_index(0)
-            scrolla.adjust_offset(0)
-            navigation.repaint()
-        },
+    user_wrapper_el,
+  };
 
-        applyMatchesUpdates: (u) => {
-            if (!alive) return
-            apply_matches_updates(
-                u,
-                actual_data,
-                html_shell,
-                options_dealer.get_final_value,
-                navigation.repaint
-            )
-        },
+  all_bracketry_instances.push(instance);
 
-        getAllData: () => deep_clone_object(actual_data || {}),
-
-        getUserOptions: () => deep_clone_object(options_dealer?.get_user_options() || {}),
-
-        highlightContestantHistory: (contestantId) => {
-            alive && update_highlight(html_shell.matches_positioner, contestantId)
-        },
-
-        uninstall: () => alive && uninstall(),
-
-        user_wrapper_el
-    }
-
-    all_bracketry_instances.push(instance)
-
-    return instance
-}
+  return instance;
+};

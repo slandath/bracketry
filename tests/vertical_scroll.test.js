@@ -2,10 +2,10 @@
  * @jest-environment jsdom
  */
 
-import { test, expect } from '@jest/globals';
-import { init } from './utils.js';
-import finished_ucl from './data/ucl-finished.js';
-import ResizeObserver from 'resize-observer-polyfill';
+import { test, expect } from "@jest/globals";
+import { init } from "./utils.js";
+import finished_ucl from "./data/ucl-finished.js";
+import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
 // testing native scroll in action here appears impossible because there is no real wheel/mousewheel
@@ -17,10 +17,9 @@ test('Scroll is "native" by default', () => {
   const { wrapper } = init(finished_ucl);
 
   // signal that the component applied the native-scroll mode
-  const root = wrapper.querySelector('.bracket-root');
-  expect(root.classList.contains('with-native-scroll')).toBe(true);
+  const root = wrapper.querySelector(".bracket-root");
+  expect(root.classList.contains("with-native-scroll")).toBe(true);
 });
-
 
 // test("verticalScrollMode nonsense falls back to native (class applied)", () => {
 //   const { wrapper } = init(finished_ucl, { verticalScrollMode: 123 });
@@ -29,7 +28,6 @@ test('Scroll is "native" by default', () => {
 //   expect(wrapper.querySelector(".bracket-root.with-native-scroll")).not.toBe(null);
 // });
 
-
 // test(`Scroll buttons are hidden with "native" verticalScrollMode`, () => {
 
 //     const { wrapper } = init(finished_ucl, { verticalScrollMode: 'native' })
@@ -37,20 +35,17 @@ test('Scroll is "native" by default', () => {
 //     expect(getComputedStyle(wrapper.querySelector('.button-down')).display).toBe('none')
 // })
 
-
 // test(`Matches-scroller has overflowY: hidden when verticalScrollMode is "buttons`, () => {
 
 //     const { wrapper } = init(finished_ucl, { verticalScrollMode: 'buttons' })
 //     expect(getComputedStyle(wrapper.querySelector('.matches-scroller')).overflowY).toBe('hidden')
 // })
 
-
 // test(`Matches-scroller has overflowY: hidden when verticalScrollMode is "mixed"`, () => {
 
 //     const { wrapper } = init(finished_ucl, { verticalScrollMode: 'mixed' })
 //     expect(getComputedStyle(wrapper.querySelector('.matches-scroller')).overflowY).toBe('hidden')
 // })
-
 
 // test(`Scroll buttons are visible when verticalScrollMode is "buttons"`, () => {
 
@@ -59,14 +54,12 @@ test('Scroll is "native" by default', () => {
 //     expect(getComputedStyle(wrapper.querySelector('.button-down')).display).toBe('flex')
 // })
 
-
 // test(`Scroll buttons are visible when verticalScrollMode is "mixed"`, () => {
 
 //     const { wrapper } = init(finished_ucl, { verticalScrollMode: 'mixed' })
 //     expect(getComputedStyle(wrapper.querySelector('.button-up')).display).toBe('flex')
 //     expect(getComputedStyle(wrapper.querySelector('.button-down')).display).toBe('flex')
 // })
-
 
 // test(`verticalScrollMode is not updatable by applyNewOptions`, () => {
 
@@ -78,24 +71,26 @@ test('Scroll is "native" by default', () => {
 //     expect(getComputedStyle(wrapper.querySelector('.matches-scroller')).overflowY).toBe('hidden')
 // })
 
-
 test(`resets (synthetic) scroll on navigation when resetScrollOnNavigation is true`, () => {
+  const { wrapper, bracket: br } = init(finished_ucl, {
+    verticalScrollMode: "buttons",
+    resetScrollOnNavigation: true,
+  });
 
-    const { wrapper, bracket: br } = init(finished_ucl, { verticalScrollMode: 'buttons', resetScrollOnNavigation: true })
-
-    const poser = wrapper.querySelector('.matches-positioner')
-    poser.style.transform = 'translate3d(0, -500px, 0)'
-    br.moveToNextRound()
-    expect(getComputedStyle(poser).transform).toBe('translate3d(0, -0px, 0)')
-})
-
+  const poser = wrapper.querySelector(".matches-positioner");
+  poser.style.transform = "translate3d(0, -500px, 0)";
+  br.moveToNextRound();
+  expect(getComputedStyle(poser).transform).toBe("translate3d(0, -0px, 0)");
+});
 
 test(`resets (synthetic) scroll on replaceData()`, () => {
+  const { wrapper, bracket: br } = init(finished_ucl, {
+    verticalScrollMode: "buttons",
+    resetScrollOnNavigation: true,
+  });
 
-    const { wrapper, bracket: br } = init(finished_ucl, { verticalScrollMode: 'buttons', resetScrollOnNavigation: true })
-
-    const poser = wrapper.querySelector('.matches-positioner')
-    poser.style.transform = 'translate3d(0, -500px, 0)'
-    br.replaceData({ rounds: [{}] })
-    expect(getComputedStyle(poser).transform).toBe('translate3d(0, -0px, 0)')
-})
+  const poser = wrapper.querySelector(".matches-positioner");
+  poser.style.transform = "translate3d(0, -500px, 0)";
+  br.replaceData({ rounds: [{}] });
+  expect(getComputedStyle(poser).transform).toBe("translate3d(0, -0px, 0)");
+});
