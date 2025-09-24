@@ -65,3 +65,5 @@ Includes a **d.ts** file for ease of TypeScript development
 ## Licensing
 
 MIT
+
+## Added for PR
