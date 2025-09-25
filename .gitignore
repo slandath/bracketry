@@ -4,3 +4,5 @@ dist/**/index.js.map
 writings/
 .DS_Store
 gpt.md
+test-results/
+playwright-report/
