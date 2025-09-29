@@ -7,7 +7,7 @@ import { deep_clone_object, init } from "./utils.js";
 
 // ensure ResizeObserver is available in the jsdom environment
 // (TypeScript-friendly global assignment)
-;(global).ResizeObserver = ResizeObserver;
+global.ResizeObserver = ResizeObserver;
 
 test(`does not mutate data which wass passed to createBracket`, () => {
   const cloned_ucl = deep_clone_object(finished_ucl);

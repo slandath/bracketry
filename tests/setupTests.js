@@ -27,7 +27,10 @@ global.ResizeObserver = ResizeObserver;
 // Optionally silence noisy React act warnings
 const originalError = console.error;
 console.error = (...args) => {
-  if (typeof args[0] === "string" && /Warning.*not wrapped in act/.test(args[0])) {
+  if (
+    typeof args[0] === "string" &&
+    /Warning.*not wrapped in act/.test(args[0])
+  ) {
     return;
   }
   originalError.call(console, ...args);
