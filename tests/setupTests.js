@@ -1,31 +1,33 @@
-// 1. Import @jest/globals helpers (in ESM you need this for jest.fn, etc.)
-import { jest } from "@jest/globals";
+// test/setupTests.js
+
+import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
 console.log("✅ setupTests.js loaded");
 
-// 2. Polyfill window.matchMedia (JSDOM doesn’t provide it)
+// Polyfill window.matchMedia (jsdom doesn't provide it)
 Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: jest.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(), // deprecated but used by some libs
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(), // deprecated but still used by some libs
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });
 
-// 3. Polyfill ResizeObserver (used in your bracket layout)
+// Polyfill ResizeObserver (used in bracket layout)
 import ResizeObserver from "resize-observer-polyfill";
 global.ResizeObserver = ResizeObserver;
 
-// 4. (Optional) Silence noisy console warnings from React 18 strict mode
+// Optionally silence noisy React act warnings
 const originalError = console.error;
 console.error = (...args) => {
-  if (/Warning.*not wrapped in act/.test(args[0])) {
+  if (typeof args[0] === "string" && /Warning.*not wrapped in act/.test(args[0])) {
     return;
   }
   originalError.call(console, ...args);
