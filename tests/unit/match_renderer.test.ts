@@ -16,8 +16,8 @@ vi.mock("../../../src/lib/draw/try_get_custom_element.mjs", () => ({
 // Import the module-under-test AFTER the vi.mock calls.
 // Updated import path as you requested.
 import {
-    get_match_content,
-    get_match_element,
+  get_match_content,
+  get_match_element,
 } from "../../src/lib/draw/get_match_element.mjs";
 
 // helper to create a real DOM element from HTML
@@ -44,26 +44,26 @@ describe("get_match_content", () => {
     expect(result).toBeNull();
   });
 
-it("wraps and returns custom element when provided", () => {
-  const custom = document.createElement("div");
-  custom.className = "custom-match";
+  it("wraps and returns custom element when provided", () => {
+    const custom = document.createElement("div");
+    custom.className = "custom-match";
 
-  mockTryGetCustomElement.mockReturnValueOnce(custom);
+    mockTryGetCustomElement.mockReturnValueOnce(custom);
 
-  // Provide an actual getMatchElement function
-  const getOption = (key: string) => {
-    if (key === "getMatchElement") {
-      return () => custom;
-    }
-    return undefined;
-  };
+    // Provide an actual getMatchElement function
+    const getOption = (key: string) => {
+      if (key === "getMatchElement") {
+        return () => custom;
+      }
+      return undefined;
+    };
 
-  const result = get_match_content(null, {}, 0, 0, getOption);
+    const result = get_match_content(null, {}, 0, 0, getOption);
 
-  expect(result).toBeInstanceOf(Element);
-  expect(result?.classList.contains("match-body")).toBe(true);
-  expect(result?.querySelector(".custom-match")).toBe(custom);
-});
+    expect(result).toBeInstanceOf(Element);
+    expect(result?.classList.contains("match-body")).toBe(true);
+    expect(result?.querySelector(".custom-match")).toBe(custom);
+  });
 
   it("renders TBD when sides missing or team not found", () => {
     mockTryGetCustomElement.mockReturnValueOnce({}); // truthy non-Element -> proceed
@@ -111,7 +111,9 @@ it("wraps and returns custom element when provided", () => {
 
     expect(side1.querySelector(".side-scores")?.textContent?.trim()).toBe("83");
     expect(side2.querySelector(".side-scores")?.textContent?.trim()).toBe("79");
-    expect(side1.querySelector(".logo img")?.getAttribute("src")).toBe("logo1.png");
+    expect(side1.querySelector(".logo img")?.getAttribute("src")).toBe(
+      "logo1.png",
+    );
     expect(
       side1.querySelector(".player-title")?.textContent?.includes("1 Alpha"),
     ).toBe(true);
@@ -125,11 +127,17 @@ it("wraps and returns custom element when provided", () => {
         t2: { id: "t2", seed: 2, name: "Beta" },
       },
     };
-    const match = { sides: [{ teamId: "t1" }, { teamId: "t2" }], isLive: true, matchStatus: "OT" };
+    const match = {
+      sides: [{ teamId: "t1" }, { teamId: "t2" }],
+      isLive: true,
+      matchStatus: "OT",
+    };
 
     const content = get_match_content(match, all_data, 0, 0, () => undefined);
     expect((content as Element).classList.contains("live")).toBe(true);
-    expect((content as Element).querySelector(".match-status")?.textContent).toBe("OT");
+    expect(
+      (content as Element).querySelector(".match-status")?.textContent,
+    ).toBe("OT");
   });
 });
 
@@ -141,7 +149,10 @@ describe("get_match_element", () => {
         {
           roundIndex: 1,
           order: 3,
-          sides: [{ teamId: "t1", score: 10 }, { teamId: "t2", score: 8 }],
+          sides: [
+            { teamId: "t1", score: 10 },
+            { teamId: "t2", score: 8 },
+          ],
           result: "t1",
           prediction: "t1",
         },
@@ -166,7 +177,10 @@ describe("get_match_element", () => {
         {
           roundIndex: 2,
           order: 4,
-          sides: [{ teamId: "t1", score: 10 }, { teamId: "t2", score: 8 }],
+          sides: [
+            { teamId: "t1", score: 10 },
+            { teamId: "t2", score: 8 },
+          ],
           result: "t1",
           prediction: "t2",
         },
