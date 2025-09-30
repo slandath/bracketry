@@ -6,16 +6,19 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["./tests/setupTests.js"],
+    // Keep unit tests and JS/TS tests under tests/, but exclude e2e explicitly
     include: [
       "src/**/*.{test,spec}.{ts,tsx}",
       "tests/**/*.{test,spec}.{ts,tsx,js,jsx}",
     ],
+    exclude: ["tests/e2e/**"],
+
     coverage: {
       reporter: ["text", "lcov"],
       all: true,
-      exclude: ["**/node_modules/**", "test/**", "vitest.config.ts"],
+      exclude: ["**/node_modules/**", "tests/e2e/**", "vitest.config.ts"],
     },
-    mockReset: true, // isolates mocks between tests
+    mockReset: true,
     watch: false,
   },
 });
