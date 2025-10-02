@@ -1,5 +1,7 @@
 {
   "rounds": [
+    { "name": "Round of 64" },
+    { "name": "Round of 32" },
     { "name": "Sweet Sixteen" },
     { "name": "Elite Eight" },
     { "name": "Final Four" },
@@ -39,13 +41,13 @@
     "t6": {
       "id": "t6",
       "name": "Alabama",
-      "seed": 1,
+      "seed": 2,
       "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/alabama.svg"
     },
     "t7": {
       "id": "t7",
       "name": "Tennessee",
-      "seed": 1,
+      "seed": 2,
       "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/tennessee.svg"
     },
     "t8": {
@@ -63,7 +65,7 @@
     "t10": {
       "id": "t10",
       "name": "Ole Miss",
-      "seed": 2,
+      "seed": 6,
       "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/ole-miss.svg"
     },
     "t11": {
@@ -101,6 +103,150 @@
       "name": "Kentucky",
       "seed": 3,
       "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/kentucky.svg"
+    },
+    "t17": {
+      "id": "t17",
+      "name": "Clemson",
+      "seed": 5,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/clemson.svg"
+    },
+    "t18": {
+      "id": "t18",
+      "name": "Illinois",
+      "seed": 6,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/illinois.svg"
+    },
+    "t19": {
+      "id": "t19",
+      "name": "UCLA",
+      "seed": 7,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/ucla.svg"
+    },
+    "t20": {
+      "id": "t20",
+      "name": "Gonzaga",
+      "seed": 8,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/gonzaga.svg"
+    },
+    "t21": {
+      "id": "t21",
+      "name": "Georgia",
+      "seed": 9,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/georgia.svg"
+    },
+    "t22": {
+      "id": "t22",
+      "name": "Utah St.",
+      "seed": 10,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/utah-st.svg"
+    },
+    "t23": {
+      "id": "t23",
+      "name": "Xavier",
+      "seed": 11,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/utah-st.svg"
+    },
+    "t24": {
+      "id": "t24",
+      "name": "McNeese",
+      "seed": 12,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/mcneese.svg"
+    },
+    "t25": {
+      "id": "t25",
+      "name": "High Point",
+      "seed": 13,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/high-point.svg"
+    },
+    "t26": {
+      "id": "t26",
+      "name": "Troy",
+      "seed": 14,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/troy.svg"
+    },
+    "t27": {
+      "id": "t27",
+      "name": "Wofford",
+      "seed": 15,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/wofford.svg"
+    },
+    "t28": {
+      "id": "t28",
+      "name": "SIU Edwardsville",
+      "seed": 16,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/siu-edwardsville.svg"
+    },
+    "t29": {
+      "id": "t29",
+      "name": "Iowa St",
+      "seed": 3,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/iowa-st.svg"
+    },
+    "t30": {
+      "id": "t30",
+      "name": "Texas A&M",
+      "seed": 4,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/texas-am.svg"
+    },
+    "t31": {
+      "id": "t31",
+      "name": "Marquette",
+      "seed": 7,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/marquette.svg"
+    },
+    "t32": {
+      "id": "t32",
+      "name": "Louisville",
+      "seed": 8,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/louisville.svg"
+    },
+    "t33": {
+      "id": "t33",
+      "name": "Creighton",
+      "seed": 9,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/creighton.svg"
+    },
+    "t34": {
+      "id": "t34",
+      "name": "New Mexico",
+      "seed": 10,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/new-mexico.svg"
+    },
+    "t35": {
+      "id": "t35",
+      "name": "North Carolina",
+      "seed": 11,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/north-carolina.svg"
+    },
+    "t36": {
+      "id": "t36",
+      "name": "UC San Diego",
+      "seed": 12,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/uc-san-diego.svg"
+    },
+    "t37": {
+      "id": "t37",
+      "name": "Yale",
+      "seed": 13,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/yale.svg"
+    },
+    "t38": {
+      "id": "t38",
+      "name": "Lipscomb",
+      "seed": 14,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/lipscomb.svg"
+    },
+    "t39": {
+      "id": "t39",
+      "name": "Bryant",
+      "seed": 15,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/bryant.svg"
+    },
+    "t40": {
+      "id": "t40",
+      "name": "Alabama St.",
+      "seed": 15,
+      "logoUrl": "https://i.turner.ncaa.com/sites/default/files/images/logos/schools/bgl/alabama-st.svg"
     }
   },
   "matches": [
