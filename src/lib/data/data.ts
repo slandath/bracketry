@@ -10,6 +10,7 @@ export type Round = {
 };
 
 export type Match = {
+  id?: string;
   roundIndex: number;
   order: number; // 0-based index inside its round
   sides?: Side[];
