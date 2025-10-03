@@ -1,0 +1,37 @@
+{
+  "rounds": [
+    { "name": "__ROUND_1_NAME__" },
+    { "name": "__ROUND_2_NAME__" },
+    { "name": "__ROUND_3_NAME__" }
+  ],
+  "teams": {
+    "__TEAM_ID__": {
+      "id": "__TEAM_ID__",
+      "name": "__TEAM_NAME__",
+      "seed": "__SEED_NUMBER__",
+      "logoUrl": "__LOGO_URL__"
+    }
+  },
+  "matches": [
+    {
+      "id": "__MATCH_ID__",
+      "roundIndex": "__ROUND_INDEX__",
+      "order": "__ORDER_IN_ROUND__",
+      "sides": [
+        {
+          "teamId": "__TEAM_ID_SIDE_A__",
+          "score": "__SCORE_INT_OR_NULL__",
+          "isWinner": "__BOOLEAN_OR_NULL__"
+        },
+        {
+          "teamId": "__TEAM_ID_SIDE_B__",
+          "score": "__SCORE_INT_OR_NULL__",
+          "isWinner": "__BOOLEAN_OR_NULL__"
+        }
+      ],
+      "matchStatus": "__STATUS__",
+      "result": "__WINNING_TEAM_ID_OR_NULL__",
+      "prediction": "__PREDICTED_TEAM_ID_OR_NULL__"
+    }
+  ]
+}
