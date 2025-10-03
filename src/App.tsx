@@ -27,7 +27,7 @@ export default function App() {
   return (
     <div>
       {/* This div is where createBracket will render */}
-      <div ref={bracketContainerRef} />
+      <div ref={bracketContainerRef} className="bracketry-wrapper" />
     </div>
   );
 }
