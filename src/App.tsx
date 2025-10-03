@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import bracketData from "./2025-tournament.json";
+import bracketData from "./2025-tournament-blank.json";
 import { createBracket } from "./lib/lib.mjs";
 
 export default function App() {
