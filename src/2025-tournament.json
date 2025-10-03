@@ -1227,7 +1227,7 @@
         {
           "teamId": "t13",
           "score": 87,
-          "isWinner": false
+          "isWinner": true
         }
       ],
       "matchStatus": "final",
