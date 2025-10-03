@@ -2,26 +2,46 @@ import { useEffect, useRef } from "react";
 import bracketData from "./2025-tournament-blank.json";
 import { createBracket } from "./lib/lib.mjs";
 
+const STORAGE_KEY = "bracketry:tournament:v1";
+
 export default function App() {
   const bracketContainerRef = useRef<HTMLDivElement | null>(null);
   const bracketInstanceRef = useRef<any>(null);
 
+  function readStoredData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // ignore parse/storage errors
+    }
+    return bracketData;
+  }
+
+  function buildBracket(data: any) {
+    if (!bracketContainerRef.current) return;
+    bracketInstanceRef.current?.uninstall?.();
+    bracketInstanceRef.current = createBracket(data, bracketContainerRef.current, {});
+  }
+
   useEffect(() => {
-    if (bracketContainerRef.current) {
-      // Install bracket into this container
-      bracketInstanceRef.current = createBracket(
-        bracketData, // initial_user_data
-        bracketContainerRef.current, // wrapper element
-        {
-          // no custom options passed in for now
-        },
-      );
+    // seed storage if empty
+    try {
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(bracketData));
+      }
+    } catch {
+      // localStorage may be disabled — fall back to bundled data
     }
 
-    // Clean up on unmount
+    const dataToUse = readStoredData();
+    buildBracket(dataToUse);
+
     return () => {
-      bracketInstanceRef.current?.uninstall();
+      bracketInstanceRef.current?.uninstall?.();
     };
+    // run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
