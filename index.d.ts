@@ -1,4 +1,4 @@
-import { Data, Match, Player, Round, Side } from "./lib/data/data";
+import { Data, Match, Round, Side } from "./src/lib/data/data";
 
 // TODO check if all options present here
 
@@ -69,32 +69,12 @@ type Options = {
   distanceBetweenScorePairs: number;
 
   onMatchClick: (match: Partial<Match>) => void;
-
   onMatchSideClick: (match: Partial<Match>, sideIndex: number) => void;
-
   getRoundTitleElement: (roundData: Round, roundIndex: number) => Element;
   getMatchElement: (roundIndex: number, matchOrder: number) => Element | null;
-  getNationalityHTML: (
-    player: Player,
-    context: {
-      roundIndex: number;
-      matchOrder: number;
-      contestantId: string;
-      playerIndex: number;
-    },
-  ) => string;
   getEntryStatusHTML: (
     entryStatus: any,
     context: { roundIndex: number; matchOrder: number; contestantId: string },
-  ) => string;
-  getPlayerTitleHTML: (
-    player: Player,
-    context: {
-      roundIndex: number;
-      matchOrder: number;
-      contestantId: string;
-      playerIndex: number;
-    },
   ) => string;
   getScoresHTML: (side: Side, match: Match) => string;
   getMatchTopHTML: (match: Match) => string;

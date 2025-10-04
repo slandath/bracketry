@@ -1,6 +1,7 @@
 import "./styles/buttons.scss";
 import "./styles/main.scss";
 import "./styles/rounds.scss";
+import "./styles/SelectionTool.scss";
 import { create_element_from_Html } from "./utils.mjs";
 
 export const create_html_shell = (user_wrapper_el) => {
