@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Data, Match, Team } from "./lib/data/data";
 import "./lib/styles/SelectionTool.scss";
 
@@ -8,69 +8,138 @@ type Props = {
 };
 
 export default function SelectionTool({ data, onPick }: Props) {
-  const [predictedTeam, setPredictedTeam] = useState<string | null>(null);
-  const [confirmedTeam, setConfirmedTeam] = useState<string | null>(null);
-
-  const firstMatch = useMemo<Match | null>(() => {
-    if (!data?.matches || data.matches.length === 0) return null;
-    const sorted = [...data.matches].sort((a, b) =>
-      a.roundIndex === b.roundIndex
-        ? a.order - b.order
-        : a.roundIndex - b.roundIndex,
-    );
-    return sorted[0] ?? null;
+  const firstRoundMatches = useMemo(() => {
+    if (!data?.matches) return [];
+    return [...data.matches]
+      .filter((m) => m.roundIndex === 0)
+      .sort((a, b) => a.order - b.order);
   }, [data]);
 
-  if (!firstMatch) {
-    return <div className="selection-tool__empty">No matches available to select.</div>;
+  const [index, setIndex] = useState(0);
+  const [confirmedByMatch, setConfirmedByMatch] = useState<
+    Record<string, string>
+  >({});
+
+  const match = firstRoundMatches[index];
+  const matchKey = match ? `${match.roundIndex}:${match.order}` : "";
+  const predictedTeam = confirmedByMatch[matchKey] ?? null;
+
+  // Clamp index when matches change
+  useEffect(() => {
+    if (index >= firstRoundMatches.length && firstRoundMatches.length > 0) {
+      setIndex(firstRoundMatches.length - 1);
+    }
+  }, [firstRoundMatches.length, index]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft")
+        setIndex((i) => Math.max(0, i - 1));
+      if (e.key === "ArrowRight")
+        setIndex((i) =>
+          Math.min(firstRoundMatches.length - 1, i + 1)
+        );
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [firstRoundMatches.length]);
+
+  if (!firstRoundMatches.length) {
+    return (
+      <div className="selection-tool__empty">
+        No first-round matches available.
+      </div>
+    );
   }
 
-  const sides = firstMatch.sides ?? [];
-  const left = sides[0]?.teamId ? data.teams?.[sides[0]!.teamId!] : undefined;
-  const right = sides[1]?.teamId ? data.teams?.[sides[1]!.teamId!] : undefined;
+  const sides = match.sides ?? [];
+  const left = sides[0]?.teamId
+    ? data.teams?.[sides[0].teamId]
+    : undefined;
+  const right = sides[1]?.teamId
+    ? data.teams?.[sides[1].teamId]
+    : undefined;
 
   function handleConfirm() {
-    if (!predictedTeam || !firstMatch) return;
-    setConfirmedTeam(predictedTeam);
-    onPick?.(firstMatch, predictedTeam);
+    if (!predictedTeam) return;
+    setConfirmedByMatch((prev) => ({
+      ...prev,
+      [matchKey]: predictedTeam,
+    }));
+    onPick?.(match, predictedTeam);
+  }
+
+  function selectTeam(teamId: string | null) {
+    setConfirmedByMatch((prev) => ({
+      ...prev,
+      [matchKey]: teamId ?? "",
+    }));
   }
 
   return (
-    <div className="selection-tool">
-      <h4 className="selection-tool__title">Round {firstMatch.roundIndex + 1}</h4>
+    <div className="selection-tool-wrapper">
+      <div className="selection-tool">
+        <div className="selection-tool__side selection-tool__side--left">
+          <button
+            aria-label="Previous match"
+            className="selection-tool__nav selection-tool__nav--left"
+            onClick={() => setIndex((i) => Math.max(0, i - 1))}
+            disabled={index === 0}
+          >
+            ‹
+          </button>
+        </div>
 
-      <div className="selection-tool__match">
-        <TeamCard
-          team={left}
-          checked={predictedTeam === left?.id}
-          onChange={() => setPredictedTeam(left?.id ?? null)}
-        />
-
-        <div className="selection-tool__vs">vs</div>
-
-        <TeamCard
-          team={right}
-          checked={predictedTeam === right?.id}
-          onChange={() => setPredictedTeam(right?.id ?? null)}
-        />
-      </div>
-
-      <div className="selection-tool__controls">
-        <button
-          type="button"
-          className="selection-tool__confirm-btn"
-          onClick={handleConfirm}
-          disabled={!predictedTeam}
-          aria-disabled={!predictedTeam}
-        >
-          Confirm Selection
-        </button>
-
-        {confirmedTeam ? (
-          <div className="selection-tool__confirmed">
-            Confirmed: {data.teams?.[confirmedTeam]?.name ?? confirmedTeam}
+        <div className="selection-tool__panel">
+          <div className="selection-tool__header">
+            <h4 className="selection-tool__title">
+              Round {match.roundIndex + 1}
+            </h4>
+            <div className="selection-tool__position">
+              {index + 1} / {firstRoundMatches.length}
+            </div>
           </div>
-        ) : null}
+
+          <div className="selection-tool__match">
+            <TeamCard
+              team={left}
+              checked={predictedTeam === left?.id}
+              onChange={() => selectTeam(left?.id ?? null)}
+            />
+            <TeamCard
+              team={right}
+              checked={predictedTeam === right?.id}
+              onChange={() => selectTeam(right?.id ?? null)}
+            />
+          </div>
+
+          <div className="selection-tool__controls">
+            <button
+              type="button"
+              className="selection-tool__confirm-btn"
+              onClick={handleConfirm}
+              disabled={!predictedTeam}
+            >
+              Confirm Selection
+            </button>
+          </div>
+        </div>
+
+        <div className="selection-tool__side selection-tool__side--right">
+          <button
+            aria-label="Next match"
+            className="selection-tool__nav selection-tool__nav--right"
+            onClick={() =>
+              setIndex((i) =>
+                Math.min(firstRoundMatches.length - 1, i + 1)
+              )
+            }
+            disabled={index === firstRoundMatches.length - 1}
+          >
+            ›
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -90,7 +159,9 @@ function TeamCard({
   }
 
   return (
-    <label className={`team-card ${checked ? "team-card--selected" : ""}`}>
+    <label
+      className={`team-card ${checked ? "team-card--selected" : ""}`}
+    >
       <div className="team-card__left">
         {team.logoUrl ? (
           <img
@@ -114,11 +185,11 @@ function TeamCard({
 
       <div className="team-card__action">
         <input
-          type="checkbox"
+          type="radio"
           className="team-card__pick-checkbox"
           checked={!!checked}
           onChange={onChange}
-          aria-checked={!!checked}
+          name="team-selection"
         />
       </div>
     </label>
