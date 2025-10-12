@@ -1,5 +1,9 @@
 :root {
-  --blue: #009cde;
+  --blue: hsl(198, 100%, 44%);
+  --gray: hsl(0, 0%, 40%);
+  --beige: hsl(35, 100%, 95%);
+  --orange: hsl(33, 100%, 83%);
+  --brown: hsl(39, 100%, 21%);
 }
 
 *,
@@ -230,4 +234,32 @@ body {
       }
     }
   }
+}
+
+.app-container {
+  padding: 0.75rem;
+}
+
+.controls-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.controls-note {
+  color: hsl(0, 0%, 40%);
+}
+
+.selection-wrapper {
+  margin-bottom: 0.75rem;
+}
+
+.app-error {
+  background: var(--beige);
+  border: 1px solid var(--orange);
+  color: var(--brown);
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 4px;
 }
