@@ -242,8 +242,8 @@ body {
 
 .controls-row {
   display: flex;
-  gap: .5rem;
-  margin-bottom: .75rem;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
   align-items: center;
 }
 
@@ -252,14 +252,14 @@ body {
 }
 
 .selection-wrapper {
-  margin-bottom: .75rem;
+  margin-bottom: 0.75rem;
 }
 
 .app-error {
   background: var(--beige);
   border: 1px solid var(--orange);
   color: var(--brown);
-  padding: .5rem .75rem;
-  margin-bottom: .75;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75;
   border-radius: 4px;
 }
