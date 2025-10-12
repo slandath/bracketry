@@ -8,39 +8,33 @@ type Props = {
 };
 
 export default function SelectionTool({ data, onPick }: Props) {
-  const firstRoundMatches = useMemo(() => {
-    if (!data?.matches) return [];
-    return [...data.matches]
-      .filter((m) => m.roundIndex === 0)
-      .sort((a, b) => a.order - b.order);
-  }, [data]);
+  const firstRoundMatches = useMemo(
+    () =>
+      (data?.matches ?? [])
+        .filter((m) => m.roundIndex === 0)
+        .sort((a, b) => a.order - b.order),
+    [data],
+  );
 
   const [index, setIndex] = useState(0);
-  const [confirmedByMatch, setConfirmedByMatch] = useState<
+  const [selectedByMatch, setSelectedByMatch] = useState<
     Record<string, string>
   >({});
+  const [savedByMatch, setSavedByMatch] = useState<Record<string, string>>({});
+  const [savingAll, setSavingAll] = useState(false);
 
-  const match = firstRoundMatches[index];
-  const matchKey = match ? `${match.roundIndex}:${match.order}` : "";
-  const predictedTeam = confirmedByMatch[matchKey] ?? null;
-
-  // Clamp index when matches change
   useEffect(() => {
-    if (index >= firstRoundMatches.length && firstRoundMatches.length > 0) {
+    if (index >= firstRoundMatches.length && firstRoundMatches.length) {
       setIndex(firstRoundMatches.length - 1);
     }
   }, [firstRoundMatches.length, index]);
 
-  // Keyboard navigation
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "ArrowLeft")
-        setIndex((i) => Math.max(0, i - 1));
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") setIndex((i) => Math.max(0, i - 1));
       if (e.key === "ArrowRight")
-        setIndex((i) =>
-          Math.min(firstRoundMatches.length - 1, i + 1)
-        );
-    }
+        setIndex((i) => Math.min(firstRoundMatches.length - 1, i + 1));
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [firstRoundMatches.length]);
@@ -53,29 +47,56 @@ export default function SelectionTool({ data, onPick }: Props) {
     );
   }
 
-  const sides = match.sides ?? [];
-  const left = sides[0]?.teamId
-    ? data.teams?.[sides[0].teamId]
-    : undefined;
-  const right = sides[1]?.teamId
-    ? data.teams?.[sides[1].teamId]
-    : undefined;
+  const match = firstRoundMatches[index];
+  const matchKey = `${match.roundIndex}:${match.order}`;
+  const [left, right] = (match.sides ?? []).map((side) =>
+    side?.teamId ? data.teams?.[side.teamId] : undefined,
+  );
 
-  function handleConfirm() {
-    if (!predictedTeam) return;
-    setConfirmedByMatch((prev) => ({
-      ...prev,
-      [matchKey]: predictedTeam,
-    }));
-    onPick?.(match, predictedTeam);
-  }
+  const selectedForThis = selectedByMatch[matchKey] ?? "";
+  const savedForThis = savedByMatch[matchKey] ?? "";
+  const isLocked = !!savedForThis;
 
-  function selectTeam(teamId: string | null) {
-    setConfirmedByMatch((prev) => ({
-      ...prev,
-      [matchKey]: teamId ?? "",
-    }));
-  }
+  const selectTeam = (teamId: string | null) => {
+    if (!isLocked) {
+      setSelectedByMatch((p) => ({ ...p, [matchKey]: teamId ?? "" }));
+    }
+  };
+
+  const handleSaveAll = async () => {
+    if (!onPick) return;
+
+    const selectedEntries = Object.entries(selectedByMatch).filter(
+      ([_, teamId]) => teamId,
+    );
+    if (!selectedEntries.length) return;
+
+    setSavingAll(true);
+    for (const [key, teamId] of selectedEntries) {
+      const [r, order] = key.split(":").map(Number);
+      const match = data.matches?.find(
+        (m) => m.roundIndex === r && m.order === order,
+      );
+      if (match) {
+        try {
+          await onPick(match, teamId);
+          setSavedByMatch((p) => ({ ...p, [key]: teamId }));
+        } catch (err) {
+          console.error("onPick failed for match", key, err);
+        }
+      }
+    }
+    setSelectedByMatch({});
+    setSavingAll(false);
+  };
+
+  const navigate = (delta: number) => {
+    setIndex((i) =>
+      Math.max(0, Math.min(firstRoundMatches.length - 1, i + delta)),
+    );
+  };
+
+  const hasSelections = Object.values(selectedByMatch).some(Boolean);
 
   return (
     <div className="selection-tool-wrapper">
@@ -84,7 +105,7 @@ export default function SelectionTool({ data, onPick }: Props) {
           <button
             aria-label="Previous match"
             className="selection-tool__nav selection-tool__nav--left"
-            onClick={() => setIndex((i) => Math.max(0, i - 1))}
+            onClick={() => navigate(-1)}
             disabled={index === 0}
           >
             ‹
@@ -104,24 +125,32 @@ export default function SelectionTool({ data, onPick }: Props) {
           <div className="selection-tool__match">
             <TeamCard
               team={left}
-              checked={predictedTeam === left?.id}
+              checked={
+                selectedForThis === left?.id || savedForThis === left?.id
+              }
               onChange={() => selectTeam(left?.id ?? null)}
+              name={`team-selection-${matchKey}`}
+              disabled={isLocked}
             />
             <TeamCard
               team={right}
-              checked={predictedTeam === right?.id}
+              checked={
+                selectedForThis === right?.id || savedForThis === right?.id
+              }
               onChange={() => selectTeam(right?.id ?? null)}
+              name={`team-selection-${matchKey}`}
+              disabled={isLocked}
             />
           </div>
 
           <div className="selection-tool__controls">
             <button
               type="button"
-              className="selection-tool__confirm-btn"
-              onClick={handleConfirm}
-              disabled={!predictedTeam}
+              className="selection-tool__save-all-btn"
+              onClick={handleSaveAll}
+              disabled={savingAll || !hasSelections}
             >
-              Confirm Selection
+              {savingAll ? "Saving…" : "Save All Picks"}
             </button>
           </div>
         </div>
@@ -130,11 +159,7 @@ export default function SelectionTool({ data, onPick }: Props) {
           <button
             aria-label="Next match"
             className="selection-tool__nav selection-tool__nav--right"
-            onClick={() =>
-              setIndex((i) =>
-                Math.min(firstRoundMatches.length - 1, i + 1)
-              )
-            }
+            onClick={() => navigate(1)}
             disabled={index === firstRoundMatches.length - 1}
           >
             ›
@@ -149,18 +174,20 @@ function TeamCard({
   team,
   onChange,
   checked,
+  name,
+  disabled,
 }: {
   team?: Team;
   onChange?: () => void;
   checked?: boolean;
+  name?: string;
+  disabled?: boolean;
 }) {
-  if (!team) {
-    return <div className="team-card team-card--tbd">TBD</div>;
-  }
+  if (!team) return <div className="team-card team-card--tbd">TBD</div>;
 
   return (
     <label
-      className={`team-card ${checked ? "team-card--selected" : ""}`}
+      className={`team-card ${checked ? "team-card--selected" : ""} ${disabled ? "team-card--disabled" : ""}`}
     >
       <div className="team-card__left">
         {team.logoUrl ? (
@@ -189,7 +216,8 @@ function TeamCard({
           className="team-card__pick-checkbox"
           checked={!!checked}
           onChange={onChange}
-          name="team-selection"
+          name={name}
+          disabled={disabled}
         />
       </div>
     </label>
