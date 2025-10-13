@@ -67,5 +67,8 @@
   "editor.formatOnSaveExcludedLanguages": ["plaintext"],
 
   // Editor niceties
-  "editor.minimap.enabled": true
+  "editor.minimap.enabled": true,
+
+  "oxc.enable": true,
+  "oxc.lint.run": "onType",
 }
