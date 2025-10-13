@@ -40,7 +40,7 @@ export default function App() {
       bracketInstanceRef.current = createBracket(
         tournamentData,
         bracketContainerRef.current,
-        {}
+        {},
       );
 
       injectMatchStatuses(bracketContainerRef.current, tournamentData.matches);
@@ -94,53 +94,53 @@ export default function App() {
     });
   }
 
-function recomputeLaterRoundsFromPicks(data: Data) {
-  const matches = data.matches ?? [];
-  const maxRound = Math.max(...matches.map((m) => m.roundIndex));
+  function recomputeLaterRoundsFromPicks(data: Data) {
+    const matches = data.matches ?? [];
+    const maxRound = Math.max(...matches.map((m) => m.roundIndex));
 
-  for (let r = 1; r <= maxRound; r++) {
-    const curMatches = matches
-      .filter((m) => m.roundIndex === r)
-      .sort((a, b) => a.order - b.order);
+    for (let r = 1; r <= maxRound; r++) {
+      const curMatches = matches
+        .filter((m) => m.roundIndex === r)
+        .sort((a, b) => a.order - b.order);
 
-    const prevMatches = matches
-      .filter((m) => m.roundIndex === r - 1)
-      .sort((a, b) => a.order - b.order);
+      const prevMatches = matches
+        .filter((m) => m.roundIndex === r - 1)
+        .sort((a, b) => a.order - b.order);
 
-    curMatches.forEach((target, i) => {
-      const left = prevMatches[i * 2];
-      const right = prevMatches[i * 2 + 1];
+      curMatches.forEach((target, i) => {
+        const left = prevMatches[i * 2];
+        const right = prevMatches[i * 2 + 1];
 
-      const leftWinner = left?.prediction || left?.result || null;
-      const rightWinner = right?.prediction || right?.result || null;
+        const leftWinner = left?.prediction || left?.result || null;
+        const rightWinner = right?.prediction || right?.result || null;
 
-      // Ensure sides array exists with proper structure
-      if (!Array.isArray(target.sides)) {
-        target.sides = [];
-      }
-      if (!target.sides[0]) {
-        target.sides[0] = {};
-      }
-      if (!target.sides[1]) {
-        target.sides[1] = {};
-      }
-
-      target.sides[0].teamId = leftWinner ?? undefined;
-      target.sides[1].teamId = rightWinner ?? undefined;
-
-      if (leftWinner && rightWinner) {
-        target.matchStatus = "Predicted";
-      } else {
-        delete target.prediction;
-        if (target.matchStatus === "Predicted") {
-          target.matchStatus = "Scheduled";
+        // Ensure sides array exists with proper structure
+        if (!Array.isArray(target.sides)) {
+          target.sides = [];
         }
-      }
-    });
-  }
+        if (!target.sides[0]) {
+          target.sides[0] = {};
+        }
+        if (!target.sides[1]) {
+          target.sides[1] = {};
+        }
 
-  return data;
-}
+        target.sides[0].teamId = leftWinner ?? undefined;
+        target.sides[1].teamId = rightWinner ?? undefined;
+
+        if (leftWinner && rightWinner) {
+          target.matchStatus = "Predicted";
+        } else {
+          delete target.prediction;
+          if (target.matchStatus === "Predicted") {
+            target.matchStatus = "Scheduled";
+          }
+        }
+      });
+    }
+
+    return data;
+  }
 
   async function handlePick(match: Match, teamId: string) {
     const run = async () => {
@@ -148,7 +148,7 @@ function recomputeLaterRoundsFromPicks(data: Data) {
       const updated = structuredClone(base);
 
       const target = updated.matches?.find(
-        (m) => m.roundIndex === match.roundIndex && m.order === match.order
+        (m) => m.roundIndex === match.roundIndex && m.order === match.order,
       );
 
       if (!target) return;

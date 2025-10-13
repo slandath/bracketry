@@ -28,7 +28,7 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
 
   const matchKey = `${match.roundIndex}:${match.order}`;
   const [left, right] = (match.sides ?? []).map((side) =>
-    side?.teamId ? data.teams?.[side.teamId] : undefined
+    side?.teamId ? data.teams?.[side.teamId] : undefined,
   );
 
   // Derive saved state from data instead of maintaining separate state
@@ -76,7 +76,8 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
 
         const [roundStr, orderStr] = key.split(":");
         const targetMatch = firstRoundMatches.find(
-          (m) => m.roundIndex === Number(roundStr) && m.order === Number(orderStr)
+          (m) =>
+            m.roundIndex === Number(roundStr) && m.order === Number(orderStr),
         );
 
         if (targetMatch) {
@@ -96,7 +97,7 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
 
   const navigate = (delta: number) => {
     setIndex((i) =>
-      Math.max(0, Math.min(firstRoundMatches.length - 1, i + delta))
+      Math.max(0, Math.min(firstRoundMatches.length - 1, i + delta)),
     );
   };
 
