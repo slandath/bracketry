@@ -75,7 +75,7 @@ $max-width: 21.875rem;
     font-weight: 700;
 
     &:disabled {
-      opacity: .5;
+      opacity: 0.5;
       cursor: not-allowed;
     }
   }
@@ -240,8 +240,8 @@ $max-width: 21.875rem;
 
   &__close {
     position: absolute;
-    top: .05rem;
-    right: .05rem;
+    top: 0.05rem;
+    right: 0.05rem;
     background: white;
     border: none;
     border-radius: 50%;

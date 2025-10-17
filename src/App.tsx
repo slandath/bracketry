@@ -122,43 +122,43 @@ export default function App() {
     setTournamentData(updated);
   }
 
-    function refreshBracketFromStorage() {
-      setTournamentData(readStoredData());
-    }
+  function refreshBracketFromStorage() {
+    setTournamentData(readStoredData());
+  }
 
-    return (
-      <div className="app-container">
-        <button
-          className="open-selection-btn"
-          onClick={() => setIsSelectionOpen(true)}
-        >
-          Make Predictions
-        </button>
+  return (
+    <div className="app-container">
+      <button
+        className="open-selection-btn"
+        onClick={() => setIsSelectionOpen(true)}
+      >
+        Make Predictions
+      </button>
 
-        {isSelectionOpen && tournamentData && (
-          <dialog className="selection-modal" open>
-            <div className="selection-modal__content">
-              <button
-                className="selection-modal__close"
-                onClick={() => setIsSelectionOpen(false)}
-                aria-label="Close"
-              >
-                x
-              </button>
-              <SelectionTool
-                data={tournamentData}
-                onPick={handlePick}
-                onRefresh={refreshBracketFromStorage}
-              />
-            </div>
-          </dialog>
-        )}
+      {isSelectionOpen && tournamentData && (
+        <dialog className="selection-modal" open>
+          <div className="selection-modal__content">
+            <button
+              className="selection-modal__close"
+              onClick={() => setIsSelectionOpen(false)}
+              aria-label="Close"
+            >
+              x
+            </button>
+            <SelectionTool
+              data={tournamentData}
+              onPick={handlePick}
+              onRefresh={refreshBracketFromStorage}
+            />
+          </div>
+        </dialog>
+      )}
 
-        <div
-          ref={bracketContainerRef}
-          className="bracketry-wrapper"
-          style={{ filter: isSelectionOpen ? "blur(4px)" : "none" }}
-        />
-      </div>
-    );
+      <div
+        ref={bracketContainerRef}
+        className="bracketry-wrapper"
+        style={{ filter: isSelectionOpen ? "blur(4px)" : "none" }}
+      />
+    </div>
+  );
 }

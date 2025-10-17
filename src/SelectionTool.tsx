@@ -147,7 +147,9 @@ export default function SelectionTool({
   };
 
   const navigate = (delta: number) => {
-    setIndex((i: number) => Math.max(0, Math.min(roundMatches.length - 1, i + delta)));
+    setIndex((i: number) =>
+      Math.max(0, Math.min(roundMatches.length - 1, i + delta)),
+    );
   };
 
   const isLastRound = currentRound === maxRound;
