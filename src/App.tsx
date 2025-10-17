@@ -128,13 +128,6 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <button
-        className="open-selection-btn"
-        onClick={() => setIsSelectionOpen(true)}
-      >
-        Make Predictions
-      </button>
-
       {isSelectionOpen && tournamentData && (
         <dialog className="selection-modal" open>
           <div className="selection-modal__content">
@@ -159,6 +152,12 @@ export default function App() {
         className="bracketry-wrapper"
         style={{ filter: isSelectionOpen ? "blur(4px)" : "none" }}
       />
+      <button
+        className="open-selection-btn"
+        onClick={() => setIsSelectionOpen(true)}
+      >
+        Make Predictions
+      </button>
     </div>
   );
 }
