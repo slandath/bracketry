@@ -7,7 +7,7 @@ import SelectionTool from "./SelectionTool";
 const STORAGE_KEY = "bracketry:tournament:v1";
 
 export default function App() {
-  const [showSelection, setShowSelection] = useState(false);
+  const [isSelectionOpen, setIsSelectionOpen] = useState(false);
   const [tournamentData, setTournamentData] = useState<Data | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -178,6 +178,10 @@ export default function App() {
     }
   }
 
+  function handleSelectionClose() {
+    setIsSelectionOpen(false);
+  }
+
   return (
     <div className="app-container">
       {error && (
@@ -186,21 +190,22 @@ export default function App() {
         </div>
       )}
 
-      <div className="controls-row">
-        <button onClick={() => setShowSelection((s) => !s)}>
-          {showSelection ? "Hide" : "Show"} Selection Tool
-        </button>
-      </div>
+      <button className="open-selection-btn" onClick={() => setIsSelectionOpen(true)}>
+        Make Predictions
+      </button>
 
-      {showSelection && tournamentData && (
-        <SelectionTool
-          data={tournamentData}
-          onPick={handlePick}
-          onRefresh={refreshBracketFromStorage}
-        />
+      {isSelectionOpen && tournamentData && (
+        <dialog className="selection-modal" open>
+          <div className="selection-modal__content">
+            <button className="selection-modal__close" onClick={handleSelectionClose} aria-label="Close selection tool">
+              x
+            </button>
+            <SelectionTool data={tournamentData} onPick={handlePick} onRefresh={refreshBracketFromStorage} />
+          </div>
+        </dialog>
       )}
 
-      <div ref={bracketContainerRef} className="bracketry-wrapper" />
+      <div ref={bracketContainerRef} className="bracketry-wrapper" style={{ filter: isSelectionOpen ? "blur(4px)" : "none"}} />
     </div>
   );
 }

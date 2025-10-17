@@ -9,11 +9,40 @@ type Props = {
   roundNames?: Record<number, string>;
 };
 
-export default function SelectionTool({ data, onPick, onRefresh, roundNames }: Props) {
-  const [currentRound, setCurrentRound] = useState(0);
-  const [index, setIndex] = useState(0);
+export default function SelectionTool({
+  data,
+  onPick,
+  onRefresh,
+  roundNames,
+}: Props) {
+  const SELECTION_STATE_KEY = "bracketry:selection:state";
+
   const [pendingPicks, setPendingPicks] = useState<Record<string, string>>({});
   const [isSaving, setIsSaving] = useState(false);
+  const [currentRound, setCurrentRound] = useState(() => {
+    try {
+      const saved = localStorage.getItem(SELECTION_STATE_KEY);
+      if (saved) {
+        const { round } = JSON.parse(saved);
+        return round ?? 0;
+      }
+    } catch (err) {
+      console.warn("Failed to restore selection state:", err);
+    }
+    return 0;
+  });
+  const [index, setIndex] = useState(() => {
+    try {
+      const saved = localStorage.getItem(SELECTION_STATE_KEY);
+      if (saved) {
+        const { matchIndex } = JSON.parse(saved);
+        return matchIndex ?? 0;
+      }
+    } catch (err) {
+      console.warn("Failed to restore selection state:", err);
+    }
+    return 0;
+  });
 
   const allMatches = (data?.matches ?? []).sort(
     (a, b) => a.roundIndex - b.roundIndex || a.order - b.order,
@@ -26,10 +55,10 @@ export default function SelectionTool({ data, onPick, onRefresh, roundNames }: P
     2: "Sweet 16",
     3: "Elite 8",
     4: "Final 4",
-    5: "Championship"
+    5: "Championship",
   };
 
-  const names = roundNames || defaultRoundNames
+  const names = roundNames || defaultRoundNames;
   const roundMatches = allMatches
     .filter((m) => m.roundIndex === currentRound)
     .sort((a, b) => a.order - b.order);
@@ -74,15 +103,22 @@ export default function SelectionTool({ data, onPick, onRefresh, roundNames }: P
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") {
-        setIndex((i) => Math.max(0, i - 1));
+        setIndex((i: number) => Math.max(0, i - 1));
       }
       if (e.key === "ArrowRight") {
-        setIndex((i) => Math.min(roundMatches.length - 1, i + 1));
+        setIndex((i: number) => Math.min(roundMatches.length - 1, i + 1));
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [roundMatches.length]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      SELECTION_STATE_KEY,
+      JSON.stringify({ round: currentRound, matchIndex: index }),
+    );
+  }, [currentRound, index]);
 
   const selectTeam = (teamId: string | null) => {
     if (isLocked) return;
@@ -100,7 +136,7 @@ export default function SelectionTool({ data, onPick, onRefresh, roundNames }: P
         const key = `${m.roundIndex}:${m.order}`;
         const teamId = pendingPicks[key];
         if (teamId) {
-          await onPick(m, teamId);
+          await Promise.resolve(onPick(m, teamId));
         }
       }
 
@@ -115,7 +151,7 @@ export default function SelectionTool({ data, onPick, onRefresh, roundNames }: P
       onRefresh?.();
 
       if (currentRound < maxRound) {
-        setCurrentRound((r) => r + 1);
+        setCurrentRound((r: number) => r + 1);
         setIndex(0);
       }
     } catch (err) {
@@ -131,7 +167,7 @@ export default function SelectionTool({ data, onPick, onRefresh, roundNames }: P
   };
 
   const navigate = (delta: number) => {
-    setIndex((i) =>
+    setIndex((i: number) =>
       Math.max(0, Math.min(roundMatches.length - 1, i + delta)),
     );
   };
