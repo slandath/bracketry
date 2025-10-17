@@ -7,54 +7,35 @@ import SelectionTool from "./SelectionTool";
 const STORAGE_KEY = "bracketry:tournament:v1";
 
 export default function App() {
-  const [showSelection, setShowSelection] = useState(false);
+  const [isSelectionOpen, setIsSelectionOpen] = useState(false);
   const [tournamentData, setTournamentData] = useState<Data | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const bracketContainerRef = useRef<HTMLDivElement | null>(null);
   const bracketInstanceRef = useRef<any>(null);
-  const writeLockRef = useRef<Promise<void>>(Promise.resolve());
 
-  // Initialize on mount
   useEffect(() => {
-    try {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(bracketData));
-      }
-      const data = readStoredData();
-      setTournamentData(data);
-    } catch (err) {
-      console.error("Initialization failed:", err);
-      setError("Failed to load bracket data.");
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(bracketData));
     }
-
-    return () => bracketInstanceRef.current?.uninstall?.();
+    setTournamentData(readStoredData());
   }, []);
 
-  // Rebuild bracket when data changes
   useEffect(() => {
     if (!tournamentData?.matches || !bracketContainerRef.current) return;
-
-    try {
-      bracketInstanceRef.current?.uninstall?.();
-      bracketInstanceRef.current = createBracket(
-        tournamentData,
-        bracketContainerRef.current,
-        {},
-      );
-
-      injectMatchStatuses(bracketContainerRef.current, tournamentData.matches);
-    } catch (err) {
-      console.error("Bracket render failed:", err);
-      setError("Failed to render bracket.");
-    }
+    bracketInstanceRef.current?.uninstall?.();
+    bracketInstanceRef.current = createBracket(
+      tournamentData,
+      bracketContainerRef.current,
+      {},
+    );
+    injectMatchStatuses(bracketContainerRef.current, tournamentData.matches);
 
     return () => bracketInstanceRef.current?.uninstall?.();
   }, [tournamentData]);
 
   function readStoredData(): Data {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return bracketData as unknown as Data;
+    if (!raw) return bracketData as Data;
 
     try {
       return JSON.parse(raw) as Data;
@@ -65,21 +46,17 @@ export default function App() {
   }
 
   function injectMatchStatuses(container: HTMLElement, matches: Match[]) {
-    // Build lookup map: "roundIndex:order" -> matchStatus
-    const statusMap = new Map<string, string>();
-    matches.forEach((m) => {
-      if (m.matchStatus) {
-        statusMap.set(`${m.roundIndex}:${m.order}`, m.matchStatus);
-      }
-    });
+    const statusMap = new Map(
+      matches
+        .filter((m) => m.matchStatus)
+        .map((m) => [`${m.roundIndex}:${m.order}`, m.matchStatus!]),
+    );
 
     container.querySelectorAll(".match-wrapper").forEach((wrapper) => {
       const order = wrapper.getAttribute("match-order");
       const round = wrapper
         .closest(".round-wrapper")
         ?.getAttribute("round-index");
-
-      if (!order || !round) return;
 
       const status = statusMap.get(`${round}:${order}`);
       if (!status) return;
@@ -102,7 +79,6 @@ export default function App() {
       const curMatches = matches
         .filter((m) => m.roundIndex === r)
         .sort((a, b) => a.order - b.order);
-
       const prevMatches = matches
         .filter((m) => m.roundIndex === r - 1)
         .sort((a, b) => a.order - b.order);
@@ -114,93 +90,75 @@ export default function App() {
         const leftWinner = left?.prediction || left?.result || null;
         const rightWinner = right?.prediction || right?.result || null;
 
-        // Ensure sides array exists with proper structure
-        if (!Array.isArray(target.sides)) {
-          target.sides = [];
-        }
-        if (!target.sides[0]) {
-          target.sides[0] = {};
-        }
-        if (!target.sides[1]) {
-          target.sides[1] = {};
-        }
+        target.sides = [
+          { ...target.sides?.[0], teamId: leftWinner ?? undefined },
+          { ...target.sides?.[1], teamId: rightWinner ?? undefined },
+        ];
 
-        target.sides[0].teamId = leftWinner ?? undefined;
-        target.sides[1].teamId = rightWinner ?? undefined;
-
-        if (leftWinner && rightWinner) {
-          target.matchStatus = "Predicted";
-        } else {
+        if (!leftWinner || !rightWinner) {
           delete target.prediction;
-          if (target.matchStatus === "Predicted") {
-            target.matchStatus = "Scheduled";
-          }
+          target.matchStatus =
+            target.matchStatus === "Predicted"
+              ? "Scheduled"
+              : target.matchStatus;
+        } else {
+          target.matchStatus = "Predicted";
         }
       });
     }
-
     return data;
   }
 
-  async function handlePick(match: Match, teamId: string) {
-    const run = async () => {
-      const base = readStoredData();
-      const updated = structuredClone(base);
+  function handlePick(match: Match, teamId: string) {
+    const updated = structuredClone(readStoredData());
+    const target = updated.matches?.find(
+      (m) => m.roundIndex === match.roundIndex && m.order === match.order,
+    );
+    if (!target) return;
 
-      const target = updated.matches?.find(
-        (m) => m.roundIndex === match.roundIndex && m.order === match.order,
-      );
-
-      if (!target) return;
-
-      target.prediction = teamId;
-      recomputeLaterRoundsFromPicks(updated);
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      setTournamentData(updated);
-    };
-
-    const prev = writeLockRef.current;
-    const next = prev.then(run).catch((err) => {
-      console.error("Pick failed:", err);
-      setError("Failed to save pick.");
-    });
-    writeLockRef.current = next;
-    await next;
+    target.prediction = teamId;
+    recomputeLaterRoundsFromPicks(updated);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    setTournamentData(updated);
   }
 
   function refreshBracketFromStorage() {
-    try {
-      setTournamentData(readStoredData());
-    } catch (err) {
-      console.error("Refresh failed:", err);
-      setError("Failed to refresh bracket.");
-    }
+    setTournamentData(readStoredData());
   }
 
   return (
     <div className="app-container">
-      {error && (
-        <div className="app-error" role="alert">
-          {error}
-        </div>
+      <button
+        className="open-selection-btn"
+        onClick={() => setIsSelectionOpen(true)}
+      >
+        Make Predictions
+      </button>
+
+      {isSelectionOpen && tournamentData && (
+        <dialog className="selection-modal" open>
+          <div className="selection-modal__content">
+            <button
+              className="selection-modal__close"
+              onClick={() => setIsSelectionOpen(false)}
+              aria-label="Close"
+            >
+              x
+            </button>
+            <SelectionTool
+              data={tournamentData}
+              onPick={handlePick}
+              onRefresh={refreshBracketFromStorage}
+            />
+          </div>
+        </dialog>
       )}
 
-      <div className="controls-row">
-        <button onClick={() => setShowSelection((s) => !s)}>
-          {showSelection ? "Hide" : "Show"} Selection Tool
-        </button>
-      </div>
-
-      {showSelection && tournamentData && (
-        <SelectionTool
-          data={tournamentData}
-          onPick={handlePick}
-          onRefresh={refreshBracketFromStorage}
-        />
-      )}
-
-      <div ref={bracketContainerRef} className="bracketry-wrapper" />
+      <div
+        ref={bracketContainerRef}
+        className="bracketry-wrapper"
+        style={{ filter: isSelectionOpen ? "blur(4px)" : "none" }}
+      />
     </div>
   );
 }
