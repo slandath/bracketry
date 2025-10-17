@@ -17,32 +17,22 @@ export default function SelectionTool({
 }: Props) {
   const SELECTION_STATE_KEY = "bracketry:selection:state";
 
+  const getInitialState = () => {
+    try {
+      const saved = localStorage.getItem(SELECTION_STATE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch (err) {
+      console.warn("Failed to restore selection state:", err);
+    }
+    return { round: 0, matchIndex: 0 };
+  };
+
   const [pendingPicks, setPendingPicks] = useState<Record<string, string>>({});
   const [isSaving, setIsSaving] = useState(false);
-  const [currentRound, setCurrentRound] = useState(() => {
-    try {
-      const saved = localStorage.getItem(SELECTION_STATE_KEY);
-      if (saved) {
-        const { round } = JSON.parse(saved);
-        return round ?? 0;
-      }
-    } catch (err) {
-      console.warn("Failed to restore selection state:", err);
-    }
-    return 0;
-  });
-  const [index, setIndex] = useState(() => {
-    try {
-      const saved = localStorage.getItem(SELECTION_STATE_KEY);
-      if (saved) {
-        const { matchIndex } = JSON.parse(saved);
-        return matchIndex ?? 0;
-      }
-    } catch (err) {
-      console.warn("Failed to restore selection state:", err);
-    }
-    return 0;
-  });
+  const [currentRound, setCurrentRound] = useState(
+    () => getInitialState().round,
+  );
+  const [index, setIndex] = useState(() => getInitialState().matchIndex);
 
   const allMatches = (data?.matches ?? []).sort(
     (a, b) => a.roundIndex - b.roundIndex || a.order - b.order,
@@ -79,35 +69,28 @@ export default function SelectionTool({
   );
 
   const savedPick = match.prediction || "";
-  const pendingPick = pendingPicks[matchKey] || "";
-  const currentPick = pendingPick || savedPick;
+  const currentPick = pendingPicks[matchKey] || savedPick;
   const isLocked = !!savedPick;
 
-  // Count pending picks for this round
   const roundMatchKeys = new Set(
     roundMatches.map((m) => `${m.roundIndex}:${m.order}`),
   );
-  const pendingInRound = Object.entries(pendingPicks)
-    .filter(([key]) => roundMatchKeys.has(key))
-    .filter(([, teamId]) => !!teamId).length;
+  const pendingInRound = Object.entries(pendingPicks).filter(
+    ([key, teamId]) => roundMatchKeys.has(key) && teamId,
+  ).length;
   const allRoundMatchesPicked = pendingInRound === roundMatches.length;
 
-  // Clamp index if array shrinks
   useEffect(() => {
     if (index >= roundMatches.length && roundMatches.length > 0) {
       setIndex(roundMatches.length - 1);
     }
   }, [roundMatches.length, index]);
 
-  // Keyboard navigation
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") {
-        setIndex((i: number) => Math.max(0, i - 1));
-      }
-      if (e.key === "ArrowRight") {
+      if (e.key === "ArrowLeft") setIndex((i: number) => Math.max(0, i - 1));
+      if (e.key === "ArrowRight")
         setIndex((i: number) => Math.min(roundMatches.length - 1, i + 1));
-      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -131,23 +114,20 @@ export default function SelectionTool({
     setIsSaving(true);
 
     try {
-      // Call onPick for each pending selection in this round
       for (const m of roundMatches) {
         const key = `${m.roundIndex}:${m.order}`;
         const teamId = pendingPicks[key];
-        if (teamId) {
-          await Promise.resolve(onPick(m, teamId));
-        }
+        if (teamId) await Promise.resolve(onPick(m, teamId));
       }
 
-      // Clear pending picks for this round
-      const updatedPicks = { ...pendingPicks };
-      roundMatches.forEach((m) => {
-        delete updatedPicks[`${m.roundIndex}:${m.order}`];
+      setPendingPicks((prev) => {
+        const updated = { ...prev };
+        roundMatches.forEach((m) => {
+          delete updated[`${m.roundIndex}:${m.order}`];
+        });
+        return updated;
       });
-      setPendingPicks(updatedPicks);
 
-      // Trigger refresh and advance to next round if available
       onRefresh?.();
 
       if (currentRound < maxRound) {
@@ -167,9 +147,7 @@ export default function SelectionTool({
   };
 
   const navigate = (delta: number) => {
-    setIndex((i: number) =>
-      Math.max(0, Math.min(roundMatches.length - 1, i + delta)),
-    );
+    setIndex((i: number) => Math.max(0, Math.min(roundMatches.length - 1, i + delta)));
   };
 
   const isLastRound = currentRound === maxRound;
@@ -273,9 +251,7 @@ function TeamCard({
 
   return (
     <label
-      className={`team-card ${checked ? "team-card--selected" : ""} ${
-        disabled ? "team-card--disabled" : ""
-      }`}
+      className={`team-card ${checked ? "team-card--selected" : ""} ${disabled ? "team-card--disabled" : ""}`}
     >
       <div className="team-card__left">
         {team.logoUrl ? (
