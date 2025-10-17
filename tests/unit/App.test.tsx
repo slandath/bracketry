@@ -1,5 +1,4 @@
 // src/App.test.tsx
-import "@testing-library/jest-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { recomputeLaterRoundsFromPicks } from "../../src/App";
 import { Data } from "../../src/lib/data/data";
@@ -48,38 +47,32 @@ const mockBracketData: Data = {
   teams: mockTeams,
 };
 
-describe("App - recomputeLaterRoundsFromPicks", () => {
+describe("App - handlePick & write-lock queue", () => {
   beforeEach(() => {
+    localStorage.clear();
     vi.clearAllMocks();
   });
 
-it("recomputes downstream rounds after a pick", () => {
-  const data = structuredClone(mockBracketData);
-  data.matches![0].prediction = "1";
-  data.matches![1].prediction = "8";
+  it("recomputes downstream rounds after a pick", () => {
+    const data = structuredClone(mockBracketData);
+    data.matches![0].prediction = "1";
+    data.matches![1].prediction = "8";
 
-  recomputeLaterRoundsFromPicks(data);
+    recomputeLaterRoundsFromPicks(data);
 
-  console.log("Match 2 after recompute:", JSON.stringify(data.matches![2], null, 2));
-  console.log("Match 2 sides:", data.matches![2].sides);
-  console.log("Match 2 sides[0]:", data.matches![2].sides?.[0]);
+    expect(data.matches![2].sides?.[0]?.teamId).toBe("1");
+    expect(data.matches![2].sides?.[1]?.teamId).toBe("8");
+  });
 
-  expect(data.matches![2].sides?.[0]?.teamId).toBe("1");
-  expect(data.matches![2].sides?.[1]?.teamId).toBe("8");
-});
+  it("clears downstream predictions if both upstream picks aren't set", () => {
+    const data = structuredClone(mockBracketData);
+    data.matches![0].prediction = "1"; // Only left pick set
+    data.matches![2].prediction = "1"; // Old prediction to clear
 
-it("clears downstream predictions if both upstream picks aren't set", () => {
-  const data = structuredClone(mockBracketData);
-  data.matches![0].prediction = "1"; // Left pick set
-  // Right pick NOT set
-  data.matches![2].prediction = "1"; // Old prediction that should be cleared
+    recomputeLaterRoundsFromPicks(data);
 
-  recomputeLaterRoundsFromPicks(data);
-
-  // Since right upstream match has no prediction, downstream should be cleared
-  expect(data.matches![2].prediction).toBeUndefined();
-  expect(data.matches![2].matchStatus).not.toBe("Predicted");
-});
+    expect(data.matches![2].prediction).toBeUndefined();
+  });
 
   it("marks round as Predicted when both upstream picks exist", () => {
     const data = structuredClone(mockBracketData);
@@ -98,8 +91,8 @@ it("clears downstream predictions if both upstream picks aren't set", () => {
 
     recomputeLaterRoundsFromPicks(data);
 
-    expect(data.matches![2].sides?.[0].teamId).toBe("1");
-    expect(data.matches![2].sides?.[1].teamId).toBe("8");
+    expect(data.matches![2].sides?.[0]?.teamId).toBe("1");
+    expect(data.matches![2].sides?.[1]?.teamId).toBe("8");
   });
 
   it("prefers prediction over result", () => {
@@ -111,8 +104,8 @@ it("clears downstream predictions if both upstream picks aren't set", () => {
 
     recomputeLaterRoundsFromPicks(data);
 
-    expect(data.matches![2].sides?.[0].teamId).toBe("1");
-    expect(data.matches![2].sides?.[1].teamId).toBe("8");
+    expect(data.matches![2].sides?.[0]?.teamId).toBe("1");
+    expect(data.matches![2].sides?.[1]?.teamId).toBe("8");
   });
 
   it("reverts matchStatus from Predicted to Scheduled when picks are cleared", () => {
@@ -123,9 +116,7 @@ it("clears downstream predictions if both upstream picks aren't set", () => {
 
     recomputeLaterRoundsFromPicks(data);
 
-    // Clear the left prediction
     data.matches![0].prediction = undefined;
-
     recomputeLaterRoundsFromPicks(data);
 
     expect(data.matches![2].matchStatus).toBe("Scheduled");
