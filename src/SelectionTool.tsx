@@ -6,22 +6,40 @@ type Props = {
   data: Data;
   onPick?: (match: Match, teamId: string) => void;
   onRefresh?: () => void;
+  roundNames?: Record<number, string>;
 };
 
-export default function SelectionTool({ data, onPick, onRefresh }: Props) {
-  const firstRoundMatches = (data?.matches ?? [])
-    .filter((m) => m.roundIndex === 0)
-    .sort((a, b) => a.order - b.order);
-
+export default function SelectionTool({ data, onPick, onRefresh, roundNames }: Props) {
+  const [currentRound, setCurrentRound] = useState(0);
   const [index, setIndex] = useState(0);
   const [pendingPicks, setPendingPicks] = useState<Record<string, string>>({});
   const [isSaving, setIsSaving] = useState(false);
 
-  const match = firstRoundMatches[index];
+  const allMatches = (data?.matches ?? []).sort(
+    (a, b) => a.roundIndex - b.roundIndex || a.order - b.order,
+  );
+
+  const maxRound = Math.max(...allMatches.map((m) => m.roundIndex), -1);
+  const defaultRoundNames: Record<number, string> = {
+    0: "Round of 64",
+    1: "Round of 32",
+    2: "Sweet 16",
+    3: "Elite 8",
+    4: "Final 4",
+    5: "Championship"
+  };
+
+  const names = roundNames || defaultRoundNames
+  const roundMatches = allMatches
+    .filter((m) => m.roundIndex === currentRound)
+    .sort((a, b) => a.order - b.order);
+
+  const match = roundMatches[index];
+
   if (!match) {
     return (
       <div className="selection-tool__empty">
-        No first-round matches available.
+        No matches available for this round.
       </div>
     );
   }
@@ -31,19 +49,26 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
     side?.teamId ? data.teams?.[side.teamId] : undefined,
   );
 
-  // Derive saved state from data instead of maintaining separate state
   const savedPick = match.prediction || "";
   const pendingPick = pendingPicks[matchKey] || "";
   const currentPick = pendingPick || savedPick;
   const isLocked = !!savedPick;
-  const hasPendingPicks = Object.values(pendingPicks).some(Boolean);
+
+  // Count pending picks for this round
+  const roundMatchKeys = new Set(
+    roundMatches.map((m) => `${m.roundIndex}:${m.order}`),
+  );
+  const pendingInRound = Object.entries(pendingPicks)
+    .filter(([key]) => roundMatchKeys.has(key))
+    .filter(([, teamId]) => !!teamId).length;
+  const allRoundMatchesPicked = pendingInRound === roundMatches.length;
 
   // Clamp index if array shrinks
   useEffect(() => {
-    if (index >= firstRoundMatches.length && firstRoundMatches.length > 0) {
-      setIndex(firstRoundMatches.length - 1);
+    if (index >= roundMatches.length && roundMatches.length > 0) {
+      setIndex(roundMatches.length - 1);
     }
-  }, [firstRoundMatches.length, index]);
+  }, [roundMatches.length, index]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -52,12 +77,12 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
         setIndex((i) => Math.max(0, i - 1));
       }
       if (e.key === "ArrowRight") {
-        setIndex((i) => Math.min(firstRoundMatches.length - 1, i + 1));
+        setIndex((i) => Math.min(roundMatches.length - 1, i + 1));
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [firstRoundMatches.length]);
+  }, [roundMatches.length]);
 
   const selectTeam = (teamId: string | null) => {
     if (isLocked) return;
@@ -65,29 +90,34 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
   };
 
   const handleSaveAll = async () => {
-    if (!onPick || !hasPendingPicks) return;
+    if (!onPick || !allRoundMatchesPicked) return;
 
     setIsSaving(true);
 
     try {
-      // Call onPick for each pending selection
-      for (const [key, teamId] of Object.entries(pendingPicks)) {
-        if (!teamId) continue;
-
-        const [roundStr, orderStr] = key.split(":");
-        const targetMatch = firstRoundMatches.find(
-          (m) =>
-            m.roundIndex === Number(roundStr) && m.order === Number(orderStr),
-        );
-
-        if (targetMatch) {
-          await onPick(targetMatch, teamId);
+      // Call onPick for each pending selection in this round
+      for (const m of roundMatches) {
+        const key = `${m.roundIndex}:${m.order}`;
+        const teamId = pendingPicks[key];
+        if (teamId) {
+          await onPick(m, teamId);
         }
       }
 
-      // Clear pending picks and trigger refresh
-      setPendingPicks({});
+      // Clear pending picks for this round
+      const updatedPicks = { ...pendingPicks };
+      roundMatches.forEach((m) => {
+        delete updatedPicks[`${m.roundIndex}:${m.order}`];
+      });
+      setPendingPicks(updatedPicks);
+
+      // Trigger refresh and advance to next round if available
       onRefresh?.();
+
+      if (currentRound < maxRound) {
+        setCurrentRound((r) => r + 1);
+        setIndex(0);
+      }
     } catch (err) {
       console.error("Failed to save picks:", err);
     } finally {
@@ -95,11 +125,18 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
     }
   };
 
+  const handleReset = () => {
+    setPendingPicks({});
+    setIndex(0);
+  };
+
   const navigate = (delta: number) => {
     setIndex((i) =>
-      Math.max(0, Math.min(firstRoundMatches.length - 1, i + delta)),
+      Math.max(0, Math.min(roundMatches.length - 1, i + delta)),
     );
   };
+
+  const isLastRound = currentRound === maxRound;
 
   return (
     <div className="selection-tool-wrapper">
@@ -118,10 +155,10 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
         <div className="selection-tool__panel">
           <div className="selection-tool__header">
             <h4 className="selection-tool__title">
-              Round {match.roundIndex + 1}
+              {names[match.roundIndex] || `Round ${match.roundIndex + 1}`}
             </h4>
             <div className="selection-tool__position">
-              {index + 1} / {firstRoundMatches.length}
+              {index + 1} / {roundMatches.length}
             </div>
           </div>
 
@@ -147,9 +184,21 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
               type="button"
               className="selection-tool__save-all-btn"
               onClick={handleSaveAll}
-              disabled={isSaving || !hasPendingPicks}
+              disabled={isSaving || !allRoundMatchesPicked}
             >
-              {isSaving ? "Saving…" : "Save All Picks"}
+              {isSaving
+                ? "Saving…"
+                : isLastRound
+                  ? "Save Final Picks"
+                  : "Save & Continue"}
+            </button>
+            <button
+              type="button"
+              className="selection-tool__reset-btn"
+              onClick={handleReset}
+              disabled={isSaving || Object.keys(pendingPicks).length === 0}
+            >
+              Reset Round
             </button>
           </div>
         </div>
@@ -159,7 +208,7 @@ export default function SelectionTool({ data, onPick, onRefresh }: Props) {
             aria-label="Next match"
             className="selection-tool__nav selection-tool__nav--right"
             onClick={() => navigate(1)}
-            disabled={index === firstRoundMatches.length - 1}
+            disabled={index === roundMatches.length - 1}
           >
             ›
           </button>
