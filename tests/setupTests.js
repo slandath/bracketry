@@ -1,9 +1,12 @@
 // test/setupTests.js
 
 import "@testing-library/jest-dom";
-import { vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach, vi } from "vitest";
 
-console.log("✅ setupTests.js loaded");
+afterEach(() => {
+  cleanup();
+});
 
 // Polyfill window.matchMedia (jsdom doesn't provide it)
 Object.defineProperty(window, "matchMedia", {
