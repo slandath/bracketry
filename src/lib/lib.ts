@@ -1,23 +1,30 @@
-import { handle_data_errors } from "./data/handle_errors.mjs";
+// lib/lib.ts
+import { apply_matches_updates } from "./apply_matches_updates.mjs";
 import { ananlyze_data } from "./data/analyze_data.mjs";
-import { deep_clone_object, is_valid_number } from "./utils.mjs";
-import { create_html_shell } from "./html_shell.mjs";
-import { install_ui_events } from "./ui_events/ui_events.mjs";
-import { update_highlight } from "./ui_events/highlight.mjs";
+import type { BracketInstance } from "./data/data";
+import { handle_data_errors } from "./data/handle_errors.mjs";
+import { render_content } from "./draw/render_content.mjs";
+import { handle_images } from "./handle_images.mjs";
+import { create_html_shell } from "./html_shell";
+import { create_navigation } from "./navigation/navigation.mjs";
 import {
   apply_options,
   filter_updatable_options,
 } from "./options/apply_options.mjs";
 import { create_options_dealer } from "./options/options_dealer.mjs";
-import { create_navigation } from "./navigation/navigation.mjs";
-import { render_content } from "./draw/render_content.mjs";
 import { create_scrolla } from "./scroll/scrolla.mjs";
-import { handle_images } from "./handle_images.mjs";
-import { apply_matches_updates } from "./apply_matches_updates.mjs";
+import { update_highlight } from "./ui_events/highlight.mjs";
+import { install_ui_events } from "./ui_events/ui_events.mjs";
+import { deep_clone_object, is_valid_number } from "./utils.mjs";
 
-const all_bracketry_instances = [];
+// track all live instances
+const all_bracketry_instances: BracketInstance[] = [];
 
-const try_assign_new_data = (old_data, new_data) => {
+// Helper to merge new data safely
+const try_assign_new_data = (
+  old_data: Record<string, unknown>,
+  new_data: Record<string, unknown>,
+): boolean => {
   const { have_critical_error } = handle_data_errors(ananlyze_data(new_data));
   if (have_critical_error) return false;
 
@@ -26,16 +33,19 @@ const try_assign_new_data = (old_data, new_data) => {
   return true;
 };
 
+// ======================================================
+// createBracket
+// ======================================================
 export const createBracket = (
-  initial_user_data,
-  user_wrapper_el,
-  user_options,
-) => {
+  initial_user_data: Record<string, unknown>,
+  user_wrapper_el: HTMLElement | null,
+  user_options: Record<string, unknown>,
+): BracketInstance => {
   let alive = false;
-  let options_dealer = create_options_dealer();
-  let actual_data = {};
+ const options_dealer = create_options_dealer();
+ const actual_data: Record<string, unknown> = {};
 
-  const stub = {
+  const stub: BracketInstance = {
     moveToPreviousRound: () => void 0,
     moveToNextRound: () => void 0,
     moveToLastRound: () => void 0,
@@ -51,41 +61,37 @@ export const createBracket = (
     user_wrapper_el,
   };
 
+  // Invalid DOM
   if (
     !user_wrapper_el ||
     !(user_wrapper_el instanceof Element) ||
     !user_wrapper_el.closest("html")
   ) {
     console.warn(
-      "Could not install bracket because invalid element is provided: ",
+      "Could not install bracket because invalid element is provided:",
       user_wrapper_el,
     );
     return stub;
   }
 
-  // destroy old bracket in this wrapper
+  // Kill duplicates in same wrapper
   all_bracketry_instances.forEach((inst) => {
     if (inst.user_wrapper_el === user_wrapper_el) {
       inst.uninstall();
     }
   });
 
-  let html_shell = create_html_shell(user_wrapper_el);
+  const html_shell = create_html_shell(user_wrapper_el);
   apply_options(user_options, options_dealer, html_shell);
 
-  const merge_succeeded = try_assign_new_data(actual_data, initial_user_data);
-
-  if (!merge_succeeded) {
-    return stub;
-  }
+  const merge_ok = try_assign_new_data(actual_data, initial_user_data);
+  if (!merge_ok) return stub;
 
   alive = true;
 
   render_content(actual_data, html_shell, options_dealer.get_final_value);
-
-  let scrolla = create_scrolla(html_shell, options_dealer.get_final_value);
-
-  let navigation = create_navigation(
+  const scrolla = create_scrolla(html_shell, options_dealer.get_final_value);
+  const navigation = create_navigation(
     html_shell,
     options_dealer.get_final_value,
     scrolla,
@@ -96,7 +102,7 @@ export const createBracket = (
     navigation.repaint,
   );
 
-  const uninstall = () => {
+  const uninstall = (): void => {
     if (!alive) return;
 
     unhandle_images();
@@ -104,49 +110,39 @@ export const createBracket = (
     scrolla.uninstall();
     navigation.uninstall();
     html_shell.uninstall();
-    html_shell = null;
-    options_dealer = null;
-    actual_data = null;
-    initial_user_data = null;
-    ui_events = null;
-    scrolla = null;
-    navigation = null;
+
     const instance_i = all_bracketry_instances.indexOf(instance);
-    instance_i > -1 && all_bracketry_instances.splice(instance_i, 1);
-    instance = null;
+    if (instance_i > -1) all_bracketry_instances.splice(instance_i, 1);
 
     alive = false;
   };
 
-  let ui_events = install_ui_events(
+  const ui_events = install_ui_events(
     actual_data,
     options_dealer.get_final_value,
     html_shell,
     navigation,
   );
 
-  // expose stuff
-  let instance = {
-    moveToPreviousRound: () => alive && navigation.move_left(),
-
-    moveToNextRound: () => alive && navigation.move_right(),
-
-    moveToLastRound: () => alive && navigation.set_base_round_index(Infinity),
-
-    setBaseRoundIndex: (i) => {
+  const instance: BracketInstance = {
+    moveToPreviousRound: () => {
+      if (alive) navigation.move_left();
+    },
+    moveToNextRound: () => {
+      if (alive) navigation.move_right();
+    },
+    moveToLastRound: () => {
+      if (alive) navigation.set_base_round_index(Infinity);
+    },
+    setBaseRoundIndex: (i: number) => {
       if (!is_valid_number(i)) {
-        console.warn(
-          "setBaseRoundIndex accepts only numbers, instead got: ",
-          i,
-        );
+        console.warn("setBaseRoundIndex accepts only numbers; got:", i);
         return;
       }
-      return alive && navigation.set_base_round_index(i);
+      if (alive) navigation.set_base_round_index(i);
     },
-
     getNavigationState: navigation.get_state,
-
-    applyNewOptions: (new_options) => {
+    applyNewOptions: (new_options: Record<string, unknown>) => {
       if (!alive) return;
       apply_options(
         filter_updatable_options(new_options),
@@ -155,23 +151,19 @@ export const createBracket = (
       );
       navigation.repaint();
     },
-
-    replaceData: (new_data) => {
+    replaceData: (new_data: Record<string, unknown>) => {
       if (!alive) return;
-      const merge_succeeded = try_assign_new_data(actual_data, new_data);
-      if (!merge_succeeded) {
+      const ok = try_assign_new_data(actual_data, new_data);
+      if (!ok) {
         console.warn("Failed to apply new data");
         return;
       }
-
       render_content(actual_data, html_shell, options_dealer.get_final_value);
-
       navigation.set_base_round_index(0);
       scrolla.adjust_offset(0);
       navigation.repaint();
     },
-
-    applyMatchesUpdates: (u) => {
+    applyMatchesUpdates: (u: Record<string, unknown>) => {
       if (!alive) return;
       apply_matches_updates(
         u,
@@ -181,22 +173,19 @@ export const createBracket = (
         navigation.repaint,
       );
     },
-
     getAllData: () => deep_clone_object(actual_data || {}),
-
     getUserOptions: () =>
       deep_clone_object(options_dealer?.get_user_options() || {}),
-
-    highlightContestantHistory: (contestantId) => {
-      alive && update_highlight(html_shell.matches_positioner, contestantId);
+    highlightContestantHistory: (contestantId: string) => {
+      if (alive)
+        update_highlight(html_shell.matches_positioner, contestantId);
     },
-
-    uninstall: () => alive && uninstall(),
-
+    uninstall: () => {
+      if (alive) uninstall();
+    },
     user_wrapper_el,
   };
 
   all_bracketry_instances.push(instance);
-
   return instance;
 };

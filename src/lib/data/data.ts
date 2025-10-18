@@ -1,3 +1,19 @@
+export type BracketInstance = {
+  moveToPreviousRound: () => void;
+  moveToNextRound: () => void;
+  moveToLastRound: () => void;
+  setBaseRoundIndex: (i: number) => void;
+  getNavigationState: () => unknown;
+  applyNewOptions: (options: Record<string, unknown>) => void;
+  replaceData: (data: Record<string, unknown>) => void;
+  applyMatchesUpdates: (updates: Record<string, unknown>) => void;
+  getAllData: () => unknown;
+  getUserOptions: () => unknown;
+  highlightContestantHistory: (contestantId: string) => void;
+  uninstall: () => void;
+  user_wrapper_el: HTMLElement | null;
+}
+
 export type Data = {
   rounds: Round[]; // you must provide objects for each round, including upcoming rounds
   skippedLastRoundsCount?: number; // useful for folding hidden back-rounds

@@ -1,16 +1,10 @@
 {
-  // Formatting
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSaveMode": "modifications",
-  "prettier.printWidth": 80,
-
-  // Trim/insert newline
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-
-  // File-type formatters
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
@@ -20,17 +14,10 @@
   "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-
-  // Code actions on save - try to run oxlint fixes first (replace the key
-  // if your oxlint extension exposes a different source)
   "editor.codeActionsOnSave": {
-    "source.fixAll.ts": "explicit",
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-
-  // If oxlint integrates with ESLint, validate via ESLint.
-  // If not, remove/replace with your oxlint extension's setting.
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -38,36 +25,17 @@
     "typescriptreact"
   ],
   "eslint.alwaysShowStatus": true,
-
-  // Use workspace TypeScript so types/paths match dev tooling
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-
-  // Vitest & Playwright: useful defaults / file associations
   "files.associations": {
     "*.spec.ts": "typescript",
     "*.spec.tsx": "typescriptreact",
     "*.test.ts": "typescript",
     "*.test.tsx": "typescriptreact"
   },
-
-  // Optional: run tests in editor if you have a Vitest extension (replace key
-  // with that extension's settings if needed).
-  // Example placeholder (remove if not applicable):
   "vitest.showTestExplorer": true,
-
-  // Playwright extension settings (official extension)
   "playwright.editor.usePlaywrightTestExplorer": true,
-
-  // Problems view
   "problems.showCurrentInStatus": true,
-
-  // Ignore formatting for plaintext, keep consistent with .prettierignore
   "editor.formatOnSaveExcludedLanguages": ["plaintext"],
-
-  // Editor niceties
-  "editor.minimap.enabled": true,
-
-  "oxc.enable": true,
-  "oxc.lint.run": "onType",
+  "editor.minimap.enabled": true
 }
