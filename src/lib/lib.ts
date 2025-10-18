@@ -13,8 +13,8 @@ import {
 } from "./options/apply_options.mjs";
 import { create_options_dealer } from "./options/options_dealer.mjs";
 import { create_scrolla } from "./scroll/scrolla.mjs";
-import { update_highlight } from "./ui_events/highlight.mjs";
-import { install_ui_events } from "./ui_events/ui_events.mjs";
+import { update_highlight } from "./ui_events/highlight";
+import { install_ui_events } from "./ui_events/ui_events";
 import { deep_clone_object, is_valid_number } from "./utils";
 
 export type HtmlShell = {
@@ -22,7 +22,7 @@ export type HtmlShell = {
   scrollbar: HTMLElement | null;
   round_titles_wrapper: HTMLElement | null;
   matches_scroller: HTMLElement | null;
-  matches_positioner: HTMLElement; // ✅ non-null
+  matches_positioner: HTMLElement
   uninstall: () => void;
 };
 
@@ -194,7 +194,7 @@ export const createBracket = (
     getUserOptions: () =>
       deep_clone_object(options_dealer?.get_user_options() || {}),
     highlightContestantHistory: (contestantId: string) => {
-      if (alive) update_highlight(html_shell.matches_positioner, contestantId);
+      if (alive && html_shell.matches_positioner) update_highlight(html_shell.matches_positioner, contestantId);
     },
     uninstall: () => {
       if (alive) uninstall();

@@ -1,7 +1,7 @@
 import { handle_data_errors } from "./data/handle_errors.mjs";
 import { validate_matches } from "./data/validate_matches.mjs";
 import { get_match_content } from "./draw/get_match_element.mjs";
-import { update_highlight } from "./ui_events/highlight.mjs";
+import { update_highlight } from "./ui_events/highlight";
 import { is_valid_number } from "./utils";
 
 // You can replace Record<string, unknown> with your real "Match" and "Data" interfaces when available
