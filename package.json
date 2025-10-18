@@ -17,10 +17,6 @@
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run --coverage --reporter=dot",
     "test:file": "vitest tests/unit/match_renderer.test.ts",
-    "test:e2e": "playwright test",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:ui": "playwright show-report",
-    "test:e2e:ci": "playwright test --reporter=dot",
     "ci:checks": "npm run lint && npm run type-check && npm run test:ci"
   },
   "dependencies": {
@@ -28,7 +24,6 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

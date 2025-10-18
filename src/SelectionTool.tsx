@@ -201,6 +201,7 @@ export default function SelectionTool({
               className="selection-tool__save-all-btn"
               onClick={handleSaveAll}
               disabled={isSaving || !allRoundMatchesPicked}
+              data-testId="Confirm"
             >
               {isSaving
                 ? "Saving…"
