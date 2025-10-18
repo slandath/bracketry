@@ -7,3 +7,7 @@ ReactDOM.createRoot(document.getElementById("app")!).render(
     <App />
   </React.StrictMode>,
 );
+
+document.getElementById("year")!.textContent = new Date()
+  .getFullYear()
+  .toString();

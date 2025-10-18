@@ -3,7 +3,6 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSaveMode": "modifications",
-  "prettier.requireConfig": true,
   "prettier.printWidth": 80,
 
   // Trim/insert newline
