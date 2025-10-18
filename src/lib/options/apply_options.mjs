@@ -1,5 +1,5 @@
+import { is_object } from "../utils.ts";
 import { get_options_flattened_meta } from "./options_meta_getter.mjs";
-import { is_object } from "../utils.mjs";
 
 const feature_classes = {
   "with-scroll-buttons-over-matches": (o) =>

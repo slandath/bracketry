@@ -1,5 +1,5 @@
+import { is_object, is_valid_number } from "../utils.ts";
 import { get_default_options } from "./options_meta_getter.mjs";
-import { is_object, is_valid_number } from "../utils.mjs";
 
 export const shout_impossible_option_value = (option_name, option_value) => {
   console.warn(

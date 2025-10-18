@@ -1,4 +1,4 @@
-import { deep_clone_object } from "../utils.mjs";
+import { deep_clone_object } from "../utils.ts";
 import { try_get_custom_element } from "./try_get_custom_element.mjs";
 
 const get_default_round_name = (rounds_count, round_index) => {

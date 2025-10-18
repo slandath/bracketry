@@ -1,6 +1,6 @@
+import { create_element_from_Html, do_n_times } from "../utils.ts";
 import { get_round_element } from "./get_round_element.mjs";
 import { get_round_titles } from "./get_round_titles.mjs";
-import { create_element_from_Html, do_n_times } from "../utils.mjs";
 
 const bronze_markup = `
     <div class="bronze-round-wrapper">

@@ -1,10 +1,10 @@
 // lib/lib.ts
-import { apply_matches_updates } from "./apply_matches_updates.mjs";
+import { apply_matches_updates } from "./apply_matches_updates";
 import { ananlyze_data } from "./data/analyze_data.mjs";
-import type { BracketInstance } from "./data/data";
+import type { BracketInstance, Data, Match } from "./data/data";
 import { handle_data_errors } from "./data/handle_errors.mjs";
 import { render_content } from "./draw/render_content.mjs";
-import { handle_images } from "./handle_images.mjs";
+import { handle_images } from "./handle_images";
 import { create_html_shell } from "./html_shell";
 import { create_navigation } from "./navigation/navigation.mjs";
 import {
@@ -15,7 +15,16 @@ import { create_options_dealer } from "./options/options_dealer.mjs";
 import { create_scrolla } from "./scroll/scrolla.mjs";
 import { update_highlight } from "./ui_events/highlight.mjs";
 import { install_ui_events } from "./ui_events/ui_events.mjs";
-import { deep_clone_object, is_valid_number } from "./utils.mjs";
+import { deep_clone_object, is_valid_number } from "./utils";
+
+export type HtmlShell = {
+  the_root_element: HTMLElement;
+  scrollbar: HTMLElement | null;
+  round_titles_wrapper: HTMLElement | null;
+  matches_scroller: HTMLElement | null;
+  matches_positioner: HTMLElement; // ✅ non-null
+  uninstall: () => void;
+};
 
 // track all live instances
 const all_bracketry_instances: BracketInstance[] = [];
@@ -42,8 +51,12 @@ export const createBracket = (
   user_options: Record<string, unknown>,
 ): BracketInstance => {
   let alive = false;
- const options_dealer = create_options_dealer();
- const actual_data: Record<string, unknown> = {};
+  const options_dealer = create_options_dealer();
+  const actual_data: Data = {
+    rounds: [],
+    matches: [],
+    teams: {},
+  };
 
   const stub: BracketInstance = {
     moveToPreviousRound: () => void 0,
@@ -97,10 +110,14 @@ export const createBracket = (
     scrolla,
   );
 
-  const unhandle_images = handle_images(
-    html_shell.matches_positioner,
-    navigation.repaint,
-  );
+  let unhandle_images = (): void => {};
+
+  if (html_shell.matches_positioner) {
+    unhandle_images = handle_images(
+      html_shell.matches_positioner,
+      navigation.repaint,
+    );
+  }
 
   const uninstall = (): void => {
     if (!alive) return;
@@ -167,8 +184,8 @@ export const createBracket = (
       if (!alive) return;
       apply_matches_updates(
         u,
-        actual_data,
-        html_shell,
+        actual_data as Data & { matches: Match[] },
+        html_shell as HtmlShell,
         options_dealer.get_final_value,
         navigation.repaint,
       );
@@ -177,8 +194,7 @@ export const createBracket = (
     getUserOptions: () =>
       deep_clone_object(options_dealer?.get_user_options() || {}),
     highlightContestantHistory: (contestantId: string) => {
-      if (alive)
-        update_highlight(html_shell.matches_positioner, contestantId);
+      if (alive) update_highlight(html_shell.matches_positioner, contestantId);
     },
     uninstall: () => {
       if (alive) uninstall();

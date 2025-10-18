@@ -1,4 +1,4 @@
-import { is_object, is_valid_number } from "../utils.mjs";
+import { is_object, is_valid_number } from "../utils.ts";
 import { validate_single_score } from "./validate_single_score.mjs";
 
 export const validate_matches = (matches, contestants) => {

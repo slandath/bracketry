@@ -1,14 +1,14 @@
-import { scrollbar_functions } from "./scrollbar_functions.mjs";
-import { debounce, within_range } from "../utils.mjs";
-import { disable_matches_scroll_on_window_scroll } from "./disable_matches_scroll_on_window_scroll.mjs";
-import { restrict_native_scroll } from "./restrict_native_scroll.mjs";
-import { handle_vertical_button_click } from "./handle_vertical_button_click.mjs";
+import { debounce, within_range } from "../utils.ts";
 import { adjust_offset } from "./adjust_offset.mjs";
 import {
   apply_translateY,
   swap_translateY_to_margin,
   swap_translateY_to_transform,
 } from "./apply_translateY.mjs";
+import { disable_matches_scroll_on_window_scroll } from "./disable_matches_scroll_on_window_scroll.mjs";
+import { handle_vertical_button_click } from "./handle_vertical_button_click.mjs";
+import { restrict_native_scroll } from "./restrict_native_scroll.mjs";
+import { scrollbar_functions } from "./scrollbar_functions.mjs";
 
 const get_scrollY_ratio = (html_shell, synthetic_scrollTop) => {
   const { matches_scroller: scroller, matches_positioner } = html_shell;

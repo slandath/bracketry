@@ -1,4 +1,4 @@
-import { create_element_from_Html } from "../utils.mjs";
+import { create_element_from_Html } from "../utils.ts";
 import { try_get_custom_element } from "./try_get_custom_element.mjs";
 
 const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M21 6.285l-11.16 12.733-6.84-6.018 1.319-1.49 5.341 4.686 9.865-11.196 1.475 1.285z"/></svg>`;

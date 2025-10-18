@@ -1,4 +1,4 @@
-import { is_object } from "../utils.mjs";
+import { is_object } from "../utils.ts";
 import { validate_matches } from "./validate_matches.mjs";
 
 export const ananlyze_data = (all_data) => {

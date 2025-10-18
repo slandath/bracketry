@@ -1,8 +1,8 @@
-import { within_range, observe_resize_later } from "../utils.mjs";
+import { observe_resize_later, within_range } from "../utils.ts";
 import {
+  get_max_base_index,
   get_visible_rounds_count,
   is_last_round_fully_visible,
-  get_max_base_index,
 } from "./calc.mjs";
 import { update_nav_buttons } from "./update_nav_buttons.mjs";
 

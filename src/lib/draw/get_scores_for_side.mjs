@@ -1,9 +1,9 @@
 import {
+  get_n_things,
   is_object,
   is_valid_number,
-  get_n_things,
   remove_whitespace_from_html,
-} from "../utils.mjs";
+} from "../utils.js";
 
 const is_displayable_score = (s) => {
   return is_valid_number(s) || typeof s === "string";
