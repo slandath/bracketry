@@ -6,43 +6,41 @@ import SelectionTool from "./SelectionTool";
 
 const STORAGE_KEY = "bracketry:tournament:v1";
 
-  export const recomputeLaterRoundsFromPicks = (data: Data) => {
-    const matches = data.matches ?? [];
-    const maxRound = Math.max(...matches.map((m) => m.roundIndex));
+export const recomputeLaterRoundsFromPicks = (data: Data) => {
+  const matches = data.matches ?? [];
+  const maxRound = Math.max(...matches.map((m) => m.roundIndex));
 
-    for (let r = 1; r <= maxRound; r++) {
-      const curMatches = matches
-        .filter((m) => m.roundIndex === r)
-        .sort((a, b) => a.order - b.order);
-      const prevMatches = matches
-        .filter((m) => m.roundIndex === r - 1)
-        .sort((a, b) => a.order - b.order);
+  for (let r = 1; r <= maxRound; r++) {
+    const curMatches = matches
+      .filter((m) => m.roundIndex === r)
+      .sort((a, b) => a.order - b.order);
+    const prevMatches = matches
+      .filter((m) => m.roundIndex === r - 1)
+      .sort((a, b) => a.order - b.order);
 
-      curMatches.forEach((target, i) => {
-        const left = prevMatches[i * 2];
-        const right = prevMatches[i * 2 + 1];
+    curMatches.forEach((target, i) => {
+      const left = prevMatches[i * 2];
+      const right = prevMatches[i * 2 + 1];
 
-        const leftWinner = left?.prediction || left?.result || null;
-        const rightWinner = right?.prediction || right?.result || null;
+      const leftWinner = left?.prediction || left?.result || null;
+      const rightWinner = right?.prediction || right?.result || null;
 
-        target.sides = [
-          { ...target.sides?.[0], teamId: leftWinner ?? undefined },
-          { ...target.sides?.[1], teamId: rightWinner ?? undefined },
-        ];
+      target.sides = [
+        { ...target.sides?.[0], teamId: leftWinner ?? undefined },
+        { ...target.sides?.[1], teamId: rightWinner ?? undefined },
+      ];
 
-        if (!leftWinner || !rightWinner) {
-          delete target.prediction;
-          target.matchStatus =
-            target.matchStatus === "Predicted"
-              ? "Scheduled"
-              : target.matchStatus;
-        } else {
-          target.matchStatus = "Predicted";
-        }
-      });
-    }
-    return data;
+      if (!leftWinner || !rightWinner) {
+        delete target.prediction;
+        target.matchStatus =
+          target.matchStatus === "Predicted" ? "Scheduled" : target.matchStatus;
+      } else {
+        target.matchStatus = "Predicted";
+      }
+    });
   }
+  return data;
+};
 
 export default function App() {
   const [isSelectionOpen, setIsSelectionOpen] = useState(false);
