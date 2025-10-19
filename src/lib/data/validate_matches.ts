@@ -1,7 +1,8 @@
 import { is_object, is_valid_number } from "../utils.js";
-import { validate_single_score } from "./validate_single_score.js";
+import { Match, Side, Team } from "./data.js";
+import { validate_single_score } from "./validate_single_score";
 
-export const validate_matches = (matches, contestants) => {
+export const validate_matches = (matches: Match[], teams: { [id: string]: Team }) => {
   const errors = [];
 
   if (matches !== undefined && !Array.isArray(matches)) {
@@ -46,7 +47,7 @@ export const validate_matches = (matches, contestants) => {
       }
 
       if (Array.isArray(match.sides)) {
-        match.sides.forEach((side) => {
+        match.sides.forEach((side: Side) => {
           if (!is_object(side)) {
             errors.push({
               is_critical: true,
@@ -57,23 +58,23 @@ export const validate_matches = (matches, contestants) => {
           }
 
           if (
-            side.contestantId !== undefined &&
-            typeof side.contestantId !== "string"
+            side.teamId !== undefined &&
+            typeof side.teamId !== "string"
           ) {
             errors.push({
               is_critical: true,
-              message: `If you provide side.contestantId, it must be a string`,
+              message: `If you provide side.teamId, it must be a string`,
               data: side,
             });
           }
 
           if (
-            typeof side.contestantId === "string" &&
-            !Object.keys(contestants || {}).includes(side.contestantId)
+            typeof side.teamId === "string" &&
+            !Object.keys(teams || {}).includes(side.teamId)
           ) {
             errors.push({
               is_critical: false,
-              message: "No contestant data found for this side.contestantId:",
+              message: "No team data found for this side.teamId:",
               data: side,
             });
           }
@@ -89,7 +90,7 @@ export const validate_matches = (matches, contestants) => {
             });
           }
 
-          if (side.scores !== undefined && !Array.isArray(side.scores)) {
+          if (side.score !== undefined && !Array.isArray(side.score)) {
             errors.push({
               is_critical: true,
               message: "If side.scores is provided, it must be an array",
@@ -97,7 +98,7 @@ export const validate_matches = (matches, contestants) => {
             });
           }
 
-          if (Array.isArray(side.scores) && !side.scores.length) {
+          if (Array.isArray(side.score) && !side.score.length) {
             errors.push({
               is_critical: false,
               message: `side.scores is provided but it's an empty array: `,
@@ -105,32 +106,9 @@ export const validate_matches = (matches, contestants) => {
             });
           }
 
-          if (Array.isArray(side.scores)) {
-            side.scores.forEach((score) => {
+          if (Array.isArray(side.score)) {
+            side.score.forEach((score) => {
               errors.push(...validate_single_score(score, side));
-            });
-          }
-
-          if (
-            side.currentScore !== undefined &&
-            !is_valid_number(side.currentScore) &&
-            typeof side.currentScore !== "string"
-          ) {
-            errors.push({
-              is_critical: false,
-              message: `If side.currentScore is provided, it must be a number or string: `,
-              data: side,
-            });
-          }
-
-          if (
-            side.isServing !== undefined &&
-            typeof side.isServing !== "boolean"
-          ) {
-            errors.push({
-              is_critical: false,
-              message: "If side.isServing is provided, it must be a boolean",
-              data: side,
             });
           }
         });

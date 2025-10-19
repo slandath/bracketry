@@ -68,8 +68,8 @@ export const ananlyze_data = (all_data: Data) => {
 
   // matches
   const matches_errors = validate_matches(
-    all_data.matches,
-    all_data.teams,
+    all_data.matches ?? [],
+    all_data.teams ?? {},
   );
   all_errors.push(...matches_errors);
 

@@ -59,7 +59,7 @@ export type Shell = {
   uninstall: () => void;
 };
 
-
+export type DataError = { is_critical: boolean; message: string; data?: unknown };
 
 export type GetOption = (key: string) => unknown;
 

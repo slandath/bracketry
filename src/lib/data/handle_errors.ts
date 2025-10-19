@@ -1,4 +1,6 @@
-const log_data_error = (msg, data) => {
+import { DataError } from "./data";
+
+const log_data_error = (msg: string, data: unknown) => {
   console.warn(
     `Incorrect data. %c${msg}`,
     "padding: 0 5px; color: #b90000; background: #ffff81",
@@ -6,7 +8,7 @@ const log_data_error = (msg, data) => {
   );
 };
 
-export const handle_data_errors = (errors) => {
+export const handle_data_errors = (errors: DataError[]) => {
   if (!errors.length) {
     return {
       have_errors: false,
