@@ -30,7 +30,7 @@ export const adjust_offset = (
     scroller.scrollTop = offset;
   } else {
     apply_translateY(matches_positioner, offset);
-    matches_positioner.offsetHeight; // trigger reflow: https://stackoverflow.com/a/16575811
+    void matches_positioner.offsetHeight; // trigger reflow: https://stackoverflow.com/a/16575811
   }
 
   scrollbar_functions.full_update(html_shell, get_option, offset);

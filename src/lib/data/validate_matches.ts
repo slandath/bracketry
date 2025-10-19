@@ -12,8 +12,7 @@ export const validate_matches = (matches, contestants) => {
     });
   }
 
-  matches &&
-    matches.length &&
+  if (matches && matches.length) {
     matches.forEach((match) => {
       if (!is_object(match)) {
         errors.push({
@@ -137,6 +136,6 @@ export const validate_matches = (matches, contestants) => {
         });
       }
     });
-
+  }
   return errors;
 };

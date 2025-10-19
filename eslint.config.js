@@ -32,6 +32,9 @@ export default [
     },
   },
   {
+    ignores: ["index.d.ts", "vite.config.ts"],
+  },
+  {
     plugins: { "react-hooks": reactHooks },
     rules: {
       "react/react-in-jsx-scope": "off",

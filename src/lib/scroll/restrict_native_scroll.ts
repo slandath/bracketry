@@ -20,7 +20,7 @@ const preventDefault = (e) => {
 };
 
 // modern Chrome requires { passive: false } when adding event
-var supportsPassive = false;
+let supportsPassive = false;
 try {
   window.addEventListener(
     "test",
@@ -35,8 +35,8 @@ try {
   console.debug("Passive events not supported:", e);
 }
 
-var wheelOpt = supportsPassive ? { passive: false } : false;
-var wheelEvent =
+const wheelOpt = supportsPassive ? { passive: false } : false;
+const wheelEvent =
   "onwheel" in document.createElement("div") ? "wheel" : "mousewheel";
 
 export const restrict_native_scroll = (el, make_scroll_jump) => {

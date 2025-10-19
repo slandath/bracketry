@@ -72,7 +72,7 @@ export const filter_updatable_options = (options) => {
   const meta = get_options_flattened_meta();
   const updatable_options = {};
 
-  is_object(options) &&
+  if (is_object(options)) {
     Object.entries(options).forEach(([n, v]) => {
       if (meta[n]?.type === "function_or_null" || n === "verticalScrollMode") {
         console.warn(`${n} option can't be updated via applyNewOptions`);
@@ -80,6 +80,8 @@ export const filter_updatable_options = (options) => {
         updatable_options[n] = v;
       }
     });
+  }
+
 
   return updatable_options;
 };
