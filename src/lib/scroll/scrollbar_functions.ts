@@ -1,20 +1,30 @@
-const update_position = (shell, get_option, offsetY) => {
+import { GetOption, Shell } from "../data/data";
+
+const update_position = (
+  shell: Shell,
+  get_option: GetOption,
+  offsetY: number
+): void => {
   if (get_option("showScrollbar") !== true) return;
   shell.scrollbar.style.top =
     (offsetY / shell.matches_positioner.clientHeight) * 100 + "%";
 };
 
-const update_position_with_transition = (shell, get_option, offsetY) => {
+const update_position_with_transition = (
+  shell: Shell,
+  get_option: GetOption,
+  offsetY: number
+): void => {
   shell.scrollbar.classList.add("animated");
   update_position(shell, get_option, offsetY);
-  const deanimate = () => {
+  const deanimate = (): void => {
     shell.scrollbar.classList.remove("animated");
     shell.scrollbar.removeEventListener("transitionend", deanimate);
   };
   shell.scrollbar.addEventListener("transitionend", deanimate);
 };
 
-const update_height = (shell) => {
+const update_height = (shell: Shell): void => {
   shell.scrollbar.style.height =
     (shell.matches_scroller.clientHeight /
       shell.matches_positioner.clientHeight) *
@@ -22,7 +32,11 @@ const update_height = (shell) => {
     "%";
 };
 
-const full_update = (shell, get_option, offsetY) => {
+const full_update = (
+  shell: Shell,
+  get_option: GetOption,
+  offsetY: number
+): void => {
   if (get_option("showScrollbar") !== true) return;
   const content_is_higher =
     shell.matches_positioner.clientHeight > shell.matches_scroller.clientHeight;

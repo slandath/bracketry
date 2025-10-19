@@ -1,4 +1,4 @@
-import { debounce } from "../utils.ts";
+import { debounce } from "../utils.js";
 
 export const disable_matches_scroll_on_window_scroll = (
   matches_scroller,

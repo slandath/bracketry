@@ -1,10 +1,10 @@
-import { observe_resize_later, within_range } from "../utils.ts";
+import { observe_resize_later, within_range } from "../utils.js";
 import {
   get_max_base_index,
   get_visible_rounds_count,
   is_last_round_fully_visible,
-} from "./calc.mjs";
-import { update_nav_buttons } from "./update_nav_buttons.mjs";
+} from "./calc.ts";
+import { update_nav_buttons } from "./update_nav_buttons.js";
 
 const update = (base_index, get_option, shell, scrolla) => {
   // "refresh" base index; (it may be necessary to reduce it

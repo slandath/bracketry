@@ -1,4 +1,6 @@
-export const handle_vertical_button_click = (html_shell, get_option, cb) => {
+import { Shell } from "../data/data";
+
+export const handle_vertical_button_click = (html_shell: Shell, get_option, cb) => {
   if (get_option("verticalScrollMode") === "native") {
     return () => void 0;
   }

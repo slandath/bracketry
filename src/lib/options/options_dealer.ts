@@ -1,6 +1,6 @@
-import { is_object } from "../utils.ts";
-import { get_options_flattened_meta } from "./options_meta_getter.mjs";
-import { is_valid_option } from "./validate_user_options.mjs";
+import { is_object } from "../utils.js";
+import { get_options_flattened_meta } from "./options_meta_getter";
+import { is_valid_option } from "./validate_user_options.js";
 
 const _get_final_value = (name, user_options, flattened_meta) => {
   const option_meta = flattened_meta[name];
@@ -26,7 +26,7 @@ const _get_final_value = (name, user_options, flattened_meta) => {
 };
 
 export const create_options_dealer = () => {
-  let user_options = {};
+  const user_options = {};
   const flattened_meta = get_options_flattened_meta();
 
   return {

@@ -1,4 +1,4 @@
-import { OPTIONS } from "./options_meta.mjs";
+import { OPTIONS } from "./options_meta";
 
 export const get_options_flattened_meta = () => {
   const flattened = {};

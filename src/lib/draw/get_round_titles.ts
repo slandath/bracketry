@@ -1,5 +1,5 @@
-import { deep_clone_object } from "../utils.ts";
-import { try_get_custom_element } from "./try_get_custom_element.mjs";
+import { deep_clone_object } from "../utils.js";
+import { try_get_custom_element } from "./try_get_custom_element.js";
 
 const get_default_round_name = (rounds_count, round_index) => {
   if (round_index === rounds_count - 1) return "Final";

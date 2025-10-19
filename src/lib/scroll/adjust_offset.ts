@@ -1,6 +1,6 @@
-import { within_range } from "../utils.ts";
-import { apply_translateY } from "./apply_translateY.mjs";
-import { scrollbar_functions } from "./scrollbar_functions.mjs";
+import { within_range } from "../utils.js";
+import { apply_translateY } from "./apply_translateY.js";
+import { scrollbar_functions } from "./scrollbar_functions.js";
 
 export const adjust_offset = (
   scrollY_middle_ratio,

@@ -49,3 +49,26 @@ export type Team = {
   seed: number;
   logoUrl?: string;
 };
+
+export type Shell = {
+  the_root_element: HTMLElement;
+  scrollbar: HTMLElement | null;
+  round_titles_wrapper: HTMLElement | null;
+  matches_scroller: HTMLElement | null;
+  matches_positioner: HTMLElement;
+  uninstall: () => void;
+};
+
+
+
+export type GetOption = (key: string) => unknown;
+
+export type ScrolllaShell = Shell & {
+  the_root_element: HTMLElement;
+};
+
+export type ScrolllaApi = {
+  get_scrollY_ratio: () => number;
+  adjust_offset: (scrollY_middle_ratio: number) => void;
+  uninstall: () => void;
+}

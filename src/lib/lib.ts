@@ -1,30 +1,21 @@
-// lib/lib.ts
+import type { Shell } from "../lib/data/data";
 import { apply_matches_updates } from "./apply_matches_updates";
-import { ananlyze_data } from "./data/analyze_data.mjs";
+import { ananlyze_data } from "./data/analyze_data";
 import type { BracketInstance, Data, Match } from "./data/data";
-import { handle_data_errors } from "./data/handle_errors.mjs";
-import { render_content } from "./draw/render_content.mjs";
+import { handle_data_errors } from "./data/handle_errors";
+import { render_content } from "./draw/render_content";
 import { handle_images } from "./handle_images";
 import { create_html_shell } from "./html_shell";
-import { create_navigation } from "./navigation/navigation.mjs";
+import { create_navigation } from "./navigation/navigation";
 import {
   apply_options,
   filter_updatable_options,
-} from "./options/apply_options.mjs";
-import { create_options_dealer } from "./options/options_dealer.mjs";
-import { create_scrolla } from "./scroll/scrolla.mjs";
+} from "./options/apply_options";
+import { create_options_dealer } from "./options/options_dealer";
+import { create_scrolla } from "./scroll/scrolla.js";
 import { update_highlight } from "./ui_events/highlight";
 import { install_ui_events } from "./ui_events/ui_events";
 import { deep_clone_object, is_valid_number } from "./utils";
-
-export type HtmlShell = {
-  the_root_element: HTMLElement;
-  scrollbar: HTMLElement | null;
-  round_titles_wrapper: HTMLElement | null;
-  matches_scroller: HTMLElement | null;
-  matches_positioner: HTMLElement
-  uninstall: () => void;
-};
 
 // track all live instances
 const all_bracketry_instances: BracketInstance[] = [];
@@ -185,7 +176,7 @@ export const createBracket = (
       apply_matches_updates(
         u,
         actual_data as Data & { matches: Match[] },
-        html_shell as HtmlShell,
+        html_shell as Shell,
         options_dealer.get_final_value,
         navigation.repaint,
       );

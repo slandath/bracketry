@@ -1,5 +1,4 @@
-import type { Data, Match } from "../data/data";
-import type { HtmlShell } from "../html_shell";
+import type { Data, Match, Shell } from "../data/data";
 import { update_highlight } from "./highlight";
 
 /**
@@ -32,7 +31,7 @@ const get_match_data_for_element = (el: HTMLElement, all_data: Data): Match => {
 export const install_ui_events = (
   all_data: Data,
   get_option: (key: string) => unknown,
-  html_shell: HtmlShell,
+  html_shell: Shell,
   navigation: {
     handle_click: (el: Element | null) => void;
   },

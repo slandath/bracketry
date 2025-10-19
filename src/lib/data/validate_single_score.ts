@@ -1,4 +1,4 @@
-import { is_object, is_valid_number } from "../utils.ts";
+import { is_object, is_valid_number } from "../utils.js";
 
 export const validate_single_score = (score, side) => {
   const errors = [];

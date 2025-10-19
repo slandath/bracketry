@@ -1,5 +1,5 @@
-import { create_element_from_Html, get_n_things } from "../utils.ts";
-import { get_match_element } from "./get_match_element.mjs";
+import { create_element_from_Html, get_n_things } from "../utils.js";
+import { get_match_element } from "./get_match_element.ts";
 
 export const get_round_element = (all_data, round_index, get_option) => {
   const round_element = create_element_from_Html(

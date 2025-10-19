@@ -1,26 +1,16 @@
+import type { Shell } from "./data/data";
 import "./styles/buttons.scss";
 import "./styles/main.scss";
 import "./styles/rounds.scss";
 import "./styles/SelectionTool.scss";
 import { create_element_from_Html } from "./utils";
 
-// Define the type this function returns.
-// Each key represents one DOM element we create and keep references to.
-export interface HtmlShell {
-  the_root_element: HTMLElement;
-  scrollbar: HTMLElement | null;
-  round_titles_wrapper: HTMLElement | null;
-  matches_scroller: HTMLElement | null;
-  matches_positioner: HTMLElement | null;
-  uninstall: () => void;
-}
-
 /**
  * Builds and mounts the bracket HTML shell inside the provided container element.
  */
 export const create_html_shell = (
   user_wrapper_el: HTMLElement,
-): HtmlShell => {
+): Shell => {
   const the_root_element = create_element_from_Html(`
     <div class="bracket-root">
       <div class="navigation-button left"></div>
@@ -51,13 +41,13 @@ export const create_html_shell = (
   ): T | null => the_root_element.querySelector<T>(selector);
 
   // Stored element references
-  const elements = {
-    the_root_element,
-    scrollbar: find(".scrollbar"),
-    round_titles_wrapper: find(".round-titles-wrapper"),
-    matches_scroller: find(".matches-scroller"),
-    matches_positioner: find(".matches-positioner"),
-  };
+const elements = {
+  the_root_element,
+  scrollbar: find(".scrollbar") as HTMLElement | null,
+  round_titles_wrapper: find(".round-titles-wrapper") as HTMLElement | null,
+  matches_scroller: find(".matches-scroller") as HTMLElement,
+  matches_positioner: find(".matches-positioner") as HTMLElement,
+};
 
   const uninstall = (): void => {
     // Remove all DOM nodes and clear references
