@@ -39,9 +39,15 @@ export type Match = {
 // Match-specific team context (score, winner flag, etc.)
 export type Side = {
   teamId?: string; // undefined = slot not filled yet
-  score?: number;
+  score?: Score[];
   isWinner?: boolean;
 };
+
+export type Score = {
+  mainScore: number | string,
+  subscore?: number | string,
+  isWinner?: boolean
+}
 
 export type Team = {
   id: string;

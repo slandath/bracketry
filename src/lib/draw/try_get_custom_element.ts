@@ -1,8 +1,8 @@
 export const try_get_custom_element = (
-  custom_getter,
-  custom_getter_args,
-  custom_getter_name,
-) => {
+  custom_getter: unknown,
+  custom_getter_args: unknown[],
+  custom_getter_name: string,
+): Element | null | undefined => {
   if (typeof custom_getter === "function") {
     try {
       const val = custom_getter(...custom_getter_args);

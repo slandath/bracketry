@@ -1,12 +1,13 @@
-import { create_element_from_Html, get_n_things } from "../utils.js";
-import { get_match_element } from "./get_match_element.ts";
+import { Data, GetOption } from "../data/data";
+import { create_element_from_Html, get_n_things } from "../utils";
+import { get_match_element } from "./get_match_element";
 
-export const get_round_element = (all_data, round_index, get_option) => {
+export const get_round_element = (all_data: Data, round_index: number, get_option: GetOption) => {
   const round_element = create_element_from_Html(
     `<div class="round-wrapper"></div>`,
   );
 
-  round_element.setAttribute("round-index", round_index);
+  round_element.setAttribute("round-index", `${round_index}`);
 
   const last_rnd_index = all_data.rounds.length - 1;
 
@@ -22,7 +23,6 @@ export const get_round_element = (all_data, round_index, get_option) => {
     round_index === last_rnd_index &&
     all_data.matches?.find((m) => {
       return (
-        m.isBronzeMatch === true &&
         m.roundIndex === last_rnd_index &&
         m.order === 1
       );

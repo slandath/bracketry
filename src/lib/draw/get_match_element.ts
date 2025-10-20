@@ -1,3 +1,4 @@
+import type { Data, GetOption, Match } from "../data/data";
 import { create_element_from_Html } from "../utils.js";
 import { try_get_custom_element } from "./try_get_custom_element.js";
 
@@ -6,7 +7,7 @@ const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/
 /**
  * Render a single team side in a match
  */
-const get_side_html = (match, side_index, all_data) => {
+const get_side_html = (match: Match, side_index: number, all_data: Data): string => {
   const side = match.sides?.[side_index];
   const other = match.sides?.[side_index === 0 ? 1 : 0];
 
@@ -27,7 +28,7 @@ const get_side_html = (match, side_index, all_data) => {
   if (side.isWinner || match.result === team.id) {
     winner_class = "winner";
   }
-  if (other && (other.isWinner || match.result === other.team?.id)) {
+  if (other && (other.isWinner || match.result === other.teamId)) {
     loser_class = "looser";
   }
   if (match.prediction === team.id) {
@@ -67,11 +68,11 @@ const get_side_html = (match, side_index, all_data) => {
  * Render the inner content of a match (the "body")
  */
 export const get_match_content = (
-  maybe_match_data,
-  all_data,
-  round_index,
-  match_order,
-  get_option,
+  maybe_match_data: Match | undefined,
+  all_data: Data,
+  round_index: number,
+  match_order: number,
+  get_option: GetOption,
 ) => {
   const custom_match_element = try_get_custom_element(
     get_option("getMatchElement"),
@@ -95,8 +96,8 @@ export const get_match_content = (
   if (Array.isArray(maybe_match_data.sides)) {
     match_body.innerHTML += `
       <div class="sides">
-        ${get_side_html(maybe_match_data, 0, all_data, get_option)}
-        ${get_side_html(maybe_match_data, 1, all_data, get_option)}
+        ${get_side_html(maybe_match_data, 0, all_data)}
+        ${get_side_html(maybe_match_data, 1, all_data)}
       </div>
     `;
   }
@@ -118,10 +119,10 @@ export const get_match_content = (
  * Main entry: render one whole match wrapper + body
  */
 export const get_match_element = (
-  round_index,
-  match_order,
-  all_data,
-  get_option,
+  round_index: number,
+  match_order: number,
+  all_data: Data,
+  get_option: GetOption,
 ) => {
   const maybe_match_data = all_data.matches?.find(
     (m) => m.roundIndex === round_index && m.order === match_order,

@@ -1,8 +1,8 @@
 export const get_default_or_custom_html = (
-  default_getter,
-  user_getter,
-  user_getter_args,
-  user_getter_name,
+  default_getter: () => unknown,
+  user_getter: ((...args: unknown[]) => unknown) | null | undefined,
+  user_getter_args: unknown[],
+  user_getter_name: string,
 ) => {
   // try get HTML from custom user renderer, otherwise use bare_value
   if (typeof user_getter === "function") {

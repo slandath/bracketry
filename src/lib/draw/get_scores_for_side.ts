@@ -1,3 +1,4 @@
+import type { Score, Side } from "../data/data";
 import {
   get_n_things,
   is_object,
@@ -5,11 +6,11 @@ import {
   remove_whitespace_from_html,
 } from "../utils.js";
 
-const is_displayable_score = (s) => {
+const is_displayable_score = (s: unknown) => {
   return is_valid_number(s) || typeof s === "string";
 };
 
-export const get_single_score = (own_score, opponent_score) => {
+export const get_single_score = (own_score: Score | undefined, opponent_score: Score | undefined): string => {
   if (
     !is_displayable_score(own_score?.mainScore) &&
     !is_displayable_score(opponent_score?.mainScore)
@@ -45,12 +46,12 @@ export const get_single_score = (own_score, opponent_score) => {
   );
 };
 
-export const get_scores_for_side = (side, other_side) => {
+export const get_scores_for_side = (side: Side | undefined, other_side: Side | undefined): string => {
   const own_score =
-    is_object(side) && Array.isArray(side.scores) ? side.scores : [];
+    is_object(side) && Array.isArray(side.score) ? side.score : [];
   const opponent_score =
-    is_object(other_side) && Array.isArray(other_side.scores)
-      ? other_side.scores
+    is_object(other_side) && Array.isArray(other_side.score)
+      ? other_side.score
       : [];
   const max_score_length = Math.max(own_score.length, opponent_score.length);
 

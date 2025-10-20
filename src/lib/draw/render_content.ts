@@ -1,6 +1,7 @@
+import { Data, GetOption, Match, Shell } from "../data/data.js";
 import { create_element_from_Html, do_n_times } from "../utils.js";
-import { get_round_element } from "./get_round_element.ts";
-import { get_round_titles } from "./get_round_titles.ts";
+import { get_round_element } from "./get_round_element";
+import { get_round_titles } from "./get_round_titles";
 
 const bronze_markup = `
     <div class="bronze-round-wrapper">
@@ -15,11 +16,11 @@ const bronze_markup = `
     </div>
 `;
 
-const tryExtendDataRounds = (all_data) => {
+const tryExtendDataRounds = (all_data: Data): void => {
   // 1. If skippedLastRoundsCount is provided, need to add this number of items to all_data.rounds
   // (all_data.rounds.length therefore becomes not an actual number of rounds but an ideal number that provides the necessary "thickness" of a tree)
 
-  do_n_times(all_data.skippedLastRoundsCount, () => all_data.rounds.push({}));
+  do_n_times(all_data.skippedLastRoundsCount ?? 0, () => all_data.rounds.push({}));
 
   if (!all_data.matches || !all_data.rounds) return;
 
@@ -41,29 +42,28 @@ const tryExtendDataRounds = (all_data) => {
   do_n_times(lacking_rounds_count, () => all_data.rounds.push({}));
 };
 
-export const render_content = (all_data, shell, get_option) => {
-  shell.round_titles_wrapper.innerHTML = "";
+export const render_content = (all_data: Data, shell: Shell, get_option: GetOption): void => {
+  shell.round_titles_wrapper!.innerHTML = "";
 
-  tryExtendDataRounds(all_data, get_option);
+  tryExtendDataRounds(all_data);
 
   const renderableRoundsCount =
     all_data.rounds.length - (all_data.skippedLastRoundsCount || 0);
 
-  shell.round_titles_wrapper.append(
+  shell.round_titles_wrapper!.append(
     ...get_round_titles(all_data, renderableRoundsCount, get_option),
   );
 
   shell.matches_positioner.innerHTML = "";
 
-  const round_elements = [];
-  all_data.rounds.slice(0, renderableRoundsCount).forEach((_, round_index) => {
+  const round_elements: HTMLElement[] = [];
+  all_data.rounds.slice(0, renderableRoundsCount).forEach((_, round_index: number) => {
     const round_el = get_round_element(all_data, round_index, get_option);
 
     if (
       round_index === all_data.rounds.length - 1 &&
-      all_data.matches?.find((m) => {
+      all_data.matches?.find((m: Match) => {
         return (
-          m.isBronzeMatch === true &&
           m.roundIndex === all_data.rounds.length - 1 &&
           m.order === 1
         );
