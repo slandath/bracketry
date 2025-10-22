@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import bracketData from "./2025-tournament-blank.json";
-import { Data, Match } from "./lib/data/data";
-import { createBracket } from "./lib/lib.mjs";
+import { BracketInstance, Data, Match } from "./lib/data/data";
+import { createBracket } from "./lib/lib";
 import SelectionTool from "./SelectionTool";
 
 const STORAGE_KEY = "bracketry:tournament:v1";
@@ -47,7 +47,7 @@ export default function App() {
   const [tournamentData, setTournamentData] = useState<Data | null>(null);
 
   const bracketContainerRef = useRef<HTMLDivElement | null>(null);
-  const bracketInstanceRef = useRef<any>(null);
+  const bracketInstanceRef = useRef<BracketInstance>(null);
 
   useEffect(() => {
     if (!localStorage.getItem(STORAGE_KEY)) {

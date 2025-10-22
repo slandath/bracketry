@@ -10,7 +10,7 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: lint-oxlint
+  group: lint-eslint
   cancel-in-progress: true
 
 permissions:
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   lint:
-    name: Run oxlint
+    name: Run ESLint
     runs-on: ubuntu-latest
 
     strategy:
@@ -38,6 +38,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run linter
-        # Expects a package.json script "lint" that runs oxlint, e.g. "oxlint ."
-        run: npm run lint --if-present
+      - name: Run ESLint
+        run: npm run lint:check
