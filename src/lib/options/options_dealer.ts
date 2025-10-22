@@ -1,8 +1,9 @@
+import { FlattenedMeta } from "../data/data.js";
 import { is_object } from "../utils.js";
 import { get_options_flattened_meta } from "./options_meta_getter";
 import { is_valid_option } from "./validate_user_options.js";
 
-const _get_final_value = (name, user_options, flattened_meta) => {
+const _get_final_value = (name: string, user_options: Record<string, unknown>, flattened_meta: FlattenedMeta): unknown => {
   const option_meta = flattened_meta[name];
 
   if (option_meta === undefined) {
@@ -19,18 +20,18 @@ const _get_final_value = (name, user_options, flattened_meta) => {
     (option_meta.type === "number" || option_meta.type === "pixels") &&
     typeof option_meta.min_value === "number"
   ) {
-    return Math.max(value, option_meta.min_value);
+    return Math.max(value as number, option_meta.min_value);
   } else {
     return value;
   }
 };
 
 export const create_options_dealer = () => {
-  const user_options = {};
-  const flattened_meta = get_options_flattened_meta();
+  const user_options: Record<string, unknown> = {};
+  const flattened_meta = get_options_flattened_meta() as FlattenedMeta;
 
   return {
-    try_merge_options: (new_user_options) => {
+    try_merge_options: (new_user_options: Record<string, unknown> | undefined): void => {
       if (new_user_options === undefined) return;
 
       if (!is_object(new_user_options)) {
@@ -49,13 +50,13 @@ export const create_options_dealer = () => {
       });
     },
 
-    get_final_value: (name) =>
+    get_final_value: (name: string): unknown =>
       _get_final_value(name, user_options, flattened_meta),
 
     get_user_options: () => user_options,
 
     get_all_final_options: () => {
-      const result = {};
+      const result: Record<string, unknown> = {};
       Object.keys(flattened_meta).forEach((option_name) => {
         result[option_name] = _get_final_value(
           option_name,

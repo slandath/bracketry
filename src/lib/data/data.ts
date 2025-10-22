@@ -85,3 +85,17 @@ export type BaseIndex = {
   try_increment: () => void;
   get: () => number;
 }
+
+export type OptionsDealer = {
+  get_final_value: GetOption;
+  try_merge_options: (options: Record<string, unknown>) => void;
+  get_all_final_options: () => Record<string, unknown>
+}
+
+export type OptionMeta = {
+  type: string;
+  default_value: unknown;
+  min_value?: number;
+}
+
+export type FlattenedMeta = Record<string, OptionMeta>
