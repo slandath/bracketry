@@ -1,6 +1,7 @@
-import { is_last_round_fully_visible } from "./calc.ts";
+import { GetOption, Shell } from "../data/data";
+import { is_last_round_fully_visible } from "./calc";
 
-export const update_nav_buttons = (shell, base_index_value, get_option) => {
+export const update_nav_buttons = (shell: Shell, base_index_value: number, get_option: GetOption) => {
   const last_round_is_fully_visible = is_last_round_fully_visible(
     shell,
     base_index_value,

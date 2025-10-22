@@ -78,3 +78,10 @@ export type ScrolllaApi = {
   adjust_offset: (scrollY_middle_ratio: number) => void;
   uninstall: () => void;
 }
+
+export type BaseIndex = {
+  set: (i: number) => void;
+  try_decrement: () => void;
+  try_increment: () => void;
+  get: () => number;
+}

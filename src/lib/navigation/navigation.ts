@@ -1,12 +1,18 @@
+import { BaseIndex, GetOption, ScrolllaApi, Shell } from "../data/data.js";
 import { observe_resize_later, within_range } from "../utils.js";
 import {
   get_max_base_index,
   get_visible_rounds_count,
   is_last_round_fully_visible,
-} from "./calc.ts";
+} from "./calc";
 import { update_nav_buttons } from "./update_nav_buttons.js";
 
-const update = (base_index, get_option, shell, scrolla) => {
+const update = (
+  base_index: BaseIndex,
+  get_option: GetOption,
+  shell: Shell,
+  scrolla: ScrolllaApi,
+) => {
   // "refresh" base index; (it may be necessary to reduce it
   //      if navigation was at far right && v_r_count increased for whatever reason)
   base_index.set(base_index.get());
@@ -30,8 +36,10 @@ const update = (base_index, get_option, shell, scrolla) => {
   const new_marginleft = -(base_index.get() * (100 / vrc)) + "%";
   shell.matches_positioner.style.width = new_width;
   shell.matches_positioner.style.marginLeft = new_marginleft;
-  shell.round_titles_wrapper.style.width = new_width;
-  shell.round_titles_wrapper.style.marginLeft = new_marginleft;
+  if (shell.round_titles_wrapper) {
+    shell.round_titles_wrapper.style.width = new_width;
+    shell.round_titles_wrapper.style.marginLeft = new_marginleft;
+  }
 
   // adjust scroll position to keep the same matches in the middle
 
@@ -40,10 +48,10 @@ const update = (base_index, get_option, shell, scrolla) => {
   update_nav_buttons(shell, base_index.get(), get_option);
 };
 
-const create_base_index = (shell, get_option) => {
+const create_base_index = (shell: Shell, get_option: GetOption) => {
   let value = 0;
 
-  const set = (i) => {
+  const set = (i: number) => {
     value = within_range(i, 0, get_max_base_index(shell, get_option));
   };
 
@@ -55,13 +63,33 @@ const create_base_index = (shell, get_option) => {
   };
 };
 
-export const create_navigation = (shell, get_option, scrolla) => {
+export const create_navigation = (
+  shell: Shell,
+  get_option: GetOption,
+  scrolla: ScrolllaApi,
+) => {
   const base_index = create_base_index(shell, get_option);
 
   const repaint = () => update(base_index, get_option, shell, scrolla);
   repaint();
 
   // TODO ideally this should not be in navigation
+  if (!shell.matches_scroller)
+    return {
+      move_left: () => {},
+      move_right: () => {},
+      set_base_round_index: () => {},
+      repaint: () => {},
+      handle_click: () => {},
+      get_state: () => ({
+        lastRoundIsFullyVisible: false,
+        allRoundsAreVisible: false,
+        baseRoundIndex: 0,
+        maxBaseRoundIndex: 0,
+        visibleRoundsCount: 0,
+      }),
+      uninstall: () => {},
+    };
   const content_resize_observer = observe_resize_later(
     shell.matches_scroller,
     repaint,
@@ -83,14 +111,14 @@ export const create_navigation = (shell, get_option, scrolla) => {
 
     move_right,
 
-    set_base_round_index: (i) => {
+    set_base_round_index: (i: number) => {
       base_index.set(i);
       repaint();
     },
 
     repaint,
 
-    handle_click: (button) => {
+    handle_click: (button: HTMLElement) => {
       if (!button.classList.contains("active")) return;
       if (button.classList.contains("left")) move_left();
       if (button.classList.contains("right")) move_right();
