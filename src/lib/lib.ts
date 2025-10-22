@@ -1,7 +1,6 @@
-import type { Shell } from "../lib/data/data";
 import { apply_matches_updates } from "./apply_matches_updates";
 import { ananlyze_data } from "./data/analyze_data";
-import type { BracketInstance, Data, Match } from "./data/data";
+import type { BracketInstance, Data, Match, Shell } from "./data/data";
 import { handle_data_errors } from "./data/handle_errors";
 import { render_content } from "./draw/render_content";
 import { handle_images } from "./handle_images";
@@ -22,8 +21,8 @@ const all_bracketry_instances: BracketInstance[] = [];
 
 // Helper to merge new data safely
 const try_assign_new_data = (
-  old_data: Record<string, unknown>,
-  new_data: Record<string, unknown>,
+  old_data: Data,
+  new_data: Data,
 ): boolean => {
   const { have_critical_error } = handle_data_errors(ananlyze_data(new_data));
   if (have_critical_error) return false;
@@ -88,7 +87,7 @@ export const createBracket = (
   const html_shell = create_html_shell(user_wrapper_el);
   apply_options(user_options, options_dealer, html_shell);
 
-  const merge_ok = try_assign_new_data(actual_data, initial_user_data);
+  const merge_ok = try_assign_new_data(actual_data, initial_user_data as Data) ;
   if (!merge_ok) return stub;
 
   alive = true;
@@ -129,7 +128,9 @@ export const createBracket = (
     actual_data,
     options_dealer.get_final_value,
     html_shell,
-    navigation,
+    { ...navigation, handle_click: (el: Element | null) => {
+      if (el instanceof HTMLElement) navigation.handle_click(el);
+    }},
   );
 
   const instance: BracketInstance = {
@@ -161,7 +162,7 @@ export const createBracket = (
     },
     replaceData: (new_data: Record<string, unknown>) => {
       if (!alive) return;
-      const ok = try_assign_new_data(actual_data, new_data);
+      const ok = try_assign_new_data(actual_data, new_data as Data);
       if (!ok) {
         console.warn("Failed to apply new data");
         return;
@@ -177,7 +178,7 @@ export const createBracket = (
         u,
         actual_data as Data & { matches: Match[] },
         html_shell as Shell,
-        options_dealer.get_final_value,
+         ((key: string) => options_dealer.get_final_value(key)) as (key?: unknown) => unknown,
         navigation.repaint,
       );
     },

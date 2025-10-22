@@ -19,6 +19,7 @@ export type Data = {
   skippedLastRoundsCount?: number; // useful for folding hidden back-rounds
   matches?: Match[]; // optional: can show rounds alone
   teams?: { [id: string]: Team }; // centralized team registry
+  [key: string]: unknown;
 };
 
 export type Round = {

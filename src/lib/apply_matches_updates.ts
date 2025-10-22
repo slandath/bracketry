@@ -1,3 +1,4 @@
+import { Round, Team } from "./data/data";
 import { handle_data_errors } from "./data/handle_errors";
 import { validate_matches } from "./data/validate_matches";
 import { get_match_content } from "./draw/get_match_element.js";
@@ -13,6 +14,8 @@ export interface MatchLike extends Record<string, unknown> {
 export interface AllDataLike extends Record<string, unknown> {
   matches: MatchLike[];
   contestants?: unknown[];
+  rounds: Round[];
+  teams?: {[id:string]: Team}
 }
 
 export interface HtmlShellLike {
@@ -42,7 +45,7 @@ export function apply_matches_updates(
   }
 
   const { have_critical_error } = handle_data_errors(
-    validate_matches(updates, all_data.contestants),
+    validate_matches(updates, all_data.teams ?? {}),
   );
   if (have_critical_error) return;
 
@@ -80,7 +83,7 @@ export function apply_matches_updates(
 
     const content = get_match_content(
       u,
-      all_data,
+      all_data as AllDataLike,
       u.roundIndex,
       u.order,
       get_option,
