@@ -1,7 +1,8 @@
+import { OptionMeta } from "../data/data.js";
 import { is_object, is_valid_number } from "../utils.js";
 import { get_default_options } from "./options_meta_getter";
 
-export const shout_impossible_option_value = (option_name, option_value) => {
+export const shout_impossible_option_value = (option_name: string, option_value: unknown) => {
   console.warn(
     `Impossible value provided for "${option_name}" option: %c${JSON.stringify(option_value, null, 2)}%c.
 Default value of %c${get_default_options()[option_name]}%c will be used instead`,
@@ -12,7 +13,7 @@ Default value of %c${get_default_options()[option_name]}%c will be used instead`
   );
 };
 
-const is_valid_option_type = (value, meta) => {
+const is_valid_option_type = (value: unknown, meta: OptionMeta) => {
   switch (meta.type) {
     case "number":
     case "pixels": {
@@ -29,14 +30,14 @@ const is_valid_option_type = (value, meta) => {
       return typeof value === "boolean";
     }
     case "select": {
-      return meta.options?.find((o) =>
+      return meta.options?.find((o: unknown) =>
         is_object(o) ? o.value === value : o === value,
       );
     }
   }
 };
 
-export const is_valid_option = (name, value, meta) => {
+export const is_valid_option = (name: string, value: unknown, meta: OptionMeta | undefined) => {
   if (!meta) {
     console.warn(
       `Unknown option provided: %c${name}`,

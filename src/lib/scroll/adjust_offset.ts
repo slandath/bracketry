@@ -1,14 +1,19 @@
+import { GetOption, Shell } from "../data/data.js";
 import { within_range } from "../utils.js";
 import { apply_translateY } from "./apply_translateY.js";
 import { scrollbar_functions } from "./scrollbar_functions.js";
 
 export const adjust_offset = (
-  scrollY_middle_ratio,
-  html_shell,
-  get_option,
-  synthetic_scrollTop,
+  scrollY_middle_ratio: number,
+  html_shell: Shell,
+  get_option: GetOption,
+  synthetic_scrollTop: number | undefined,
 ) => {
   const { matches_scroller: scroller, matches_positioner } = html_shell;
+
+  if (!scroller || !matches_positioner) {
+    return 0;
+  }
 
   let offset;
 

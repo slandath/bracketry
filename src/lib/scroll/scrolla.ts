@@ -16,6 +16,9 @@ const get_scrollY_ratio = (
   synthetic_scrollTop: number
 ): number => {
   const { matches_scroller: scroller, matches_positioner } = html_shell;
+  if (!scroller || !matches_positioner) {
+    return 0;
+  }
   const current_offset = scroller.scrollTop || synthetic_scrollTop;
   const scrollY_middle_px = current_offset + scroller.clientHeight / 2;
   return scrollY_middle_px / matches_positioner.clientHeight;
@@ -25,6 +28,9 @@ const update_scroll_buttons = (
   synthetic_scrollTop: number,
   html_shell: ScrolllaShell
 ): void => {
+  if (!html_shell.matches_scroller || !html_shell.matches_positioner) {
+    return;
+  }
   const max_scrollTop =
     html_shell.matches_positioner.clientHeight -
     html_shell.matches_scroller.clientHeight;
@@ -66,6 +72,10 @@ export const create_scrolla = (
   let synthetic_scrollTop = 0;
 
   const { matches_scroller: scroller, matches_positioner } = html_shell;
+
+  if (!scroller || !matches_positioner) {
+    throw new Error("Required shell elements not found")
+  }
 
   html_shell.the_root_element.style.setProperty(
     "--scroll-transition-duration",

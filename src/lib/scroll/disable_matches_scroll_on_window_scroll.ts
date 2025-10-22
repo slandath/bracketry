@@ -1,14 +1,15 @@
-import { debounce } from "../utils.js";
+import { GetOption } from "../data/data";
+import { debounce } from "../utils";
 
 export const disable_matches_scroll_on_window_scroll = (
-  matches_scroller,
-  get_option,
+  matches_scroller: HTMLElement,
+  get_option: GetOption,
 ) => {
   if (get_option("verticalScrollMode") === "buttons") {
     return () => void 0;
   }
 
-  const enable_matches_wheel_scroll = debounce((matches_scroller) => {
+  const enable_matches_wheel_scroll = debounce((matches_scroller: HTMLElement) => {
     matches_scroller.classList.add("scroll-y-enabled");
   }, 200);
 

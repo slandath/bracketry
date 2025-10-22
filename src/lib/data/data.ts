@@ -96,6 +96,7 @@ export type OptionMeta = {
   type: string;
   default_value: unknown;
   min_value?: number;
+  options?: unknown[];
 }
 
 export type FlattenedMeta = Record<string, OptionMeta>
