@@ -1,4 +1,7 @@
-export const apply_translateY = (matches_positioner: HTMLElement, offset: number) => {
+export const apply_translateY = (
+  matches_positioner: HTMLElement,
+  offset: number,
+) => {
   // Whatever property holds translateY, change it.
   // Default is transform. I.e., if none was set, it will become transform. (Because on mobiles there is no swap)
   const should_apply_as_transform = matches_positioner.style.margin === "";
@@ -18,7 +21,9 @@ export const swap_translateY_to_margin = (matches_positioner: HTMLElement) => {
   matches_positioner.style.transform = "";
 };
 
-export const swap_translateY_to_transform = (matches_positioner: HTMLElement) => {
+export const swap_translateY_to_transform = (
+  matches_positioner: HTMLElement,
+) => {
   matches_positioner.style.transform = `translate3d(0, ${matches_positioner.style.marginTop}, 0)`;
   matches_positioner.style.marginTop = "";
 };

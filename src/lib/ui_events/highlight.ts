@@ -57,8 +57,9 @@ export const update_highlight = (
       match_parent.classList.add(last_highlighted_class);
     }
 
-    const last_round_parent =
-      side.closest<HTMLElement>(".bronze-round-wrapper");
+    const last_round_parent = side.closest<HTMLElement>(
+      ".bronze-round-wrapper",
+    );
     if (!last_round_parent) return;
 
     // highlight first pseudo-round wrapper

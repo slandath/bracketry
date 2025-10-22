@@ -2,7 +2,10 @@ import { is_object, is_valid_number } from "../utils.js";
 import { Match, Side, Team } from "./data.js";
 import { validate_single_score } from "./validate_single_score";
 
-export const validate_matches = (matches: Match[], teams: { [id: string]: Team }) => {
+export const validate_matches = (
+  matches: Match[],
+  teams: { [id: string]: Team },
+) => {
   const errors = [];
 
   if (matches !== undefined && !Array.isArray(matches)) {
@@ -57,10 +60,7 @@ export const validate_matches = (matches: Match[], teams: { [id: string]: Team }
             return;
           }
 
-          if (
-            side.teamId !== undefined &&
-            typeof side.teamId !== "string"
-          ) {
+          if (side.teamId !== undefined && typeof side.teamId !== "string") {
             errors.push({
               is_critical: true,
               message: `If you provide side.teamId, it must be a string`,

@@ -1,12 +1,16 @@
 import { GetOption, Shell } from "../data/data";
 
-export const handle_vertical_button_click = (html_shell: Shell, get_option: GetOption, cb: (delta:number) => void) => {
+export const handle_vertical_button_click = (
+  html_shell: Shell,
+  get_option: GetOption,
+  cb: (delta: number) => void,
+) => {
   if (get_option("verticalScrollMode") === "native") {
     return () => void 0;
   }
 
   const try_scroll_Y = (e: Event) => {
-    if(!(e.target instanceof Element)) return;
+    if (!(e.target instanceof Element)) return;
     const button_wrapper = e.target.closest(".scroll-button");
     if (!button_wrapper) return;
     const is_up = button_wrapper.classList.contains("button-up");

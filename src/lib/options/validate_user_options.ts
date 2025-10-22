@@ -2,7 +2,10 @@ import { OptionMeta } from "../data/data.js";
 import { is_object, is_valid_number } from "../utils.js";
 import { get_default_options } from "./options_meta_getter";
 
-export const shout_impossible_option_value = (option_name: string, option_value: unknown) => {
+export const shout_impossible_option_value = (
+  option_name: string,
+  option_value: unknown,
+) => {
   console.warn(
     `Impossible value provided for "${option_name}" option: %c${JSON.stringify(option_value, null, 2)}%c.
 Default value of %c${get_default_options()[option_name]}%c will be used instead`,
@@ -37,7 +40,11 @@ const is_valid_option_type = (value: unknown, meta: OptionMeta) => {
   }
 };
 
-export const is_valid_option = (name: string, value: unknown, meta: OptionMeta | undefined) => {
+export const is_valid_option = (
+  name: string,
+  value: unknown,
+  meta: OptionMeta | undefined,
+) => {
   if (!meta) {
     console.warn(
       `Unknown option provided: %c${name}`,

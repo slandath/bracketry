@@ -1,6 +1,9 @@
 import { GetOption, Shell } from "../data/data";
 
-export const get_visible_rounds_count = (shell: Shell, get_option: GetOption) => {
+export const get_visible_rounds_count = (
+  shell: Shell,
+  get_option: GetOption,
+) => {
   const rounds = shell.matches_positioner.querySelectorAll(".round-wrapper");
 
   const vrc = get_option("visibleRoundsCount") as number | undefined;

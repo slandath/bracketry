@@ -8,9 +8,7 @@ import { create_element_from_Html } from "./utils";
 /**
  * Builds and mounts the bracket HTML shell inside the provided container element.
  */
-export const create_html_shell = (
-  user_wrapper_el: HTMLElement,
-): Shell => {
+export const create_html_shell = (user_wrapper_el: HTMLElement): Shell => {
   const the_root_element = create_element_from_Html(`
     <div class="bracket-root">
       <div class="navigation-button left"></div>
@@ -36,18 +34,17 @@ export const create_html_shell = (
 
   user_wrapper_el.append(the_root_element);
 
-  const find = <T extends Element = HTMLElement>(
-    selector: string,
-  ): T | null => the_root_element.querySelector<T>(selector);
+  const find = <T extends Element = HTMLElement>(selector: string): T | null =>
+    the_root_element.querySelector<T>(selector);
 
   // Stored element references
-const elements = {
-  the_root_element,
-  scrollbar: find(".scrollbar") as HTMLElement | null,
-  round_titles_wrapper: find(".round-titles-wrapper") as HTMLElement | null,
-  matches_scroller: find(".matches-scroller") as HTMLElement,
-  matches_positioner: find(".matches-positioner") as HTMLElement,
-};
+  const elements = {
+    the_root_element,
+    scrollbar: find(".scrollbar") as HTMLElement | null,
+    round_titles_wrapper: find(".round-titles-wrapper") as HTMLElement | null,
+    matches_scroller: find(".matches-scroller") as HTMLElement,
+    matches_positioner: find(".matches-positioner") as HTMLElement,
+  };
 
   const uninstall = (): void => {
     // Remove all DOM nodes and clear references

@@ -49,7 +49,9 @@ export default function SelectionTool({
   // --- State hooks ---
   const [pendingPicks, setPendingPicks] = useState<Record<string, string>>({});
   const [isSaving, setIsSaving] = useState(false);
-  const [currentRound, setCurrentRound] = useState(() => getInitialState().round);
+  const [currentRound, setCurrentRound] = useState(
+    () => getInitialState().round,
+  );
   const [index, setIndex] = useState(() => getInitialState().matchIndex);
 
   // --- Derived data that depends on state ---
@@ -218,8 +220,8 @@ export default function SelectionTool({
               {isSaving
                 ? "Saving…"
                 : isLastRound
-                ? "Save Final Picks"
-                : "Save & Continue"}
+                  ? "Save Final Picks"
+                  : "Save & Continue"}
             </button>
             <button
               type="button"

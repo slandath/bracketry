@@ -44,9 +44,13 @@ export function within_range(number: number, min: number, max: number): number {
   return Math.max(Math.min(number, max), min);
 }
 
-export function is_object(variable: unknown): variable is Record<string, unknown> {
+export function is_object(
+  variable: unknown,
+): variable is Record<string, unknown> {
   return (
-    typeof variable === "object" && !Array.isArray(variable) && variable !== null
+    typeof variable === "object" &&
+    !Array.isArray(variable) &&
+    variable !== null
   );
 }
 
@@ -80,7 +84,11 @@ export function remove_whitespace_from_html(str: string): string {
   return str.replace(/>\s+</g, "><");
 }
 
-function insert_styles(root_id: string, styles_id: string, styles: string): void {
+function insert_styles(
+  root_id: string,
+  styles_id: string,
+  styles: string,
+): void {
   document.head.insertAdjacentHTML(
     "beforeend",
     `<style id='${root_id}-${styles_id}'>${styles}</style>`,

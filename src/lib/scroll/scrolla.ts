@@ -13,7 +13,7 @@ import { scrollbar_functions } from "./scrollbar_functions";
 
 const get_scrollY_ratio = (
   html_shell: ScrolllaShell,
-  synthetic_scrollTop: number
+  synthetic_scrollTop: number,
 ): number => {
   const { matches_scroller: scroller, matches_positioner } = html_shell;
   if (!scroller || !matches_positioner) {
@@ -26,7 +26,7 @@ const get_scrollY_ratio = (
 
 const update_scroll_buttons = (
   synthetic_scrollTop: number,
-  html_shell: ScrolllaShell
+  html_shell: ScrolllaShell,
 ): void => {
   if (!html_shell.matches_scroller || !html_shell.matches_positioner) {
     return;
@@ -37,10 +37,10 @@ const update_scroll_buttons = (
   const has_reached_end =
     Math.ceil(synthetic_scrollTop) >= Math.floor(max_scrollTop);
   const button_down = html_shell.the_root_element.querySelector(
-    ".button-down"
+    ".button-down",
   ) as HTMLElement;
   const button_up = html_shell.the_root_element.querySelector(
-    ".button-up"
+    ".button-up",
   ) as HTMLElement;
 
   if (has_reached_end) {
@@ -62,24 +62,24 @@ const debounced_end_scrolling = debounce(
   (matches_positioner: HTMLElement): void => {
     matches_positioner.classList.remove("is-scrolling");
   },
-  SCROLL_TRANSITION_DURATION + 50
+  SCROLL_TRANSITION_DURATION + 50,
 );
 
 export const create_scrolla = (
   html_shell: ScrolllaShell,
-  get_option: GetOption
+  get_option: GetOption,
 ): ScrolllaApi => {
   let synthetic_scrollTop = 0;
 
   const { matches_scroller: scroller, matches_positioner } = html_shell;
 
   if (!scroller || !matches_positioner) {
-    throw new Error("Required shell elements not found")
+    throw new Error("Required shell elements not found");
   }
 
   html_shell.the_root_element.style.setProperty(
     "--scroll-transition-duration",
-    `${SCROLL_TRANSITION_DURATION / 1000}s`
+    `${SCROLL_TRANSITION_DURATION / 1000}s`,
   );
 
   const handle_native_scroll = (): void => {
@@ -87,14 +87,14 @@ export const create_scrolla = (
     scrollbar_functions.update_position(
       html_shell,
       get_option,
-      scroller.scrollTop
+      scroller.scrollTop,
     );
     debounced_end_scrolling(matches_positioner);
   };
 
   const forget_window_onscroll = disable_matches_scroll_on_window_scroll(
     scroller,
-    get_option
+    get_option,
   );
 
   const make_scroll_jump = (deltaY: number): void => {
@@ -105,13 +105,13 @@ export const create_scrolla = (
     synthetic_scrollTop = within_range(
       synthetic_scrollTop + deltaY,
       0,
-      translateY_max
+      translateY_max,
     );
     apply_translateY(matches_positioner, synthetic_scrollTop);
     scrollbar_functions.update_position_with_transition(
       html_shell,
       get_option,
-      synthetic_scrollTop
+      synthetic_scrollTop,
     );
     update_scroll_buttons(synthetic_scrollTop, html_shell);
     debounced_end_scrolling(matches_positioner);
@@ -123,7 +123,7 @@ export const create_scrolla = (
   if (get_option("verticalScrollMode") === "mixed") {
     release_native_scroll_on_matches = restrict_native_scroll(
       scroller,
-      make_scroll_jump
+      make_scroll_jump,
     );
   } else if (get_option("verticalScrollMode") === "native") {
     scroller.classList.add("scroll-y-enabled");
@@ -133,7 +133,7 @@ export const create_scrolla = (
   const unhandle_vertical_button_click = handle_vertical_button_click(
     html_shell,
     get_option,
-    make_scroll_jump
+    make_scroll_jump,
   );
 
   html_shell.the_root_element.addEventListener("mouseenter", () => {
@@ -159,7 +159,7 @@ export const create_scrolla = (
         scrollY_middle_ratio,
         html_shell,
         get_option,
-        synthetic_scrollTop
+        synthetic_scrollTop,
       );
       if (get_option("verticalScrollMode") !== "native") {
         synthetic_scrollTop = new_offset;

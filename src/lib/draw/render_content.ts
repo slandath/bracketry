@@ -20,7 +20,9 @@ const tryExtendDataRounds = (all_data: Data): void => {
   // 1. If skippedLastRoundsCount is provided, need to add this number of items to all_data.rounds
   // (all_data.rounds.length therefore becomes not an actual number of rounds but an ideal number that provides the necessary "thickness" of a tree)
 
-  do_n_times(all_data.skippedLastRoundsCount ?? 0, () => all_data.rounds.push({}));
+  do_n_times(all_data.skippedLastRoundsCount ?? 0, () =>
+    all_data.rounds.push({}),
+  );
 
   if (!all_data.matches || !all_data.rounds) return;
 
@@ -42,7 +44,11 @@ const tryExtendDataRounds = (all_data: Data): void => {
   do_n_times(lacking_rounds_count, () => all_data.rounds.push({}));
 };
 
-export const render_content = (all_data: Data, shell: Shell, get_option: GetOption): void => {
+export const render_content = (
+  all_data: Data,
+  shell: Shell,
+  get_option: GetOption,
+): void => {
   shell.round_titles_wrapper!.innerHTML = "";
 
   tryExtendDataRounds(all_data);
@@ -57,25 +63,24 @@ export const render_content = (all_data: Data, shell: Shell, get_option: GetOpti
   shell.matches_positioner.innerHTML = "";
 
   const round_elements: HTMLElement[] = [];
-  all_data.rounds.slice(0, renderableRoundsCount).forEach((_, round_index: number) => {
-    const round_el = get_round_element(all_data, round_index, get_option);
+  all_data.rounds
+    .slice(0, renderableRoundsCount)
+    .forEach((_, round_index: number) => {
+      const round_el = get_round_element(all_data, round_index, get_option);
 
-    if (
-      round_index === all_data.rounds.length - 1 &&
-      all_data.matches?.find((m: Match) => {
-        return (
-          m.roundIndex === all_data.rounds.length - 1 &&
-          m.order === 1
-        );
-      })
-    ) {
-      const bronze_wrapper = create_element_from_Html(bronze_markup);
-      bronze_wrapper.append(round_el);
-      round_elements.push(bronze_wrapper);
-    } else {
-      round_elements.push(round_el);
-    }
-  });
+      if (
+        round_index === all_data.rounds.length - 1 &&
+        all_data.matches?.find((m: Match) => {
+          return m.roundIndex === all_data.rounds.length - 1 && m.order === 1;
+        })
+      ) {
+        const bronze_wrapper = create_element_from_Html(bronze_markup);
+        bronze_wrapper.append(round_el);
+        round_elements.push(bronze_wrapper);
+      } else {
+        round_elements.push(round_el);
+      }
+    });
 
   shell.matches_positioner.append(...round_elements);
 };

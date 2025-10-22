@@ -1,7 +1,11 @@
 import { GetOption, Shell } from "../data/data";
 import { is_last_round_fully_visible } from "./calc";
 
-export const update_nav_buttons = (shell: Shell, base_index_value: number, get_option: GetOption) => {
+export const update_nav_buttons = (
+  shell: Shell,
+  base_index_value: number,
+  get_option: GetOption,
+) => {
   const last_round_is_fully_visible = is_last_round_fully_visible(
     shell,
     base_index_value,

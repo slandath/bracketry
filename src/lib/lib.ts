@@ -20,10 +20,7 @@ import { deep_clone_object, is_valid_number } from "./utils";
 const all_bracketry_instances: BracketInstance[] = [];
 
 // Helper to merge new data safely
-const try_assign_new_data = (
-  old_data: Data,
-  new_data: Data,
-): boolean => {
+const try_assign_new_data = (old_data: Data, new_data: Data): boolean => {
   const { have_critical_error } = handle_data_errors(ananlyze_data(new_data));
   if (have_critical_error) return false;
 
@@ -87,7 +84,7 @@ export const createBracket = (
   const html_shell = create_html_shell(user_wrapper_el);
   apply_options(user_options, options_dealer, html_shell);
 
-  const merge_ok = try_assign_new_data(actual_data, initial_user_data as Data) ;
+  const merge_ok = try_assign_new_data(actual_data, initial_user_data as Data);
   if (!merge_ok) return stub;
 
   alive = true;
@@ -128,9 +125,12 @@ export const createBracket = (
     actual_data,
     options_dealer.get_final_value,
     html_shell,
-    { ...navigation, handle_click: (el: Element | null) => {
-      if (el instanceof HTMLElement) navigation.handle_click(el);
-    }},
+    {
+      ...navigation,
+      handle_click: (el: Element | null) => {
+        if (el instanceof HTMLElement) navigation.handle_click(el);
+      },
+    },
   );
 
   const instance: BracketInstance = {
@@ -178,7 +178,9 @@ export const createBracket = (
         u,
         actual_data as Data & { matches: Match[] },
         html_shell as Shell,
-         ((key: string) => options_dealer.get_final_value(key)) as (key?: unknown) => unknown,
+        ((key: string) => options_dealer.get_final_value(key)) as (
+          key?: unknown,
+        ) => unknown,
         navigation.repaint,
       );
     },
@@ -186,7 +188,8 @@ export const createBracket = (
     getUserOptions: () =>
       deep_clone_object(options_dealer?.get_user_options() || {}),
     highlightContestantHistory: (contestantId: string) => {
-      if (alive && html_shell.matches_positioner) update_highlight(html_shell.matches_positioner, contestantId);
+      if (alive && html_shell.matches_positioner)
+        update_highlight(html_shell.matches_positioner, contestantId);
     },
     uninstall: () => {
       if (alive) uninstall();

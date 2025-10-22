@@ -3,7 +3,11 @@ import { is_object } from "../utils.js";
 import { get_options_flattened_meta } from "./options_meta_getter";
 import { is_valid_option } from "./validate_user_options.js";
 
-const _get_final_value = (name: string, user_options: Record<string, unknown>, flattened_meta: FlattenedMeta): unknown => {
+const _get_final_value = (
+  name: string,
+  user_options: Record<string, unknown>,
+  flattened_meta: FlattenedMeta,
+): unknown => {
   const option_meta = flattened_meta[name];
 
   if (option_meta === undefined) {
@@ -31,7 +35,9 @@ export const create_options_dealer = () => {
   const flattened_meta = get_options_flattened_meta() as FlattenedMeta;
 
   return {
-    try_merge_options: (new_user_options: Record<string, unknown> | undefined): void => {
+    try_merge_options: (
+      new_user_options: Record<string, unknown> | undefined,
+    ): void => {
       if (new_user_options === undefined) return;
 
       if (!is_object(new_user_options)) {

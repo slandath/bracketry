@@ -2,7 +2,11 @@ import { Data, GetOption } from "../data/data";
 import { create_element_from_Html, get_n_things } from "../utils";
 import { get_match_element } from "./get_match_element";
 
-export const get_round_element = (all_data: Data, round_index: number, get_option: GetOption) => {
+export const get_round_element = (
+  all_data: Data,
+  round_index: number,
+  get_option: GetOption,
+) => {
   const round_element = create_element_from_Html(
     `<div class="round-wrapper"></div>`,
   );
@@ -22,10 +26,7 @@ export const get_round_element = (all_data: Data, round_index: number, get_optio
   if (
     round_index === last_rnd_index &&
     all_data.matches?.find((m) => {
-      return (
-        m.roundIndex === last_rnd_index &&
-        m.order === 1
-      );
+      return m.roundIndex === last_rnd_index && m.order === 1;
     })
   ) {
     round_element.append(

@@ -7,7 +7,11 @@ const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/
 /**
  * Render a single team side in a match
  */
-const get_side_html = (match: Match, side_index: number, all_data: Data): string => {
+const get_side_html = (
+  match: Match,
+  side_index: number,
+  all_data: Data,
+): string => {
   const side = match.sides?.[side_index];
   const other = match.sides?.[side_index === 0 ? 1 : 0];
 

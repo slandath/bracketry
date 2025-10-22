@@ -17,7 +17,7 @@ const update_position_with_transition = (
   offsetY: number,
 ): void => {
   if (!shell.scrollbar) return;
-  const scrollbar = shell.scrollbar
+  const scrollbar = shell.scrollbar;
   scrollbar.classList.add("animated");
   update_position(shell, get_option, offsetY);
   const deanimate = (): void => {

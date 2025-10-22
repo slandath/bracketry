@@ -15,7 +15,7 @@ export interface AllDataLike extends Record<string, unknown> {
   matches: MatchLike[];
   contestants?: unknown[];
   rounds: Round[];
-  teams?: {[id:string]: Team}
+  teams?: { [id: string]: Team };
 }
 
 export interface HtmlShellLike {
@@ -58,8 +58,7 @@ export function apply_matches_updates(
 
     const old_match_data_i = all_data.matches.findIndex(
       (old_match) =>
-        old_match.roundIndex === u.roundIndex &&
-        old_match.order === u.order,
+        old_match.roundIndex === u.roundIndex && old_match.order === u.order,
     );
 
     if (old_match_data_i > -1) {

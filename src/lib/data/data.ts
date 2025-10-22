@@ -12,7 +12,7 @@ export type BracketInstance = {
   highlightContestantHistory: (contestantId: string) => void;
   uninstall: () => void;
   user_wrapper_el: HTMLElement | null;
-}
+};
 
 export type Data = {
   rounds: Round[]; // you must provide objects for each round, including upcoming rounds
@@ -45,10 +45,10 @@ export type Side = {
 };
 
 export type Score = {
-  mainScore: number | string,
-  subscore?: number | string,
-  isWinner?: boolean
-}
+  mainScore: number | string;
+  subscore?: number | string;
+  isWinner?: boolean;
+};
 
 export type Team = {
   id: string;
@@ -66,7 +66,11 @@ export type Shell = {
   uninstall: () => void;
 };
 
-export type DataError = { is_critical: boolean; message: string; data?: unknown };
+export type DataError = {
+  is_critical: boolean;
+  message: string;
+  data?: unknown;
+};
 
 export type GetOption = (key: string) => unknown;
 
@@ -78,26 +82,26 @@ export type ScrolllaApi = {
   get_scrollY_ratio: () => number;
   adjust_offset: (scrollY_middle_ratio: number) => void;
   uninstall: () => void;
-}
+};
 
 export type BaseIndex = {
   set: (i: number) => void;
   try_decrement: () => void;
   try_increment: () => void;
   get: () => number;
-}
+};
 
 export type OptionsDealer = {
   get_final_value: GetOption;
   try_merge_options: (options: Record<string, unknown>) => void;
-  get_all_final_options: () => Record<string, unknown>
-}
+  get_all_final_options: () => Record<string, unknown>;
+};
 
 export type OptionMeta = {
   type: string;
   default_value: unknown;
   min_value?: number;
   options?: unknown[];
-}
+};
 
-export type FlattenedMeta = Record<string, OptionMeta>
+export type FlattenedMeta = Record<string, OptionMeta>;
