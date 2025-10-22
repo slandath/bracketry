@@ -17,6 +17,7 @@ export default function SelectionTool({
 }: Props) {
   const SELECTION_STATE_KEY = "bracketry:selection:state";
 
+  // --- Utility: load persisted state safely ---
   const getInitialState = () => {
     try {
       const saved = localStorage.getItem(SELECTION_STATE_KEY);
@@ -27,18 +28,13 @@ export default function SelectionTool({
     return { round: 0, matchIndex: 0 };
   };
 
-  const [pendingPicks, setPendingPicks] = useState<Record<string, string>>({});
-  const [isSaving, setIsSaving] = useState(false);
-  const [currentRound, setCurrentRound] = useState(
-    () => getInitialState().round,
-  );
-  const [index, setIndex] = useState(() => getInitialState().matchIndex);
-
+  // --- Constants and derived data ---
   const allMatches = (data?.matches ?? []).sort(
     (a, b) => a.roundIndex - b.roundIndex || a.order - b.order,
   );
 
   const maxRound = Math.max(...allMatches.map((m) => m.roundIndex), -1);
+
   const defaultRoundNames: Record<number, string> = {
     0: "Round of 64",
     1: "Round of 32",
@@ -49,37 +45,46 @@ export default function SelectionTool({
   };
 
   const names = roundNames || defaultRoundNames;
+
+  // --- State hooks ---
+  const [pendingPicks, setPendingPicks] = useState<Record<string, string>>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [currentRound, setCurrentRound] = useState(
+    () => getInitialState().round,
+  );
+  const [index, setIndex] = useState(() => getInitialState().matchIndex);
+
+  // --- Derived data that depends on state ---
   const roundMatches = allMatches
     .filter((m) => m.roundIndex === currentRound)
     .sort((a, b) => a.order - b.order);
 
   const match = roundMatches[index];
+  const matchKey = match ? `${match.roundIndex}:${match.order}` : "";
+  const [left, right] = match?.sides
+    ? match.sides.map((side) =>
+        side?.teamId ? data.teams?.[side.teamId] : undefined,
+      )
+    : [];
 
-  if (!match) {
-    return (
-      <div className="selection-tool__empty">
-        No matches available for this round.
-      </div>
-    );
-  }
-
-  const matchKey = `${match.roundIndex}:${match.order}`;
-  const [left, right] = (match.sides ?? []).map((side) =>
-    side?.teamId ? data.teams?.[side.teamId] : undefined,
-  );
-
-  const savedPick = match.prediction || "";
-  const currentPick = pendingPicks[matchKey] || savedPick;
+  const savedPick = match?.prediction || "";
+  const currentPick = matchKey ? pendingPicks[matchKey] || savedPick : "";
   const isLocked = !!savedPick;
 
   const roundMatchKeys = new Set(
     roundMatches.map((m) => `${m.roundIndex}:${m.order}`),
   );
+
   const pendingInRound = Object.entries(pendingPicks).filter(
     ([key, teamId]) => roundMatchKeys.has(key) && teamId,
   ).length;
-  const allRoundMatchesPicked = pendingInRound === roundMatches.length;
 
+  const allRoundMatchesPicked =
+    roundMatches.length > 0 && pendingInRound === roundMatches.length;
+
+  const isLastRound = currentRound === maxRound;
+
+  // --- Effects ---
   useEffect(() => {
     if (index >= roundMatches.length && roundMatches.length > 0) {
       setIndex(roundMatches.length - 1);
@@ -92,6 +97,7 @@ export default function SelectionTool({
       if (e.key === "ArrowRight")
         setIndex((i: number) => Math.min(roundMatches.length - 1, i + 1));
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [roundMatches.length]);
@@ -103,6 +109,7 @@ export default function SelectionTool({
     );
   }, [currentRound, index]);
 
+  // --- Handlers ---
   const selectTeam = (teamId: string | null) => {
     if (isLocked) return;
     setPendingPicks((prev) => ({ ...prev, [matchKey]: teamId || "" }));
@@ -110,7 +117,6 @@ export default function SelectionTool({
 
   const handleSaveAll = async () => {
     if (!onPick || !allRoundMatchesPicked) return;
-
     setIsSaving(true);
 
     try {
@@ -152,8 +158,16 @@ export default function SelectionTool({
     );
   };
 
-  const isLastRound = currentRound === maxRound;
+  // --- Early return (after all hooks) ---
+  if (!match) {
+    return (
+      <div className="selection-tool__empty">
+        No matches available for this round.
+      </div>
+    );
+  }
 
+  // --- JSX ---
   return (
     <div className="selection-tool-wrapper">
       <div className="selection-tool">
@@ -235,6 +249,7 @@ export default function SelectionTool({
   );
 }
 
+// --- TeamCard subcomponent ---
 function TeamCard({
   team,
   onChange,
@@ -254,7 +269,9 @@ function TeamCard({
 
   return (
     <label
-      className={`team-card ${checked ? "team-card--selected" : ""} ${disabled ? "team-card--disabled" : ""}`}
+      className={`team-card ${checked ? "team-card--selected" : ""} ${
+        disabled ? "team-card--disabled" : ""
+      }`}
     >
       <div className="team-card__left">
         {team.logoUrl ? (
