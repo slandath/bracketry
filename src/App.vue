@@ -43,7 +43,7 @@ function saveToStorage(data: Data) {
 // Business logic
 function recomputeRounds(data: Data) {
   const matches = data.matches ?? [];
-  const maxRound = matches.reduce((max, m) => Math.max(max, m.roundIndex), 0)
+  const maxRound = matches.reduce((max, m) => Math.max(max, m.roundIndex), 0);
 
   for (let r = 1; r <= maxRound; r++) {
     const curMatches = matches
@@ -150,7 +150,7 @@ watch(tournamentData, initializeBracket);
           aria-label="Close"
           @click="closeDialog"
         >
-        <CloseIcon />
+          <CloseIcon />
         </button>
         <SelectionTool
           v-if="isSelectionOpen"
