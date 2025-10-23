@@ -18,6 +18,7 @@
     "noEmit": true,
     "noImplicitAny": true
   },
+  "plugins": [{ "name": "typescript-vue-plugin" }],
   "include": ["src/**/*.ts", "src/**/*.vue"],
   "references": []
 }
