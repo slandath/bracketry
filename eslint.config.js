@@ -1,9 +1,9 @@
-import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import vue from "eslint-plugin-vue";
-import vueParser from "vue-eslint-parser";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js';
+import prettier from 'eslint-config-prettier';
+import vue from 'eslint-plugin-vue';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import vueParser from 'vue-eslint-parser';
 
 export default [
   js.configs.recommended,
@@ -21,11 +21,12 @@ export default [
   {
     files: ["**/*.vue"],
     languageOptions: {
-      parser: vue.parsers["vue-eslint-parser"],
+      parser: vueParser,
       parserOptions: {
         parser: tseslint.parser,
         ecmaVersion: 2024,
         sourceType: "module",
+        extraFileExtensions: ["vue",]
       },
     },
   },

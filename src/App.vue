@@ -146,8 +146,8 @@ watch(tournamentData, initializeBracket);
       <div class="selection-modal__content">
         <button
           class="selection-modal__close"
-          @click="closeDialog"
           aria-label="Close"
+          @click="closeDialog"
         >
           ×
         </button>
