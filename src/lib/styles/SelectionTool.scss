@@ -54,7 +54,6 @@ $max-width: 21.875rem;
 
   &__save-all-btn {
     padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
     border: 1px solid $team-border-dark;
     background: hsl(0 0% 100%);
     cursor: pointer;
@@ -68,7 +67,6 @@ $max-width: 21.875rem;
 
   &__reset-btn {
     padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
     border: 1px solid $team-border-dark;
     background: hsl(0 0% 100%);
     cursor: pointer;
@@ -206,7 +204,6 @@ $max-width: 21.875rem;
   background: $primary;
   color: white;
   border: none;
-  border-radius: 0.375rem;
   cursor: pointer;
   display: flex;
   margin: 1rem auto;

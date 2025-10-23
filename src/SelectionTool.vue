@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { ArrowLeftIcon, ArrowRightIcon } from "./assets/";
 import { Data, Match } from "./lib/data/data";
 import "./lib/styles/SelectionTool.scss";
 import TeamCard from "./TeamCard.vue";
@@ -226,7 +227,7 @@ watch(
           :disabled="index === 0"
           @click="navigate(-1)"
         >
-          ‹
+          <ArrowLeftIcon />
         </button>
       </div>
 
@@ -290,7 +291,7 @@ watch(
           :disabled="index === roundMatches.length - 1"
           @click="navigate(1)"
         >
-          ›
+          <ArrowRightIcon />
         </button>
       </div>
     </div>
