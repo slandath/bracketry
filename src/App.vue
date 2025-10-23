@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import bracketData from "./2025-tournament-blank.json";
+import CloseIcon from "./assets/CloseIcon.svg";
 import type { BracketInstance, Data, Match } from "./lib/data/data";
 import { createBracket } from "./lib/lib";
 import SelectionTool from "./SelectionTool.vue";
@@ -42,7 +43,7 @@ function saveToStorage(data: Data) {
 // Business logic
 function recomputeRounds(data: Data) {
   const matches = data.matches ?? [];
-  const maxRound = Math.max(...matches.map((m) => m.roundIndex));
+  const maxRound = matches.reduce((max, m) => Math.max(max, m.roundIndex), 0)
 
   for (let r = 1; r <= maxRound; r++) {
     const curMatches = matches
@@ -149,7 +150,7 @@ watch(tournamentData, initializeBracket);
           aria-label="Close"
           @click="closeDialog"
         >
-          ×
+        <CloseIcon />
         </button>
         <SelectionTool
           v-if="isSelectionOpen"
