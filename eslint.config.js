@@ -1,46 +1,46 @@
-import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js'
+import prettier from 'eslint-config-prettier'
+import vue from 'eslint-plugin-vue'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default [
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  react.configs.flat.recommended,
+  ...vue.configs['flat/recommended'],
   prettier,
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ['**/*.{js,ts,vue}'],
     languageOptions: {
       ecmaVersion: 2024,
-      sourceType: "module",
+      sourceType: 'module',
       globals: globals.browser,
-      parserOptions: {
-        ecmaFeatures: { jsx: true },
-      },
-    },
-    settings: {
-      react: { version: "detect" },
     },
   },
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ['**/*.vue'],
     languageOptions: {
-      parser: tseslint.parser,
+      parser: vue.parsers['vue-eslint-parser'],
+      parserOptions: {
+        parser: tseslint.parser,
+        ecmaVersion: 2024,
+        sourceType: 'module',
+      },
+    },
+  },
+  {
+    files: ['**/*.{ts,vue}'],
+    languageOptions: {
       parserOptions: { project: true },
     },
   },
   {
-    ignores: ["index.d.ts", "vite.config.ts"],
+    ignores: ['index.d.ts', 'vite.config.ts', 'dist'],
   },
   {
-    plugins: { "react-hooks": reactHooks },
     rules: {
-      "react/react-in-jsx-scope": "off",
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-      "@typescript-eslint/no-unused-vars": "warn",
+      'vue/multi-word-component-names': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
-];
+]
