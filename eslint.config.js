@@ -1,8 +1,9 @@
-import js from "@eslint/js";
-import prettier from "eslint-config-prettier";
-import vue from "eslint-plugin-vue";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import js from '@eslint/js'
+import prettier from 'eslint-config-prettier'
+import vue from 'eslint-plugin-vue'
+import vueParser from 'vue-eslint-parser';
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default [
   js.configs.recommended,
