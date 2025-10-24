@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  nextTick,
+} from "vue";
 import bracketData from "./2025-tournament-blank.json";
 import CloseIcon from "./assets/CloseIcon.svg";
 import type { BracketInstance, Data, Match } from "./lib/data/data";
@@ -79,17 +86,16 @@ function recomputeRounds(data: Data) {
 
 // Event handlers
 function handlePick(match: Match, teamId: string) {
-  const updated = structuredClone(tournamentData.value);
-  const target = updated.matches?.find(
+  const target = tournamentData.value.matches?.find(
     (m) => m.roundIndex === match.roundIndex && m.order === match.order,
   );
   if (!target) return;
 
   target.prediction = teamId;
-  recomputeRounds(updated);
+  recomputeRounds(tournamentData.value);
 
-  tournamentData.value = updated;
-  saveToStorage(updated);
+  tournamentData.value = { ...tournamentData.value };
+  saveToStorage(tournamentData.value);
 
   if (allPicked.value) {
     isSelectionOpen.value = false;
@@ -102,12 +108,13 @@ function handleRefresh() {
 
 function openDialog() {
   isSelectionOpen.value = true;
-  dialogRef.value?.showModal();
+  nextTick(() => {
+    dialogRef.value?.showModal();
+  });
 }
 
 function closeDialog() {
   isSelectionOpen.value = false;
-  dialogRef.value?.close();
 }
 
 // Bracket management
@@ -142,23 +149,24 @@ watch(tournamentData, initializeBracket);
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
 
     <button class="open-selection-btn" @click="openDialog">Make Picks</button>
-
-    <dialog ref="dialogRef" class="selection-modal">
-      <div class="selection-modal__content">
-        <button
-          class="selection-modal__close"
-          aria-label="Close"
-          @click="closeDialog"
-        >
-          <CloseIcon />
-        </button>
-        <SelectionTool
-          v-if="isSelectionOpen"
-          :data="tournamentData"
-          @pick="handlePick"
-          @refresh="handleRefresh"
-        />
-      </div>
-    </dialog>
+    <Transition name="modal" @leave-end="dialogRef?.close()">
+      <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
+        <div class="selection-modal__content">
+          <button
+            class="selection-modal__close"
+            aria-label="Close"
+            @click="closeDialog"
+          >
+            <CloseIcon />
+          </button>
+          <SelectionTool
+            v-if="isSelectionOpen"
+            :data="tournamentData"
+            @pick="handlePick"
+            @refresh="handleRefresh"
+          />
+        </div>
+      </dialog>
+    </Transition>
   </div>
 </template>

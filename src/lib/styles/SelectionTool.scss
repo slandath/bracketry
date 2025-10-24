@@ -219,9 +219,11 @@ $max-width: 21.875rem;
   z-index: 1000;
   border: none;
   padding: 0;
+  animation: modalFadeIn 0.3s ease-out;
 
   &::backdrop {
     background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
   }
 
   &__content {
@@ -238,8 +240,8 @@ $max-width: 21.875rem;
 
   &__close {
     position: absolute;
-    top: 0.05rem;
-    right: 0.05rem;
+    top: 0.25rem;
+    right: 0.25rem;
     background: white;
     border: none;
     border-radius: 50%;
@@ -255,5 +257,38 @@ $max-width: 21.875rem;
     &:hover {
       opacity: 0.8;
     }
+  }
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s ease-out;
+}
+.modal-enter-from {
+  opacity: 0;
+  transform: scale(0.05);
+}
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
   }
 }
