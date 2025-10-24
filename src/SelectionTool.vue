@@ -270,7 +270,7 @@ watch(
                 ? "Saving…"
                 : isLastRound
                   ? "Save Final Picks"
-                  : "Save & Continue"
+                  : "Confirm Picks"
             }}
           </button>
           <button
@@ -279,7 +279,7 @@ watch(
             :disabled="isSaving || Object.keys(pendingPicks).length === 0"
             @click="handleReset"
           >
-            Reset Round
+            Reset
           </button>
         </div>
       </div>
