@@ -9,9 +9,17 @@ import {
 } from "vue";
 import bracketData from "./2025-tournament-blank.json";
 import CloseIcon from "./assets/CloseIcon.svg";
-import type { BracketInstance, BracketScore, Data, Match } from "./lib/data/data";
+import type {
+  BracketInstance,
+  BracketScore,
+  Data,
+  Match,
+} from "./lib/data/data";
 import { createBracket } from "./lib/lib";
-import resultsComparison from "./lib/results_comparison";
+import {
+  predictionResultDataMerge,
+  resultsComparison,
+} from "./lib/results_comparison";
 import SelectionTool from "./SelectionTool.vue";
 const STORAGE_KEY = "bracketry:tournament:v1";
 
@@ -21,8 +29,8 @@ const bracketContainerRef = ref<HTMLDivElement>();
 const bracketInstanceRef = ref<BracketInstance>();
 const isSelectionOpen = ref(false);
 const dialogRef = ref<HTMLDialogElement>();
-const score = ref<BracketScore | null>(null)
-const error = ref<string | null>(null)
+const score = ref<BracketScore | null>(null);
+const error = ref<string | null>(null);
 
 // Computed
 const allPicked = computed(() => {
@@ -138,12 +146,22 @@ onMounted(async () => {
     saveToStorage(tournamentData.value);
   }
   try {
-    const response = await fetch('/results.json')
-    const data = await response.json();
-    score.value = resultsComparison(data.matches)
-    } catch {
-      error.value = "Failed to fetch score"
-      }
+    const response = await fetch("/results.json");
+    const results = await response.json();
+    const bracketString = localStorage.getItem(STORAGE_KEY);
+    if (!bracketString) {
+      error.value = "No bracket found";
+      return;
+    }
+    const bracket = JSON.parse(bracketString);
+    const merged = predictionResultDataMerge(bracket, results.matches);
+    const scoreResult = resultsComparison(merged);
+      console.log(merged)
+    score.value = scoreResult;
+  } catch {
+    error.value = "Failed to fetch results or predictions";
+  }
+
 });
 
 onBeforeUnmount(() => {
@@ -158,7 +176,7 @@ watch(tournamentData, initializeBracket);
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
 
     <button class="open-selection-btn" @click="openDialog">Make Picks</button>
-    <p>Score: {{ error ? error : score?.correctPicks}}</p>
+    <p>Score: {{ error ? error : score?.correctPicks }}</p>
     <Transition name="modal" @leave-end="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
         <div class="selection-modal__content">
