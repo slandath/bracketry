@@ -66,6 +66,10 @@ export type Shell = {
   uninstall: () => void;
 };
 
+export type BracketScore = {
+  correctPicks: number
+}
+
 export type DataError = {
   is_critical: boolean;
   message: string;
