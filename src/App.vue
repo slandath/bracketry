@@ -16,6 +16,7 @@ import type {
   Match,
 } from "./lib/data/data";
 import { createBracket } from "./lib/lib";
+import { evaluateUserPicks } from "./lib/results_comparison";
 import SelectionTool from "./SelectionTool.vue";
 const STORAGE_KEY = "bracketry:tournament:v1";
 
@@ -136,18 +137,9 @@ function initializeBracket() {
 }
 
 async function getUserBracketData() {
-  try {
-    const item = localStorage.getItem(STORAGE_KEY)
-    if (!item) return
-    const userBracket: Data = JSON.parse(item)
-    const response = await fetch('/results.json')
-    const gameScores: Data = await response.json();
-  const mergedData = (userBracket.matches || []).map((prediction: Match) => ({
-    ...prediction, ...(gameScores.matches || []).find(m => m.id === prediction.id)
-  }))
-    saveToStorage({...userBracket, matches: mergedData })
-  } catch (error) {
-    console.error('Failed to load bracket data', error)
+  const updatedBracket = await evaluateUserPicks()
+  if (updatedBracket) {
+  saveToStorage(updatedBracket)
   }
 }
 
