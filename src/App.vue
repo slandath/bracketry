@@ -137,9 +137,9 @@ function initializeBracket() {
 }
 
 async function getUserBracketData() {
-  const updatedBracket = await evaluateUserPicks()
+  const updatedBracket = await evaluateUserPicks();
   if (updatedBracket) {
-  saveToStorage(updatedBracket)
+    saveToStorage(updatedBracket);
   }
 }
 
@@ -163,7 +163,9 @@ watch(tournamentData, initializeBracket);
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
 
     <button class="open-selection-btn" @click="openDialog">Make Picks</button>
-    <button class="open-selection-btn" @click="getUserBracketData">Fire Function</button>
+    <button class="open-selection-btn" @click="getUserBracketData">
+      Fire Function
+    </button>
     <p>Score: {{ error ? error : score?.correctPicks }}</p>
     <Transition name="modal" @leave-end="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">

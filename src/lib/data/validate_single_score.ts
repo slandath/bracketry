@@ -12,7 +12,6 @@ export const validate_single_score = (score: unknown, side: Side) => {
       data: side,
     });
   } else {
-
     if (
       typeof score.isWinner !== "boolean" &&
       typeof score.isWinner !== "undefined"

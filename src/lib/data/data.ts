@@ -67,8 +67,8 @@ export type Shell = {
 };
 
 export type BracketScore = {
-  correctPicks: number
-}
+  correctPicks: number;
+};
 
 export type DataError = {
   is_critical: boolean;
