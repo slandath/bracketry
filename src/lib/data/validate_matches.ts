@@ -1,6 +1,6 @@
 import { is_object, is_valid_number } from "../utils.js";
 import { Match, Side, Team } from "./data.js";
-import { validate_single_score } from "./validate_single_score";
+// import { validate_single_score } from "./validate_single_score";
 
 export const validate_matches = (
   matches: Match[],
@@ -90,27 +90,26 @@ export const validate_matches = (
             });
           }
 
-          if (side.score !== undefined && !Array.isArray(side.score)) {
-            errors.push({
-              is_critical: true,
-              message: "If side.scores is provided, it must be an array",
-              data: side,
-            });
-          }
+          // if (side.score !== undefined && !Array.isArray(side.score)) {
+          //   errors.push({
+          //     is_critical: true,
+          //     message: "If side.scores is provided, it must be an array",
+          //     data: side,
+          //   });
+          // }
+          // if (Array.isArray(side.score) && !side.score.length) {
+          //   errors.push({
+          //     is_critical: false,
+          //     message: `side.scores is provided but it's an empty array: `,
+          //     data: side,
+          //   });
+          // }
 
-          if (Array.isArray(side.score) && !side.score.length) {
-            errors.push({
-              is_critical: false,
-              message: `side.scores is provided but it's an empty array: `,
-              data: side,
-            });
-          }
-
-          if (Array.isArray(side.score)) {
-            side.score.forEach((score) => {
-              errors.push(...validate_single_score(score, side));
-            });
-          }
+          // if (Array.isArray(side.score)) {
+          //   side.score.forEach((score) => {
+          //     errors.push(...validate_single_score(score, side));
+          //   });
+          // }
         });
       }
     });

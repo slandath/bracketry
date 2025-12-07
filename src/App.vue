@@ -16,10 +16,6 @@ import type {
   Match,
 } from "./lib/data/data";
 import { createBracket } from "./lib/lib";
-import {
-  predictionResultDataMerge,
-  resultsComparison,
-} from "./lib/results_comparison";
 import SelectionTool from "./SelectionTool.vue";
 const STORAGE_KEY = "bracketry:tournament:v1";
 
@@ -139,29 +135,31 @@ function initializeBracket() {
   );
 }
 
+async function getUserBracketData() {
+  const userBracket = JSON.parse(localStorage.getItem(STORAGE_KEY))
+  const userMatchData = userBracket.matches
+  const response = await fetch('/results.json')
+  const gameScores = await response.json();
+  const mergedData = userMatchData.map(prediction => {
+    const gameScore = gameScores.matches.find(m => m.id === prediction.id)
+    return {...prediction, ...gameScore}
+  })
+  const updatedBracket = {
+    ...userBracket, matches: mergedData
+  }
+  saveToStorage(updatedBracket)
+  console.log("Game Scores:", gameScores)
+  console.log("User Matches:", userMatchData)
+  console.log("Merged Data:", mergedData)
+  console.log("Updated Bracket:", updatedBracket)
+}
+
 // Lifecycle
 onMounted(async () => {
   tournamentData.value = loadFromStorage();
   if (!localStorage.getItem(STORAGE_KEY)) {
     saveToStorage(tournamentData.value);
   }
-  try {
-    const response = await fetch("/results.json");
-    const results = await response.json();
-    const bracketString = localStorage.getItem(STORAGE_KEY);
-    if (!bracketString) {
-      error.value = "No bracket found";
-      return;
-    }
-    const bracket = JSON.parse(bracketString);
-    const merged = predictionResultDataMerge(bracket, results.matches);
-    const scoreResult = resultsComparison(merged);
-      console.log(merged)
-    score.value = scoreResult;
-  } catch {
-    error.value = "Failed to fetch results or predictions";
-  }
-
 });
 
 onBeforeUnmount(() => {
@@ -176,6 +174,7 @@ watch(tournamentData, initializeBracket);
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
 
     <button class="open-selection-btn" @click="openDialog">Make Picks</button>
+    <button class="open-selection-btn" @click="getUserBracketData">Fire Function</button>
     <p>Score: {{ error ? error : score?.correctPicks }}</p>
     <Transition name="modal" @leave-end="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
