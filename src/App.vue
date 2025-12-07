@@ -136,22 +136,19 @@ function initializeBracket() {
 }
 
 async function getUserBracketData() {
-  const userBracket = JSON.parse(localStorage.getItem(STORAGE_KEY))
-  const userMatchData = userBracket.matches
-  const response = await fetch('/results.json')
-  const gameScores = await response.json();
-  const mergedData = userMatchData.map(prediction => {
-    const gameScore = gameScores.matches.find(m => m.id === prediction.id)
-    return {...prediction, ...gameScore}
-  })
-  const updatedBracket = {
-    ...userBracket, matches: mergedData
+  try {
+    const item = localStorage.getItem(STORAGE_KEY)
+    if (!item) return
+    const userBracket: Data = JSON.parse(item)
+    const response = await fetch('/results.json')
+    const gameScores: Data = await response.json();
+  const mergedData = (userBracket.matches || []).map((prediction: Match) => ({
+    ...prediction, ...(gameScores.matches || []).find(m => m.id === prediction.id)
+  }))
+    saveToStorage({...userBracket, matches: mergedData })
+  } catch (error) {
+    console.error('Failed to load bracket data', error)
   }
-  saveToStorage(updatedBracket)
-  console.log("Game Scores:", gameScores)
-  console.log("User Matches:", userMatchData)
-  console.log("Merged Data:", mergedData)
-  console.log("Updated Bracket:", updatedBracket)
 }
 
 // Lifecycle

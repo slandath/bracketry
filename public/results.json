@@ -16,7 +16,7 @@
         "isWinner": false
       }
     ],
-    "matchStatus": "final",
+    "matchStatus": "Final",
     "result": "t1"
   },
   {
@@ -35,7 +35,7 @@
         "isWinner": true
       }
     ],
-    "matchStatus": "final",
+    "matchStatus": "Final",
     "result": "t33"
   },
   {
@@ -54,7 +54,7 @@
         "isWinner": false
       }
     ],
-    "matchStatus": "final",
+    "matchStatus": "Final",
     "result": "t9"
   }
 ]
