@@ -9,12 +9,7 @@ import {
 } from "vue";
 import bracketData from "./2025-tournament-blank.json";
 import CloseIcon from "./assets/CloseIcon.svg";
-import type {
-  BracketInstance,
-  BracketScore,
-  Data,
-  Match,
-} from "./lib/data/data";
+import type { BracketInstance, Data, Match } from "./lib/data/data";
 import { createBracket } from "./lib/lib";
 import { evaluateUserPicks } from "./lib/results_comparison";
 import SelectionTool from "./SelectionTool.vue";
@@ -26,8 +21,6 @@ const bracketContainerRef = ref<HTMLDivElement>();
 const bracketInstanceRef = ref<BracketInstance>();
 const isSelectionOpen = ref(false);
 const dialogRef = ref<HTMLDialogElement>();
-const score = ref<BracketScore | null>(null);
-const error = ref<string | null>(null);
 
 // Computed
 const allPicked = computed(() => {
@@ -164,9 +157,8 @@ watch(tournamentData, initializeBracket);
 
     <button class="open-selection-btn" @click="openDialog">Make Picks</button>
     <button class="open-selection-btn" @click="getUserBracketData">
-      Fire Function
+      Evaluate Bracket
     </button>
-    <p>Score: {{ error ? error : score?.correctPicks }}</p>
     <Transition name="modal" @leave-end="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
         <div class="selection-modal__content">
