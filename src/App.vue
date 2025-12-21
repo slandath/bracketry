@@ -9,11 +9,7 @@ import {
 } from "vue";
 import bracketData from "./2025-tournament-blank.json";
 import CloseIcon from "./assets/CloseIcon.svg";
-import type {
-  BracketInstance,
-  Data,
-  Match
-} from "./lib/data/data";
+import type { BracketInstance, Data, Match } from "./lib/data/data";
 import { createBracket } from "./lib/lib";
 import { evaluateUserPicks } from "./lib/results_comparison";
 import SelectionTool from "./SelectionTool.vue";
