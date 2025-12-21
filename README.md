@@ -1,67 +1,31 @@
-[![test workflow](https://github.com/slandath/bracketry/actions/workflows/main.yml/badge.svg)](https://github.com/slandath/bracketry/actions/)[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/sbachinin/bracketry/blob/main/LICENSE.md)
+# Basketball Bracket
 
-JavaScript library that takes your data and draws the tree of a knockout tournament in the browser. Suitable (hopefully) for any kind of sport
+A digital bracket to track your picks for a single-elimination basketball tournament.
 
-<br>
+Powered by [Bracketry](https://github.com/sbachinin/bracketry)
 
-![alt text](https://github.com/sbachinin/bracketry/blob/main/images/example.jpg?raw=true)
+---
 
-<br>
+## What Is It?
 
-Bracketry is designed to draw _single elimination_ brackets. Technically you can use it to make [double elimination](https://en.wikipedia.org/wiki/Double-elimination_tournament) brackets too but it won't be that easy and the result won't look very nice (a lot of screen space will be left unused).
+I was looking for a easy way to track my March Madness picks and I was unsatisfied with the digital brackets I found.
 
-<br>
+I loved the look of the Bracketry bracket, but it was not designed for basketball.  So I converted it from a library to a front-end application and made some tweaks to the data structure.
 
-## Basic usage
+## How It Works
 
-```javascript
-import { createBracket } from "bracketry";
+* Bracket is saved locally - no account required.
+* Load the tournament information into the JSON template and save in /src.
+* Selecting "Make Picks" will open a modal to predict a winner for each match.
+* Load game results in the results.json in /public.
+* Selecting "Evaluate Bracket" will compare your bracket against the real-game results, highlighting correct picks in green and incorrect picks in red.
 
-createBracket(your_data, your_wrapper_element);
-```
+## Powered By
 
-_You only need a wrapper element (advisably with explicit <a href="https://bracketry.app/create-bracket/#problem-of-height">height</a>) and some properly formatted <a href="https://bracketry.app/data-shape">data</a>_
-
-<br>
-
-## Some lovely features
-
-&nbsp;&nbsp; 🎾 Tennis: doubles, tiebreak, points within a game (15:30 etc), "serving" dot  
-&nbsp;&nbsp; 🍏 <a href="https://bracketry.app/live-updates">Live updates</a>  
-&nbsp;&nbsp; 🔦 Team's path within a tournament is <a href="https://bracketry.app/highlight-history">highlighted</a> on click (if you want)  
-&nbsp;&nbsp; 👯 Multiple brackets on a page  
-&nbsp;&nbsp; 📱 Can be easily tuned for <a href="https://bracketry.app/mobile">mobile</a> devices  
-&nbsp;&nbsp; 3️⃣ <a href="https://bracketry.app/bronze">Third place</a> match is possible
-
-<br>
-
-## Plenty of options (<a href="https://bracketry.app/options">try</a>)
-
-- Sizes, margins and fonts are quite <a href="https://bracketry.app/fonts-colors-sizes">flexible</a>
-- Navigation between rounds can be <a href="https://bracketry.app/adjust-nav-buttons">adjusted</a> or <a href="https://bracketry.app/external-navigation">built from scratch</a>
-- <a href="https://bracketry.app/scroll-modes">Vertical scroll</a> can work with mousewheel or buttons or both
-- You can <a href="https://bracketry.app/inject-markup">inject</a> your own markup here and there. You may also choose to render matches yourself and use bracketry only as a positioning mechanism
-- You can attach <a href="https://bracketry.app/click-handlers">click handlers</a> to matches (or their sides)
-- It's possible to specify a <a href="https://bracketry.app/rounds-count">number of rounds</a> visible at a time
-
-<br>
-
-## Installation: npm or yarn
-
-```bash
-npm install bracketry
-# or
-yarn add bracketry
-```
-
-<br>
-
-Minified bundle is 48k, gzipped is 12k.
-
-Includes a **d.ts** file for ease of TypeScript development
-
-<br>
-
-## Licensing
-
-MIT
+* [Bracketry](https://github.com/sbachinin/bracketry)
+* [ESLint](https://github.com/eslint/eslint)
+* [Prettier](https://github.com/prettier/prettier)
+* [Sass](https://github.com/sass/sass)
+* [Typescript](https://github.com/microsoft/TypeScript)
+* [Vite](https://github.com/vitejs/vite)
+* [Vue](https://github.com/vuejs)
