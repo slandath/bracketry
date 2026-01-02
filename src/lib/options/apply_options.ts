@@ -24,7 +24,10 @@ const feature_classes: Record<string, (o: Record<string, unknown>) => boolean>
     'with-visible-scrollbar': o => o.showScrollbar === true,
   }
 
-function update_the_DOM(the_root_element: HTMLElement, get_option: GetOption): void {
+function update_the_DOM(
+  the_root_element: HTMLElement,
+  get_option: GetOption,
+): void {
   (
     the_root_element.querySelector('.navigation-button.left') as HTMLElement
   ).innerHTML = get_option('leftNavButtonHTML') as string;
@@ -38,7 +41,11 @@ function update_the_DOM(the_root_element: HTMLElement, get_option: GetOption): v
     = get_option('scrollDownButtonHTML') as string
 }
 
-export function apply_options(new_options: Record<string, unknown>, options_dealer: OptionsDealer, { the_root_element }: { the_root_element: HTMLElement }): void {
+export function apply_options(
+  new_options: Record<string, unknown>,
+  options_dealer: OptionsDealer,
+  { the_root_element }: { the_root_element: HTMLElement },
+): void {
   const get_option = options_dealer.get_final_value
 
   options_dealer.try_merge_options(new_options)
@@ -73,7 +80,9 @@ export function apply_options(new_options: Record<string, unknown>, options_deal
   })
 }
 
-export function filter_updatable_options(options: Record<string, unknown>): Record<string, unknown> {
+export function filter_updatable_options(
+  options: Record<string, unknown>,
+): Record<string, unknown> {
   const meta = get_options_flattened_meta()
   const updatable_options: Record<string, unknown> = {}
 

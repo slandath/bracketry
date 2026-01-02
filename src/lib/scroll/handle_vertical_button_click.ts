@@ -1,6 +1,10 @@
 import type { GetOption, Shell } from '../data/data'
 
-export function handle_vertical_button_click(html_shell: Shell, get_option: GetOption, cb: (delta: number) => void) {
+export function handle_vertical_button_click(
+  html_shell: Shell,
+  get_option: GetOption,
+  cb: (delta: number) => void,
+) {
   if (get_option('verticalScrollMode') === 'native') {
     return () => void 0
   }

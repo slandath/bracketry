@@ -10,7 +10,10 @@ function is_displayable_score(s: unknown) {
   return is_valid_number(s) || typeof s === 'string'
 }
 
-export function get_single_score(own_score: Score | undefined, opponent_score: Score | undefined): string {
+export function get_single_score(
+  own_score: Score | undefined,
+  opponent_score: Score | undefined,
+): string {
   if (
     !is_displayable_score(own_score?.mainScore)
     && !is_displayable_score(opponent_score?.mainScore)
@@ -46,7 +49,10 @@ export function get_single_score(own_score: Score | undefined, opponent_score: S
   )
 }
 
-export function get_scores_for_side(side: Side | undefined, other_side: Side | undefined): string {
+export function get_scores_for_side(
+  side: Side | undefined,
+  other_side: Side | undefined,
+): string {
   const own_score
     = is_object(side) && Array.isArray(side.score) ? side.score : []
   const opponent_score

@@ -1,4 +1,7 @@
-export function apply_translateY(matches_positioner: HTMLElement, offset: number) {
+export function apply_translateY(
+  matches_positioner: HTMLElement,
+  offset: number,
+) {
   // Whatever property holds translateY, change it.
   // Default is transform. I.e., if none was set, it will become transform. (Because on mobiles there is no swap)
   const should_apply_as_transform = matches_positioner.style.margin === ''

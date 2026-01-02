@@ -1,7 +1,10 @@
 import type { Match, Side, Team } from './data.js'
 import { is_object, is_valid_number } from '../utils.js'
 
-export function validate_matches(matches: Match[], teams: { [id: string]: Team }) {
+export function validate_matches(
+  matches: Match[],
+  teams: { [id: string]: Team },
+) {
   const errors = []
 
   if (matches !== undefined && !Array.isArray(matches)) {

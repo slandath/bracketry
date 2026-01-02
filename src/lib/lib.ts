@@ -34,7 +34,11 @@ function try_assign_new_data(old_data: Data, new_data: Data): boolean {
 // ======================================================
 // createBracket
 // ======================================================
-export function createBracket(initial_user_data: Record<string, unknown>, user_wrapper_el: HTMLElement | null, user_options: Record<string, unknown>): BracketInstance {
+export function createBracket(
+  initial_user_data: Record<string, unknown>,
+  user_wrapper_el: HTMLElement | null,
+  user_options: Record<string, unknown>,
+): BracketInstance {
   let alive = false
   const options_dealer = create_options_dealer()
   const actual_data: Data = {

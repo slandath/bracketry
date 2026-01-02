@@ -1,4 +1,8 @@
-export function try_get_custom_element(custom_getter: unknown, custom_getter_args: unknown[], custom_getter_name: string): Element | null | undefined {
+export function try_get_custom_element(
+  custom_getter: unknown,
+  custom_getter_args: unknown[],
+  custom_getter_name: string,
+): Element | null | undefined {
   if (typeof custom_getter === 'function') {
     try {
       const val = custom_getter(...custom_getter_args)
@@ -6,7 +10,9 @@ export function try_get_custom_element(custom_getter: unknown, custom_getter_arg
         return val
       }
       else {
-        throw new TypeError (`options.${custom_getter_name} must return an Element or null, instead returned: ${val}`)
+        throw new TypeError(
+          `options.${custom_getter_name} must return an Element or null, instead returned: ${val}`,
+        )
       }
     }
     catch (e) {

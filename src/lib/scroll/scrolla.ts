@@ -11,7 +11,10 @@ import { handle_vertical_button_click } from './handle_vertical_button_click'
 import { restrict_native_scroll } from './restrict_native_scroll'
 import { scrollbar_functions } from './scrollbar_functions'
 
-function get_scrollY_ratio(html_shell: ScrolllaShell, synthetic_scrollTop: number): number {
+function get_scrollY_ratio(
+  html_shell: ScrolllaShell,
+  synthetic_scrollTop: number,
+): number {
   const { matches_scroller: scroller, matches_positioner } = html_shell
   if (!scroller || !matches_positioner) {
     return 0
@@ -21,7 +24,10 @@ function get_scrollY_ratio(html_shell: ScrolllaShell, synthetic_scrollTop: numbe
   return scrollY_middle_px / matches_positioner.clientHeight
 }
 
-function update_scroll_buttons(synthetic_scrollTop: number, html_shell: ScrolllaShell): void {
+function update_scroll_buttons(
+  synthetic_scrollTop: number,
+  html_shell: ScrolllaShell,
+): void {
   if (!html_shell.matches_scroller || !html_shell.matches_positioner) {
     return
   }
@@ -61,7 +67,10 @@ const debounced_end_scrolling = debounce(
   SCROLL_TRANSITION_DURATION + 50,
 )
 
-export function create_scrolla(html_shell: ScrolllaShell, get_option: GetOption): ScrolllaApi {
+export function create_scrolla(
+  html_shell: ScrolllaShell,
+  get_option: GetOption,
+): ScrolllaApi {
   let synthetic_scrollTop = 0
 
   const { matches_scroller: scroller, matches_positioner } = html_shell

@@ -44,7 +44,11 @@ function tryExtendDataRounds(all_data: Data): void {
   do_n_times(lacking_rounds_count, () => all_data.rounds.push({}))
 }
 
-export function render_content(all_data: Data, shell: Shell, get_option: GetOption): void {
+export function render_content(
+  all_data: Data,
+  shell: Shell,
+  get_option: GetOption,
+): void {
   shell.round_titles_wrapper!.innerHTML = ''
 
   tryExtendDataRounds(all_data)

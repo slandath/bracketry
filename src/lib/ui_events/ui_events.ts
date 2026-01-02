@@ -28,9 +28,14 @@ function get_match_data_for_element(el: HTMLElement, all_data: Data): Match {
 /**
  * Installs click handlers for the bracket UI: navigation, match clicks, side clicks, and highlights.
  */
-export function install_ui_events(all_data: Data, get_option: (key: string) => unknown, html_shell: Shell, navigation: {
-  handle_click: (el: Element | null) => void
-}): { uninstall: () => void } {
+export function install_ui_events(
+  all_data: Data,
+  get_option: (key: string) => unknown,
+  html_shell: Shell,
+  navigation: {
+    handle_click: (el: Element | null) => void
+  },
+): { uninstall: () => void } {
   const { the_root_element, matches_positioner } = html_shell
 
   const handle_root_click = (e: MouseEvent): void => {
@@ -73,8 +78,7 @@ export function install_ui_events(all_data: Data, get_option: (key: string) => u
 
     // --- Default: highlight team history ---
     if (target.closest('.matches-scroller')) {
-      const disableHighlight
-        = get_option('disableHighlight') === true
+      const disableHighlight = get_option('disableHighlight') === true
 
       const sideElem = target.closest(
         '.side-wrapper[contestant-id]',

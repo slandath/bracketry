@@ -1,15 +1,5 @@
-# Ignore artifacts:
-build
-coverage
-.github/**
-yarn.lock
-.vscode/**
-node_modules
-dist
-.next
-.git
-package-lock.json
-pnpm-lock.yaml
-.env
-.env.local
-.DS_Store
+*
+!*.scss
+!*.html
+!*.md
+!*/

@@ -7,7 +7,12 @@ import {
 } from './calc'
 import { update_nav_buttons } from './update_nav_buttons.js'
 
-function update(base_index: BaseIndex, get_option: GetOption, shell: Shell, scrolla: ScrolllaApi) {
+function update(
+  base_index: BaseIndex,
+  get_option: GetOption,
+  shell: Shell,
+  scrolla: ScrolllaApi,
+) {
   // "refresh" base index; (it may be necessary to reduce it
   //      if navigation was at far right && v_r_count increased for whatever reason)
   base_index.set(base_index.get())
@@ -58,7 +63,11 @@ function create_base_index(shell: Shell, get_option: GetOption) {
   }
 }
 
-export function create_navigation(shell: Shell, get_option: GetOption, scrolla: ScrolllaApi) {
+export function create_navigation(
+  shell: Shell,
+  get_option: GetOption,
+  scrolla: ScrolllaApi,
+) {
   const base_index = create_base_index(shell, get_option)
 
   const repaint = () => update(base_index, get_option, shell, scrolla)

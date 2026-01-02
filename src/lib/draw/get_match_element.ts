@@ -7,7 +7,11 @@ const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/
 /**
  * Render a single team side in a match
  */
-function get_side_html(match: Match, side_index: number, all_data: Data): string {
+function get_side_html(
+  match: Match,
+  side_index: number,
+  all_data: Data,
+): string {
   const side = match.sides?.[side_index]
   const other = match.sides?.[side_index === 0 ? 1 : 0]
 
@@ -68,7 +72,13 @@ function get_side_html(match: Match, side_index: number, all_data: Data): string
 /**
  * Render the inner content of a match (the "body")
  */
-export function get_match_content(maybe_match_data: Match | undefined, all_data: Data, round_index: number, match_order: number, get_option: GetOption) {
+export function get_match_content(
+  maybe_match_data: Match | undefined,
+  all_data: Data,
+  round_index: number,
+  match_order: number,
+  get_option: GetOption,
+) {
   const custom_match_element = try_get_custom_element(
     get_option('getMatchElement'),
     [round_index, match_order],
@@ -114,7 +124,12 @@ export function get_match_content(maybe_match_data: Match | undefined, all_data:
 /**
  * Main entry: render one whole match wrapper + body
  */
-export function get_match_element(round_index: number, match_order: number, all_data: Data, get_option: GetOption) {
+export function get_match_element(
+  round_index: number,
+  match_order: number,
+  all_data: Data,
+  get_option: GetOption,
+) {
   const maybe_match_data = all_data.matches?.find(
     m => m.roundIndex === round_index && m.order === match_order,
   )

@@ -12,7 +12,11 @@ function get_default_round_name(rounds_count: number, round_index: number) {
   return `1/${2 ** (rounds_count - round_index - 1)}`
 }
 
-export function get_round_titles(all_data: Data, renderableRoundsCount: number, get_option: GetOption) {
+export function get_round_titles(
+  all_data: Data,
+  renderableRoundsCount: number,
+  get_option: GetOption,
+) {
   return all_data.rounds.slice(0, renderableRoundsCount).map((r, i) => {
     const wrapper = document.createElement('div')
     wrapper.className = 'round-title'

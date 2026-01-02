@@ -1,7 +1,10 @@
 import type { GetOption } from '../data/data'
 import { debounce } from '../utils'
 
-export function disable_matches_scroll_on_window_scroll(matches_scroller: HTMLElement, get_option: GetOption) {
+export function disable_matches_scroll_on_window_scroll(
+  matches_scroller: HTMLElement,
+  get_option: GetOption,
+) {
   if (get_option('verticalScrollMode') === 'buttons') {
     return () => void 0
   }

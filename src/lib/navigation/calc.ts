@@ -27,7 +27,11 @@ export function get_visible_rounds_count(shell: Shell, get_option: GetOption) {
   }
 }
 
-export function is_last_round_fully_visible(shell: Shell, base_index_value: number, get_option: GetOption) {
+export function is_last_round_fully_visible(
+  shell: Shell,
+  base_index_value: number,
+  get_option: GetOption,
+) {
   const rounds = shell.matches_positioner.querySelectorAll('.round-wrapper')
   return (
     base_index_value + get_visible_rounds_count(shell, get_option) * 1.01

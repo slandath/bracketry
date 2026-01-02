@@ -2,7 +2,11 @@ import type { Data, GetOption } from '../data/data'
 import { create_element_from_Html, get_n_things } from '../utils'
 import { get_match_element } from './get_match_element'
 
-export function get_round_element(all_data: Data, round_index: number, get_option: GetOption) {
+export function get_round_element(
+  all_data: Data,
+  round_index: number,
+  get_option: GetOption,
+) {
   const round_element = create_element_from_Html(
     `<div class="round-wrapper"></div>`,
   )

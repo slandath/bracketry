@@ -6,8 +6,8 @@
     "preview": "vite preview",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "lint": "eslint . --fix",
-    "lint:check": "eslint .",
+    "lint": "eslint --fix",
+    "lint:check": "eslint",
     "type-check": "tsc --noEmit",
     "check": "npm run format:check && npm run lint:check && npm run type-check"
   },

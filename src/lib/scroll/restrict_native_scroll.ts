@@ -48,7 +48,10 @@ const wheelOpt: AddEventListenerOptions | boolean = supportsPassive
 const wheelEvent
   = 'onwheel' in document.createElement('div') ? 'wheel' : 'mousewheel'
 
-export function restrict_native_scroll(el: Element, make_scroll_jump: (delta: number) => void) {
+export function restrict_native_scroll(
+  el: Element,
+  make_scroll_jump: (delta: number) => void,
+) {
   const deputise_for_wheel = (e: WheelEvent) => {
     if (
       el.classList // window has no classList

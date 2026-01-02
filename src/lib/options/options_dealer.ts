@@ -3,7 +3,11 @@ import { is_object } from '../utils.js'
 import { get_options_flattened_meta } from './options_meta_getter'
 import { is_valid_option } from './validate_user_options.js'
 
-function _get_final_value(name: string, user_options: Record<string, unknown>, flattened_meta: FlattenedMeta): unknown {
+function _get_final_value(
+  name: string,
+  user_options: Record<string, unknown>,
+  flattened_meta: FlattenedMeta,
+): unknown {
   const option_meta = flattened_meta[name]
 
   if (option_meta === undefined) {

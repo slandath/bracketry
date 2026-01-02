@@ -7,7 +7,10 @@ const last_highlighted_class = 'last-highlighted'
  * @param matches_positioner The container element holding all matches.
  * @param new_id The team or contestant ID to highlight, or null to clear highlights.
  */
-export function update_highlight(matches_positioner: HTMLElement, new_id: string | null): void {
+export function update_highlight(
+  matches_positioner: HTMLElement,
+  new_id: string | null,
+): void {
   if (typeof new_id !== 'string' && new_id !== null)
     return
 

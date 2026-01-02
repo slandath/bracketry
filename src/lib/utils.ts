@@ -124,7 +124,10 @@ export function deep_clone_object<T>(obj: T): T {
     return obj
   }
 
-  const temp = new (obj.constructor as new () => T)() as Record<string, unknown>
+  const temp = new (obj.constructor as new () => T)() as Record<
+    string,
+    unknown
+  >
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       temp[key] = deep_clone_object((obj as Record<string, unknown>)[key])

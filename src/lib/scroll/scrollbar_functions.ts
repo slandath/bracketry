@@ -1,15 +1,22 @@
 import type { GetOption, Shell } from '../data/data'
 
-function update_position(shell: Shell, get_option: GetOption, offsetY: number): void {
+function update_position(
+  shell: Shell,
+  get_option: GetOption,
+  offsetY: number,
+): void {
   if (!shell.scrollbar || !shell.matches_positioner)
     return
   if (get_option('showScrollbar') !== true)
     return
-  shell.scrollbar.style.top
-    = `${(offsetY / shell.matches_positioner.clientHeight) * 100}%`
+  shell.scrollbar.style.top = `${(offsetY / shell.matches_positioner.clientHeight) * 100}%`
 }
 
-function update_position_with_transition(shell: Shell, get_option: GetOption, offsetY: number): void {
+function update_position_with_transition(
+  shell: Shell,
+  get_option: GetOption,
+  offsetY: number,
+): void {
   if (!shell.scrollbar)
     return
   const scrollbar = shell.scrollbar
@@ -30,14 +37,18 @@ function update_height(shell: Shell): void {
   ) {
     return
   }
-  shell.scrollbar.style.height
-    = `${(shell.matches_scroller.clientHeight
+  shell.scrollbar.style.height = `${
+    (shell.matches_scroller.clientHeight
       / shell.matches_positioner.clientHeight)
     * 100
-    }%`
+  }%`
 }
 
-function full_update(shell: Shell, get_option: GetOption, offsetY: number): void {
+function full_update(
+  shell: Shell,
+  get_option: GetOption,
+  offsetY: number,
+): void {
   if (
     !shell.scrollbar
     || !shell.matches_scroller
