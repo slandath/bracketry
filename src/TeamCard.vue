@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { Team } from "./lib/data/data";
+import type { Team } from './lib/data/data'
+import { computed } from 'vue'
 
 interface Props {
-  team?: Team;
-  checked?: boolean;
-  name?: string;
-  disabled?: boolean;
+  team?: Team
+  checked?: boolean
+  name?: string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -14,33 +14,36 @@ const props = withDefaults(defineProps<Props>(), {
   checked: false,
   name: undefined,
   disabled: false,
-});
+})
 
 const emit = defineEmits<{
-  change: [];
-}>();
+  change: []
+}>()
 
 const cardClasses = computed(() => ({
-  "team-card--selected": props.checked,
-  "team-card--disabled": props.disabled,
-}));
+  'team-card--selected': props.checked,
+  'team-card--disabled': props.disabled,
+}))
 
 const ariaLabel = computed(() => {
-  if (!props.team) return "Team to be determined";
-  const seed = props.team.seed ? `Seed ${props.team.seed}, ` : "";
-  const status = props.checked ? ", selected" : "";
-  return `${seed}${props.team.name}${status}`;
-});
+  if (!props.team)
+    return 'Team to be determined'
+  const seed = props.team.seed ? `Seed ${props.team.seed}, ` : ''
+  const status = props.checked ? ', selected' : ''
+  return `${seed}${props.team.name}${status}`
+})
 
 function handleChange() {
   if (!props.disabled) {
-    emit("change");
+    emit('change')
   }
 }
 </script>
 
 <template>
-  <div v-if="!team" class="team-card team-card--tbd">TBD</div>
+  <div v-if="!team" class="team-card team-card--tbd">
+    TBD
+  </div>
   <label v-else class="team-card" :class="cardClasses" :aria-label="ariaLabel">
     <div class="team-card__left">
       <img
@@ -48,7 +51,7 @@ function handleChange() {
         :src="team.logoUrl"
         :alt="`${team.name} logo`"
         class="team-card__logo"
-      />
+      >
       <div v-else class="team-card__logo team-card__logo--placeholder">
         {{ team.name.charAt(0).toUpperCase() }}
       </div>
@@ -71,7 +74,7 @@ function handleChange() {
         :name="name"
         :disabled="disabled"
         @change="handleChange"
-      />
+      >
     </div>
   </label>
 </template>

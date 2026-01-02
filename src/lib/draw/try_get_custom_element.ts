@@ -1,23 +1,21 @@
-export const try_get_custom_element = (
-  custom_getter: unknown,
-  custom_getter_args: unknown[],
-  custom_getter_name: string,
-): Element | null | undefined => {
-  if (typeof custom_getter === "function") {
+export function try_get_custom_element(custom_getter: unknown, custom_getter_args: unknown[], custom_getter_name: string): Element | null | undefined {
+  if (typeof custom_getter === 'function') {
     try {
-      const val = custom_getter(...custom_getter_args);
+      const val = custom_getter(...custom_getter_args)
       if (val instanceof Element || val === null) {
-        return val;
-      } else {
-        throw `options.${custom_getter_name} must return an Element or null, instead returned: ${val}`;
+        return val
       }
-    } catch (e) {
+      else {
+        throw `options.${custom_getter_name} must return an Element or null, instead returned: ${val}`
+      }
+    }
+    catch (e) {
       console.warn(
         `Failed to get a valid return from ${custom_getter_name}.`,
         e,
-      );
+      )
     }
   }
 
-  return undefined;
-};
+  return undefined
+}
