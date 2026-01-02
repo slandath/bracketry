@@ -1,4 +1,5 @@
-import type { BracketInstance, Data, Match, Shell } from './data/data'
+import type { AllDataLike } from './apply_matches_updates'
+import type { BracketInstance, Data, Shell } from './data/data'
 import { apply_matches_updates } from './apply_matches_updates'
 import { ananlyze_data } from './data/analyze_data'
 import { handle_data_errors } from './data/handle_errors'
@@ -104,6 +105,21 @@ export function createBracket(initial_user_data: Record<string, unknown>, user_w
     )
   }
 
+  const ui_events = install_ui_events(
+    actual_data,
+    options_dealer.get_final_value,
+    html_shell,
+    {
+      ...navigation,
+      handle_click: (el: Element | null) => {
+        if (el instanceof HTMLElement)
+          navigation.handle_click(el)
+      },
+    },
+  )
+
+  let instance: BracketInstance
+
   const uninstall = (): void => {
     if (!alive)
       return
@@ -121,20 +137,7 @@ export function createBracket(initial_user_data: Record<string, unknown>, user_w
     alive = false
   }
 
-  const ui_events = install_ui_events(
-    actual_data,
-    options_dealer.get_final_value,
-    html_shell,
-    {
-      ...navigation,
-      handle_click: (el: Element | null) => {
-        if (el instanceof HTMLElement)
-          navigation.handle_click(el)
-      },
-    },
-  )
-
-  const instance: BracketInstance = {
+  instance = {
     moveToPreviousRound: () => {
       if (alive)
         navigation.move_left()
@@ -184,7 +187,7 @@ export function createBracket(initial_user_data: Record<string, unknown>, user_w
         return
       apply_matches_updates(
         u,
-        actual_data as Data & { matches: Match[] },
+        actual_data as AllDataLike,
         html_shell as Shell,
         ((key: string) => options_dealer.get_final_value(key)) as (
           key?: unknown,
