@@ -39,7 +39,7 @@ try {
   )
 }
 catch (e) {
-  console.debug('Passive events not supported:', e)
+  console.warn('Passive events not supported:', e)
 }
 
 const wheelOpt: AddEventListenerOptions | boolean = supportsPassive

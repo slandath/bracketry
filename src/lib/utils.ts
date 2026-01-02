@@ -56,7 +56,7 @@ export function is_object(
 }
 
 export function is_valid_number(v: unknown): v is number {
-  return typeof v === 'number' && !isNaN(v)
+  return typeof v === 'number' && !Number.isNaN(v)
 }
 
 export function create_element_from_Html(htmlString: string): HTMLElement {
@@ -124,15 +124,13 @@ export function deep_clone_object<T>(obj: T): T {
     return obj
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const temp = new (obj as any).constructor()
+  const temp = new (obj.constructor as new () => T)() as Record<string, unknown>
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      temp[key] = deep_clone_object((obj as any)[key])
+      temp[key] = deep_clone_object((obj as Record<string, unknown>)[key])
     }
   }
-  return temp
+  return temp as T
 }
 
 export function observe_resize_later(
