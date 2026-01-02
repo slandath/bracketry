@@ -13,7 +13,7 @@ export function apply_translateY(matches_positioner: HTMLElement, offset: number
 
 export function swap_translateY_to_margin(matches_positioner: HTMLElement) {
   const translateY = matches_positioner.style.transform.match(
-    /translate3d\([^,]+,\s*([^,]+),[^)]+\)/,
+    /translate3d\([^,]+,([^,]+),[^)]+\)/,
   )?.[1]
   matches_positioner.style.marginTop = translateY ?? ''
   matches_positioner.style.transform = ''
