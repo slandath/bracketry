@@ -6,7 +6,7 @@ export function try_get_custom_element(custom_getter: unknown, custom_getter_arg
         return val
       }
       else {
-        throw `options.${custom_getter_name} must return an Element or null, instead returned: ${val}`
+        throw new TypeError (`options.${custom_getter_name} must return an Element or null, instead returned: ${val}`)
       }
     }
     catch (e) {

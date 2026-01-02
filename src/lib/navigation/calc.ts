@@ -15,7 +15,7 @@ export function get_visible_rounds_count(shell: Shell, get_option: GetOption) {
     const vrc_float
       = shell.matches_scroller.getBoundingClientRect().width
         / rounds[0].getBoundingClientRect().width
-    if (isNaN(vrc_float))
+    if (Number.isNaN(vrc_float))
       return 0
     if (get_option('displayWholeRounds') as boolean) {
       return Math.max(

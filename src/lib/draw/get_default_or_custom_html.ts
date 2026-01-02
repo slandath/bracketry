@@ -7,7 +7,7 @@ export function get_default_or_custom_html(default_getter: () => unknown, user_g
         return user_html
       }
       else {
-        throw `options.${user_getter_name} must return a string, instead returned: ${user_html}`
+        throw new TypeError (`options.${user_getter_name} must return a string, instead returned: ${user_html}`)
       }
     }
     catch (e) {
