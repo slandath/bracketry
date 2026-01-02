@@ -29,5 +29,5 @@ I loved the look of the Bracketry bracket, but it was not designed for basketbal
 [![vite](https://img.shields.io/badge/-Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=white)](https://github.com/vitejs/vite)
 [![vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://github.com/vuejs)
 
-* [Antfu's ESLint Config](https://github.com/antfu/eslint-config)
-* [Bracketry](https://github.com/sbachinin/bracketry)
+- [Antfu's ESLint Config](https://github.com/antfu/eslint-config)
+- [Bracketry](https://github.com/sbachinin/bracketry)
