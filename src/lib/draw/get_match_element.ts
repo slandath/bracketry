@@ -1,58 +1,59 @@
-import type { Data, GetOption, Match } from "../data/data";
-import { create_element_from_Html } from "../utils.js";
-import { try_get_custom_element } from "./try_get_custom_element.js";
+import type { Data, GetOption, Match } from '../data/data'
+import { create_element_from_Html } from '../utils.js'
+import { try_get_custom_element } from './try_get_custom_element.js'
 
-const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M21 6.285l-11.16 12.733-6.84-6.018 1.319-1.49 5.341 4.686 9.865-11.196 1.475 1.285z"/></svg>`;
+const checkmark_svg = `<svg class="default-winner-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M21 6.285l-11.16 12.733-6.84-6.018 1.319-1.49 5.341 4.686 9.865-11.196 1.475 1.285z"/></svg>`
 
 /**
  * Render a single team side in a match
  */
-const get_side_html = (
+function get_side_html(
   match: Match,
   side_index: number,
   all_data: Data,
-): string => {
-  const side = match.sides?.[side_index];
-  const other = match.sides?.[side_index === 0 ? 1 : 0];
+): string {
+  const side = match.sides?.[side_index]
+  const other = match.sides?.[side_index === 0 ? 1 : 0]
 
   if (!side || !side.teamId) {
-    return `<div class="side-wrapper empty-side"><span class="placeholder">TBD</span></div>`;
+    return `<div class="side-wrapper empty-side"><span class="placeholder">TBD</span></div>`
   }
 
-  const team = all_data.teams?.[side.teamId];
+  const team = all_data.teams?.[side.teamId]
   if (!team) {
-    return `<div class="side-wrapper empty-side"><span class="placeholder">TBD</span></div>`;
+    return `<div class="side-wrapper empty-side"><span class="placeholder">TBD</span></div>`
   }
 
   // CSS classes
-  let winner_class = "";
-  let loser_class = "";
-  let predicted_class = "";
+  let winner_class = ''
+  let loser_class = ''
+  let predicted_class = ''
 
   if (side.isWinner || match.result === team.id) {
-    winner_class = "winner";
+    winner_class = 'winner'
   }
   if (other && (other.isWinner || match.result === other.teamId)) {
-    loser_class = "looser";
+    loser_class = 'looser'
   }
   if (match.prediction === team.id) {
     if (match.result) {
-      predicted_class =
-        match.result === team.id
-          ? "predicted predicted-correct"
-          : "predicted predicted-incorrect";
-    } else {
-      predicted_class = "predicted";
+      predicted_class
+        = match.result === team.id
+          ? 'predicted predicted-correct'
+          : 'predicted predicted-incorrect'
+    }
+    else {
+      predicted_class = 'predicted'
     }
   }
 
   // Simple logo + title markup
   const logo = team.logoUrl
     ? `<img src="${team.logoUrl}" alt="${team.name} logo"/>`
-    : "";
+    : ''
 
-  const title = `${team.seed} ${team.name}`;
-  const score = side.score ?? "";
+  const title = `${team.seed} ${team.name}`
+  const score = side.score ?? ''
 
   return `
     <div class="side-wrapper ${winner_class} ${loser_class} ${predicted_class}">
@@ -65,35 +66,36 @@ const get_side_html = (
       <div class="side-info-item winner-mark">${checkmark_svg}</div>
       <div class="side-info-item side-scores">${score}</div>
     </div>
-  `;
-};
+  `
+}
 
 /**
  * Render the inner content of a match (the "body")
  */
-export const get_match_content = (
+export function get_match_content(
   maybe_match_data: Match | undefined,
   all_data: Data,
   round_index: number,
   match_order: number,
   get_option: GetOption,
-) => {
+) {
   const custom_match_element = try_get_custom_element(
-    get_option("getMatchElement"),
+    get_option('getMatchElement'),
     [round_index, match_order],
-    "getMatchElement",
-  );
-  if (custom_match_element === null) return null;
+    'getMatchElement',
+  )
+  if (custom_match_element === null)
+    return null
 
-  const match_body = create_element_from_Html(`<div class="match-body"></div>`);
+  const match_body = create_element_from_Html(`<div class="match-body"></div>`)
 
   if (custom_match_element instanceof Element) {
-    match_body.append(custom_match_element);
-    return match_body;
+    match_body.append(custom_match_element)
+    return match_body
   }
 
   if (!maybe_match_data) {
-    return null;
+    return null
   }
 
   // Add sides
@@ -103,40 +105,40 @@ export const get_match_content = (
         ${get_side_html(maybe_match_data, 0, all_data)}
         ${get_side_html(maybe_match_data, 1, all_data)}
       </div>
-    `;
+    `
   }
 
   // Live flag
   if (maybe_match_data.isLive) {
-    match_body.classList.add("live");
+    match_body.classList.add('live')
   }
 
   // Match status display
   if (maybe_match_data.matchStatus) {
-    match_body.innerHTML += `<div class="match-status">${maybe_match_data.matchStatus}</div>`;
+    match_body.innerHTML += `<div class="match-status">${maybe_match_data.matchStatus}</div>`
   }
 
-  return match_body;
-};
+  return match_body
+}
 
 /**
  * Main entry: render one whole match wrapper + body
  */
-export const get_match_element = (
+export function get_match_element(
   round_index: number,
   match_order: number,
   all_data: Data,
   get_option: GetOption,
-) => {
+) {
   const maybe_match_data = all_data.matches?.find(
-    (m) => m.roundIndex === round_index && m.order === match_order,
-  );
+    m => m.roundIndex === round_index && m.order === match_order,
+  )
 
-  const is_even = match_order % 2 === 0;
+  const is_even = match_order % 2 === 0
 
   const wrapper = create_element_from_Html(`
     <div
-      class="match-wrapper ${is_even ? "even" : "odd"}"
+      class="match-wrapper ${is_even ? 'even' : 'odd'}"
       match-order="${match_order}"
     >
       <div class="match-lines-area">
@@ -144,7 +146,7 @@ export const get_match_element = (
         <div class="line-wrapper lower"></div>
       </div>
     </div>
-  `);
+  `)
 
   const body = get_match_content(
     maybe_match_data,
@@ -152,17 +154,19 @@ export const get_match_element = (
     round_index,
     match_order,
     get_option,
-  );
-  if (body) wrapper.prepend(body);
+  )
+  if (body)
+    wrapper.prepend(body)
 
   // result correctness
   if (maybe_match_data?.prediction && maybe_match_data?.result) {
     if (maybe_match_data.prediction === maybe_match_data.result) {
-      wrapper.classList.add("result-correct");
-    } else {
-      wrapper.classList.add("result-incorrect");
+      wrapper.classList.add('result-correct')
+    }
+    else {
+      wrapper.classList.add('result-incorrect')
     }
   }
 
-  return wrapper;
-};
+  return wrapper
+}

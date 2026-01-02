@@ -1,16 +1,23 @@
-name: autofix.ci
+name: Formatting Check
 on:
   pull_request:
   push:
-      branches:
-      - "main"
+    branches:
+      - main
 permissions: {}
 jobs:
   prettier:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          cache: npm
       - run: |
-          yarn
-          yarn prettier . --check
+          npm ci
+          npx prettier . --check

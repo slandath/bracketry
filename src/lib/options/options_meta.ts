@@ -1,220 +1,220 @@
-export const default_border_gray = "#bbbbbb";
+export const default_border_gray = '#bbbbbb'
 
 const GENERAL_OPTIONS = {
   width: {
-    type: "string",
-    default_value: "max-content",
+    type: 'string',
+    default_value: 'max-content',
   },
 
   height: {
-    type: "string",
-    default_value: "100%",
+    type: 'string',
+    default_value: '100%',
   },
 
   rootBgColor: {
-    type: "string",
-    default_value: "transparent",
+    type: 'string',
+    default_value: 'transparent',
   },
 
   mainVerticalPadding: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 20,
     min_value: 0,
   },
 
   visibleRoundsCount: {
-    type: "number",
+    type: 'number',
     default_value: 0,
   },
 
   displayWholeRounds: {
-    type: "boolean",
+    type: 'boolean',
     default_value: false,
   },
 
   useClassicalLayout: {
-    type: "boolean",
+    type: 'boolean',
     default_value: false,
   },
 
   disableHighlight: {
-    type: "boolean",
+    type: 'boolean',
     default_value: false,
   },
-};
+}
 
 const BORDERS_OPTIONS = {
   rootBorderColor: {
-    type: "string",
+    type: 'string',
     default_value: default_border_gray,
   },
 
   wrapperBorderColor: {
-    type: "string",
-    default_value: "",
+    type: 'string',
+    default_value: '',
   },
 
   roundTitlesBorderColor: {
-    type: "string",
-    default_value: "",
+    type: 'string',
+    default_value: '',
   },
 
   scrollGutterBorderColor: {
-    type: "string",
-    default_value: "",
+    type: 'string',
+    default_value: '',
   },
 
   navGutterBorderColor: {
-    type: "string",
-    default_value: "",
+    type: 'string',
+    default_value: '',
   },
 
   liveMatchBorderColor: {
-    type: "string",
-    default_value: "#44c985",
+    type: 'string',
+    default_value: '#44c985',
   },
 
   hoveredMatchBorderColor: {
-    type: "string",
-    default_value: "",
+    type: 'string',
+    default_value: '',
   },
-};
+}
 
 const fn_or_null = {
-  type: "function_or_null",
+  type: 'function_or_null',
   default_value: null,
-};
+}
 
 const ROUND_TITLE_OPTIONS = {
   getRoundTitleElement: fn_or_null,
 
   roundTitlesVerticalPadding: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 8,
   },
 
   roundTitleColor: {
-    type: "string",
-    default_value: "#000",
+    type: 'string',
+    default_value: '#000',
   },
-};
+}
 
 const NAVIGATION_OPTIONS = {
   navButtonsPosition: {
-    type: "select",
-    options: ["overMatches", "gutters", "beforeTitles", "overTitles", "hidden"],
-    default_value: "gutters",
+    type: 'select',
+    options: ['overMatches', 'gutters', 'beforeTitles', 'overTitles', 'hidden'],
+    default_value: 'gutters',
   },
   navButtonSvgColor: {
-    type: "string",
-    default_value: "#161616",
+    type: 'string',
+    default_value: '#161616',
   },
 
   navButtonArrowSize: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 34,
   },
 
   navButtonPadding: {
-    type: "string",
-    default_value: "4px",
+    type: 'string',
+    default_value: '4px',
   },
 
   leftNavButtonHTML: {
-    type: "multiline_string",
+    type: 'multiline_string',
     default_value: `<svg class="default-nav-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Mono Icons by Mono - https://github.com/mono-company/mono-icons/blob/master/LICENSE.md --><path fill="currentColor" d="M11.707 5.293a1 1 0 0 1 0 1.414L7.414 11H19a1 1 0 1 1 0 2H7.414l4.293 4.293a1 1 0 0 1-1.414 1.414l-6-6a1 1 0 0 1 0-1.414l6-6a1 1 0 0 1 1.414 0"/></svg>`,
   },
 
   rightNavButtonHTML: {
-    type: "multiline_string",
+    type: 'multiline_string',
     default_value: `<svg class="default-nav-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Mono Icons by Mono - https://github.com/mono-company/mono-icons/blob/master/LICENSE.md --><path fill="currentColor" d="M12.293 5.293a1 1 0 0 1 1.414 0l6 6a1 1 0 0 1 0 1.414l-6 6a1 1 0 0 1-1.414-1.414L16.586 13H5a1 1 0 1 1 0-2h11.586l-4.293-4.293a1 1 0 0 1 0-1.414"/></svg>`,
   },
 
   navButtonsTopDistance: {
-    type: "string",
-    default_value: "50%",
+    type: 'string',
+    default_value: '50%',
   },
-};
+}
 
 const SCROLL_OPTIONS = {
   verticalScrollMode: {
-    type: "select",
-    options: ["native", "buttons", "mixed"],
-    default_value: "native",
+    type: 'select',
+    options: ['native', 'buttons', 'mixed'],
+    default_value: 'native',
   },
 
   buttonScrollAmount: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 300,
   },
 
   resetScrollOnNavigation: {
-    type: "boolean",
+    type: 'boolean',
     default_value: false,
   },
 
   scrollButtonsPosition: {
-    type: "select",
-    options: ["gutters", "overMatches"],
-    default_value: "gutters",
+    type: 'select',
+    options: ['gutters', 'overMatches'],
+    default_value: 'gutters',
   },
 
   scrollButtonSvgColor: {
-    type: "string",
-    default_value: "#161616",
+    type: 'string',
+    default_value: '#161616',
   },
 
   scrollButtonArrowSize: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 34,
   },
 
   scrollButtonPadding: {
-    type: "string",
-    default_value: "4px",
+    type: 'string',
+    default_value: '4px',
   },
 
   scrollUpButtonHTML: {
-    type: "multiline_string",
+    type: 'multiline_string',
     default_value: `<svg class="default-scroll-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z"/></svg>`,
   },
 
   scrollDownButtonHTML: {
-    type: "multiline_string",
+    type: 'multiline_string',
     default_value: `<svg class="default-scroll-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/></svg>`,
   },
 
   showScrollbar: {
-    type: "boolean",
+    type: 'boolean',
     default_value: true,
   },
 
   scrollbarWidth: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 5,
   },
 
   scrollbarColor: {
-    type: "string",
-    default_value: "rgb(63 63 63 / 23%)",
+    type: 'string',
+    default_value: 'rgb(63 63 63 / 23%)',
   },
-};
+}
 
 const CONNECTION_LINES_OPTIONS = {
   connectionLinesWidth: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 2,
     min_value: 0,
   },
   connectionLinesColor: {
-    type: "string",
-    default_value: "#dcdcdc",
+    type: 'string',
+    default_value: '#dcdcdc',
   },
   highlightedConnectionLinesColor: {
-    type: "string",
-    default_value: "#7698ff",
+    type: 'string',
+    default_value: '#7698ff',
   },
-};
+}
 
 const MATCH_OPTIONS = {
   getMatchElement: fn_or_null,
@@ -231,95 +231,95 @@ const MATCH_OPTIONS = {
   getScoresHTML: fn_or_null,
 
   matchMaxWidth: {
-    type: "pixels",
+    type: 'pixels',
     /* setting it to specific small value by default may lead to very puzzling layout problems on wide matches */
     default_value: 1000,
   },
 
   matchMinVerticalGap: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 25,
   },
 
   matchHorMargin: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 20,
   },
 
   matchAxisMargin: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 4,
   },
 
   oneSidePlayersGap: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 2,
   },
 
   liveMatchBgColor: {
-    type: "string",
-    default_value: "transparent",
+    type: 'string',
+    default_value: 'transparent',
   },
 
   distanceBetweenScorePairs: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 14,
     min_value: 0,
   },
 
   matchStatusBgColor: {
-    type: "string",
-    default_value: "#fff",
+    type: 'string',
+    default_value: '#fff',
   },
-};
+}
 
 const FONTS_OPTIONS = {
   rootFontFamily: {
-    type: "string",
-    default_value: "Open Sans, Roboto, sans-serif",
+    type: 'string',
+    default_value: 'Open Sans, Roboto, sans-serif',
   },
 
   roundTitlesFontFamily: {
-    type: "string",
-    default_value: "inherit",
+    type: 'string',
+    default_value: 'inherit',
   },
 
   roundTitlesFontSize: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 22,
     min_value: 8,
   },
 
   matchTextColor: {
-    type: "string",
-    default_value: "#000",
+    type: 'string',
+    default_value: '#000',
   },
   matchFontSize: {
-    type: "pixels",
+    type: 'pixels',
     default_value: 14,
     min_value: 8,
   },
 
   playerTitleFontFamily: {
-    type: "string",
-    default_value: "inherit",
+    type: 'string',
+    default_value: 'inherit',
   },
 
   highlightedPlayerTitleColor: {
-    type: "string",
-    default_value: "#003ae6",
+    type: 'string',
+    default_value: '#003ae6',
   },
 
   scoreFontFamily: {
-    type: "string",
-    default_value: "inherit",
+    type: 'string',
+    default_value: 'inherit',
   },
-};
+}
 
 const CALLBACKS = {
   onMatchClick: fn_or_null,
   onMatchSideClick: fn_or_null,
-};
+}
 
 export const OPTIONS = {
   GENERAL_OPTIONS,
@@ -331,4 +331,4 @@ export const OPTIONS = {
   CONNECTION_LINES_OPTIONS,
   MATCH_OPTIONS,
   CALLBACKS,
-};
+}

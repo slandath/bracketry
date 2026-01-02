@@ -1,1 +1,1 @@
-export * from "./src/lib/lib.mjs";
+export * from './src/lib/lib.mjs'

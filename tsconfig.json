@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "useDefineForClassFields": true,
+    "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": true,
-    "skipLibCheck": true, // silences node_modules type noise
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "jsx": "preserve",
-    "types": ["vite/client"],
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "types": ["vite/client"],
+    "allowJs": true,
+    "strict": true,
+    "noImplicitAny": true,
     "noEmit": true,
-    "noImplicitAny": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true // silences node_modules type noise
   },
   "plugins": [{ "name": "typescript-vue-plugin" }],
-  "include": ["src/**/*.ts", "src/**/*.vue"],
-  "references": []
+  "references": [],
+  "include": ["src/**/*.ts", "src/**/*.vue"]
 }
