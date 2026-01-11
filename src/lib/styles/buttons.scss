@@ -59,14 +59,12 @@
 
     &.button-up {
       grid-row: 3;
-      border-bottom: 1px solid
-        var(--scrollGutterBorderColor, var(--rootBorderColor));
+      border-bottom: 1px solid var(--scrollGutterBorderColor, var(--rootBorderColor));
     }
 
     &.button-down {
       grid-row: 5;
-      border-top: 1px solid
-        var(--scrollGutterBorderColor, var(--rootBorderColor));
+      border-top: 1px solid var(--scrollGutterBorderColor, var(--rootBorderColor));
     }
   }
 
@@ -101,8 +99,7 @@
 
   &.with-nav-buttons-before-titles {
     .navigation-button {
-      border-bottom: 1px solid
-        var(--roundTitlesBorderColor, var(--rootBorderColor));
+      border-bottom: 1px solid var(--roundTitlesBorderColor, var(--rootBorderColor));
 
       &.left {
         grid-column: 2;
@@ -145,13 +142,11 @@
       grid-row: 1/-1;
 
       &.left {
-        border-right: 1px solid
-          var(--navGutterBorderColor, var(--rootBorderColor));
+        border-right: 1px solid var(--navGutterBorderColor, var(--rootBorderColor));
       }
 
       &.right {
-        border-left: 1px solid
-          var(--navGutterBorderColor, var(--rootBorderColor));
+        border-left: 1px solid var(--navGutterBorderColor, var(--rootBorderColor));
       }
     }
   }

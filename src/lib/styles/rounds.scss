@@ -75,12 +75,8 @@
 
         &.odd {
           align-self: start;
-          padding-top: calc(
-            var(--matchMinVerticalGap) + var(--matchFontSize) * 1.5
-          );
-          padding-bottom: calc(
-            var(--matchMinVerticalGap) + var(--matchFontSize) * 1.5
-          );
+          padding-top: calc(var(--matchMinVerticalGap) + var(--matchFontSize) * 1.5);
+          padding-bottom: calc(var(--matchMinVerticalGap) + var(--matchFontSize) * 1.5);
         }
 
         &.odd .line-wrapper.upper,
@@ -109,8 +105,7 @@
 
     &.odd .line-wrapper.upper {
       box-shadow: var(--connectionLinesWidth) 0px 0px 0px;
-      border-bottom: var(--connectionLinesWidth) solid
-        var(--connectionLinesColor);
+      border-bottom: var(--connectionLinesWidth) solid var(--connectionLinesColor);
     }
 
     &.even .line-wrapper.lower {
