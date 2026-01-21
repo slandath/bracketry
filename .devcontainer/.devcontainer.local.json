@@ -1,0 +1,3 @@
+{
+  "postCreateCommand": "git config --global gpg.format ssh && git config --global user.signingkey 'ssh-ed25519 AAAA...your-full-key...' && git config --global commit.gpgsign true"
+}

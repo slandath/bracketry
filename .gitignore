@@ -5,3 +5,4 @@ dist/**/index.js.map
 writings/
 .DS_Store
 gpt.md
+.devcontainer/devcontainer.local.json
