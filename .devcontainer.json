@@ -1,13 +1,6 @@
 {
   "name": "Bracketry",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "24",
-      "pnpmVersion": "latest"
-    }
-  },
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
 
   "customizations": {
     "vscode": {
@@ -15,12 +8,13 @@
         "ms-azuretools.vscode-docker",
         "dbaeumer.vscode-eslint",
         "pnpm.pnpm-vscode-helper"
-      ]
+      ],
+      "settings": {
+        "git.enableCommitSigning": true,
+        "git.gpgSign": true
+      }
     }
   },
 
-  "forwardPorts": [3000],
-
-  // Automatically install dependencies after the container is created
-  "postCreateCommand": "pnpm install --force"
+  "forwardPorts": [3000]
 }
