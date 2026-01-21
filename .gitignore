@@ -1,6 +1,8 @@
 node_modules
+.pnpm-store/
 dist/**/index.js
 dist/**/index.js.map
 writings/
 .DS_Store
 gpt.md
+.devcontainer/devcontainer.local.json

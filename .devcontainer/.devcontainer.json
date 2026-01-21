@@ -1,0 +1,19 @@
+{
+  "name": "Bracketry",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "pnpm.pnpm-vscode-helper"
+      ],
+      "settings": {
+        "git.enableCommitSigning": true
+      }
+    }
+  },
+
+  "forwardPorts": [3000]
+}
