@@ -10,8 +10,7 @@
         "pnpm.pnpm-vscode-helper"
       ],
       "settings": {
-        "git.enableCommitSigning": true,
-        "git.gpgSign": true
+        "git.enableCommitSigning": true
       }
     }
   },
