@@ -7,13 +7,12 @@
       "extensions": [
         "ms-azuretools.vscode-docker",
         "dbaeumer.vscode-eslint",
-        "pnpm.pnpm-vscode-helper"
-      ],
-      "settings": {
-        "git.enableCommitSigning": true
-      }
+        "pnpm.pnpm-vscode-helper",
+        "Vue.volar"
+      ]
     }
   },
 
-  "forwardPorts": [3000]
+  "forwardPorts": [5173],
+  "postCreateCommand": "pnpm install && pnpm build"
 }
