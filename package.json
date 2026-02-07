@@ -15,6 +15,5 @@
     "check": "pnpm -r check"
   },
   "devDependencies": {
-    "turbo": "^2.3.0"
   }
 }
