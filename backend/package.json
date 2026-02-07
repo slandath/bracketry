@@ -1,0 +1,29 @@
+{
+  "name": "@bracketry/backend",
+  "type": "module",
+  "version": "1.0.0",
+  "engines": {
+    "node": "24.x",
+    "pnpm": ">=8"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.1.0",
+    "@fastify/env": "^5.0.0",
+    "fastify": "^5.0.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^6.7.3",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.39.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3"
+  }
+}
