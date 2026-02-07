@@ -3,7 +3,7 @@
   "type": "module",
   "engines": {
     "node": "24.x",
-    "pnpm": ">=8"
+    "pnpm": "^8.15.9"
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",

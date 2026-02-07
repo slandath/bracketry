@@ -13,6 +13,6 @@
     }
   },
 
-  "forwardPorts": [5173],
-  "postCreateCommand": "pnpm install && pnpm build"
+  "forwardPorts": [5173, 3000],
+  "postCreateCommand": "npm install -g pnpm@8.15.9 && pnpm install && pnpm build"
 }
