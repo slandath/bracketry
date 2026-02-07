@@ -43,27 +43,52 @@ If providing code examples:
 
 ## Build, Lint, and Type Check Commands
 
+### Root (Monorepo)
+
 ```bash
-# Development server (Vite on port 5173)
+# Start both frontend and backend in parallel
 pnpm dev
 
-# Build for production
+# Build all workspaces
 pnpm build
 
-# Preview production build
-pnpm preview
-
-# Run ESLint (Antfu config)
+# Lint all workspaces
 pnpm lint
 
-# Fix ESLint issues automatically
+# Fix linting issues
 pnpm lint:fix
 
-# Type check with TypeScript
+# Type check all workspaces
 pnpm type-check
 
-# Run all checks (format, lint, type-check)
+# Run all checks
 pnpm check
+```
+
+### Frontend (@bracketry/frontend)
+
+```bash
+# Development server (Vite on port 5173)
+pnpm --filter @bracketry/frontend dev
+
+# Build for production
+pnpm --filter @bracketry/frontend build
+
+# Preview production build
+pnpm --filter @bracketry/frontend preview
+```
+
+### Backend (@bracketry/backend)
+
+```bash
+# Start development server (tsx watch on port 3000)
+pnpm --filter @bracketry/backend dev
+
+# Build TypeScript
+pnpm --filter @bracketry/backend build
+
+# Start production server
+pnpm --filter @bracketry/backend start
 ```
 
 ## Code Style Guidelines
@@ -114,18 +139,27 @@ pnpm check
 
 ### Project Structure
 
+This is a pnpm monorepo with two workspaces:
+
 ```
-src/
-├── lib/           # Bracket rendering library
-│   ├── data/      # Data types and validation
-│   ├── draw/      # Rendering functions
-│   ├── navigation/# Navigation logic
-│   ├── options/   # Options handling
-│   ├── scroll/    # Scrolling behavior
-│   └── ui_events/ # Event handling
-├── assets/        # Icons and images
-├── *.vue          # Vue components
-└── *.ts           # Entry points
+bracketry/
+├── frontend/              # Vue 3 + Vite frontend
+│   ├── src/
+│   │   ├── lib/          # Bracket rendering library (leave unchanged)
+│   │   ├── assets/       # Icons and images
+│   │   └── *.vue         # Vue components
+│   └── package.json
+├── backend/               # Fastify API server
+│   ├── src/
+│   │   ├── routes/       # API routes
+│   │   ├── plugins/      # Fastify plugins
+│   │   ├── types/        # Shared TypeScript types
+│   │   ├── app.ts        # Fastify app factory
+│   │   └── server.ts     # Entry point
+│   └── package.json
+├── package.json           # Root workspace config
+├── pnpm-workspace.yaml    # Workspace definition
+└── AGENTS.md              # This file
 ```
 
 ## Academic Integrity
