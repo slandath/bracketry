@@ -2,6 +2,7 @@
   "name": "bracketry-monorepo",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@8.15.9",
   "engines": {
     "node": "24.x",
     "pnpm": ">=8"
@@ -14,6 +15,5 @@
     "type-check": "pnpm -r type-check",
     "check": "pnpm -r check"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
