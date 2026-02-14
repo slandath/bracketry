@@ -28,7 +28,7 @@ export const auth = betterAuth({
   },
   advanced: {
     cookiePrefix: 'bracketry',
-    useSecureCookies: false,
+    useSecureCookies: process.env.NODE_ENV === 'production',
     cookie: {
       sameSite: 'lax',
       path: '/',

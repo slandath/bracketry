@@ -51,6 +51,9 @@ pnpm install
 
 # Copy environment file
 cp backend/.env.example backend/.env
+
+# Copy frontend environment file
+cp frontend/.env.example frontend/.env
 ```
 
 Update `backend/.env` with required auth settings:
@@ -67,6 +70,7 @@ Update `backend/.env` with required auth settings:
 Frontend env:
 
 - `frontend/.env` → `VITE_API_URL=http://localhost:3000`
+- `frontend/.env` → `VITE_APP_URL=http://localhost:5173`
 
 GitHub OAuth App callback URL:
 

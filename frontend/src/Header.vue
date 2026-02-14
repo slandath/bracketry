@@ -3,12 +3,13 @@ import { authClient } from './auth-client'
 import './lib/styles/Header.scss'
 
 const session = authClient.useSession()
+const app_url = import.meta.env.VITE_APP_URL || window.location.origin
 
 async function handleSignIn() {
   try {
     await authClient.signIn.social({
       provider: 'github',
-      callbackURL: 'http://localhost:5173/',
+      callbackURL: app_url,
     })
   }
   catch (error) {
