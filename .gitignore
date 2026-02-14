@@ -5,3 +5,7 @@ dist/**/index.js
 dist/**/index.js.map
 writings/
 .DS_Store
+.env
+.env.*
+backend/.env
+frontend/.env

@@ -3,8 +3,8 @@ import process from 'node:process'
 import cors from '@fastify/cors'
 import rateLimit from '@fastify/rate-limit'
 import Fastify from 'fastify'
-import authRoutes from './routes/auth.js'
 import healthRoutes from './routes/health.js'
+import { auth } from './utils/auth.js'
 import 'dotenv/config'
 
 function getAllowedOrigins(): string | string[] {
@@ -14,10 +14,8 @@ function getAllowedOrigins(): string | string[] {
     return 'http://localhost:5173'
   }
 
-  // Split by comma to support multiple origins
   const origins = corsOrigin.split(',').map(origin => origin.trim())
 
-  // Return single string if only one origin, otherwise return array
   return origins.length === 1 ? origins[0] : origins
 }
 
@@ -28,15 +26,52 @@ export async function buildApp(): Promise<FastifyInstance> {
   })
   await app.register(cors, {
     origin: getAllowedOrigins(),
+    credentials: true,
   })
+
   await app.register(async (scoped) => {
     await scoped.register(rateLimit, {
-      global: true,
+      global: false,
       max: 10,
       timeWindow: '1 minute',
     })
-    await scoped.register(authRoutes, { prefix: '/api/auth' })
-  })
+    // Use Better-Auth's built-in handler
+    scoped.all('/*', async (request, reply) => {
+      try {
+        const url = new URL(request.url, `http://${request.headers.host}`)
+        const body = request.method === 'GET' || request.method === 'HEAD'
+          ? undefined
+          : request.body && typeof request.body === 'object'
+            ? JSON.stringify(request.body)
+            : undefined
+        const headers = new Headers()
+        for (const [key, value] of Object.entries(request.headers)) {
+          if (value !== undefined)
+            headers.set(key, Array.isArray(value) ? value.join(',') : value)
+        }
+
+        const req = new Request(url, {
+          method: request.method,
+          headers,
+          ...(body ? { body } : {}),
+        })
+
+        const response = await auth.handler(req)
+
+        reply.status(response.status)
+        response.headers.forEach((value, key) => {
+          reply.header(key, value)
+        })
+
+        const responseBody = await response.text()
+        return responseBody
+      }
+      catch (error) {
+        request.log.error({ err: error }, 'Auth handler error')
+        reply.status(500).send({ error: 'Authentication failed' })
+      }
+    })
+  }, { prefix: '/api/auth' })
 
   await app.register(healthRoutes, { prefix: '/health' })
 
