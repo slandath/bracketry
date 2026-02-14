@@ -1,24 +1,37 @@
 import type { FastifyInstance } from 'fastify'
+import process from 'node:process'
 import { auth } from '../utils/auth.js'
+
+const required = ['AUTH_POST_LOGIN_URL', 'AUTH_ERROR_URL']
+for (const key of required) {
+  if (!process.env[key])
+    throw new Error(`Missing ${key}`)
+}
 
 export default async function authRoutes(app: FastifyInstance) {
   // GitHub OAuth Sign In
   app.get('/signin/github', async (request, reply) => {
-    const response = await auth.api.signInSocial({
-      body: {
-        provider: 'github',
-        callbackURL: 'http://localhost:5173/',
-        errorCallbackURL: 'http://localhost:5173/error',
-      },
-      headers: request.headers,
-    })
+    try {
+      const response = await auth.api.signInSocial({
+        body: {
+          provider: 'github',
+          callbackURL: process.env.AUTH_POST_LOGIN_URL as string,
+          errorCallbackURL: process.env.AUTH_ERROR_URL as string,
+        },
+        headers: request.headers,
+      })
 
-    // Handle redirect
-    if (response.redirect && response.url) {
-      return reply.redirect(response.url)
+      // Handle redirect
+      if (response.redirect && response.url) {
+        return reply.redirect(response.url)
+      }
+
+      return reply.send(response)
     }
-
-    return reply.send(response)
+    catch (error) {
+      console.error('OAuth sign-in error:', error)
+      return reply.status(500).send({ error: 'OAuth sign-in failed' })
+    }
   })
 
   // GitHub OAuth Callback
@@ -47,19 +60,32 @@ export default async function authRoutes(app: FastifyInstance) {
 
   // Get Session
   app.get('/session', async (request, reply) => {
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    })
-
-    return reply.send(session)
+    try {
+      const session = await auth.api.getSession({
+        headers: request.headers,
+      })
+      if (!session)
+        return reply.status(401).send({ error: 'Unauthenticated' })
+      return reply.send(session)
+    }
+    catch (error) {
+      console.error('Session error:', error)
+      return reply.status(500).send({ error: 'Session lookup failed' })
+    }
   })
 
   // Sign Out
   app.post('/signout', async (request, reply) => {
-    await auth.api.signOut({
-      headers: request.headers,
-    })
+    try {
+      await auth.api.signOut({
+        headers: request.headers,
+      })
 
-    return reply.send({ success: true })
+      return reply.send({ success: true })
+    }
+    catch (error) {
+      console.error('Sign out error:', error)
+      return reply.status(500).send({ success: false, error: 'Sign out failed' })
+    }
   })
 }
