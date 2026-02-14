@@ -10,6 +10,7 @@ import {
 } from 'vue'
 import bracketData from './2025-tournament-blank.json'
 import CloseIcon from './assets/CloseIcon.svg'
+import Header from './Header.vue'
 import { createBracket } from './lib/lib'
 import { evaluateUserPicks } from './lib/results_comparison'
 import SelectionTool from './SelectionTool.vue'
@@ -158,6 +159,7 @@ watch(tournamentData, initializeBracket)
 </script>
 
 <template>
+  <Header />
   <div class="app-container">
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
 
