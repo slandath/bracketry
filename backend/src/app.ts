@@ -39,9 +39,11 @@ export async function buildApp(): Promise<FastifyInstance> {
     scoped.all('/*', async (request, reply) => {
       try {
         const url = new URL(request.url, `http://${request.headers.host}`)
-        const body = request.body && typeof request.body === 'object'
-          ? JSON.stringify(request.body)
-          : undefined
+        const body = request.method === 'GET' || request.method === 'HEAD'
+          ? undefined
+          : request.body && typeof request.body === 'object'
+            ? JSON.stringify(request.body)
+            : undefined
         const headers = new Headers()
         for (const [key, value] of Object.entries(request.headers)) {
           if (value !== undefined)
@@ -51,7 +53,7 @@ export async function buildApp(): Promise<FastifyInstance> {
         const req = new Request(url, {
           method: request.method,
           headers,
-          body,
+          ...(body ? { body } : {}),
         })
 
         const response = await auth.handler(req)
