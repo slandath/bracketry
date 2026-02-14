@@ -22,7 +22,7 @@ export default async function authRoutes(app: FastifyInstance) {
   })
 
   // GitHub OAuth Callback
-  app.get('/callback/github', async (request, reply) => {
+  app.get('/callback/github', { config: { rateLimit: { max: 10, timeWindow: '1 minute' } } }, async (request, reply) => {
     const url = new URL(request.url, `http://${request.headers.host}`)
 
     try {
