@@ -91,6 +91,26 @@ pnpm --filter @bracketry/backend build
 pnpm --filter @bracketry/backend start
 ```
 
+## Auth Integration Notes
+
+- Better-Auth is mounted at `/api/auth` on the Fastify server.
+- The auth handler uses a Fetch `Request` bridge in `backend/src/app.ts`.
+- `trustedOrigins` must include the frontend origin (set via `FRONTEND_URL`).
+- CORS must be registered before the auth handler and use `credentials: true`.
+
+### Required Auth Environment Variables
+
+- `BETTER_AUTH_URL`
+- `FRONTEND_URL`
+- `BETTER_AUTH_SECRET`
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+- `AUTH_POST_LOGIN_URL`
+- `AUTH_ERROR_URL`
+- `CORS_ORIGIN`
+
+Never commit secrets from `.env` files.
+
 ## Code Style Guidelines
 
 ### TypeScript/JavaScript

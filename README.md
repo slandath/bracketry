@@ -28,6 +28,8 @@ This is a **pnpm monorepo** with two workspaces:
 ### Backend (`backend/`)
 
 - **Fastify** HTTP server with TypeScript
+- **Better-Auth** with GitHub OAuth
+- **Drizzle ORM** with PostgreSQL
 - CORS enabled for frontend communication
 - Runs on port 3000
 - Health check endpoint at `/health`
@@ -50,6 +52,25 @@ pnpm install
 # Copy environment file
 cp backend/.env.example backend/.env
 ```
+
+Update `backend/.env` with required auth settings:
+
+- `BETTER_AUTH_URL` (e.g. `http://localhost:3000`)
+- `FRONTEND_URL` (e.g. `http://localhost:5173`)
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+- `BETTER_AUTH_SECRET`
+- `AUTH_POST_LOGIN_URL` (e.g. `http://localhost:5173/`)
+- `AUTH_ERROR_URL` (e.g. `http://localhost:5173/error`)
+- `CORS_ORIGIN` (e.g. `http://localhost:5173`)
+
+Frontend env:
+
+- `frontend/.env` → `VITE_API_URL=http://localhost:3000`
+
+GitHub OAuth App callback URL:
+
+- `http://localhost:3000/api/auth/callback/github`
 
 ### Running Locally
 
@@ -79,6 +100,7 @@ Access the application:
 ## How It Works
 
 - Bracket is saved locally - no account required.
+- GitHub OAuth is available for user sessions.
 - Load the tournament information into the JSON template and save in `/frontend/src`.
 - Selecting "Make Picks" will open a modal to predict a winner for each match.
 - Load game results in the results.json in `/frontend/public`.
