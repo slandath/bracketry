@@ -42,10 +42,15 @@ export async function buildApp(): Promise<FastifyInstance> {
         const body = request.body && typeof request.body === 'object'
           ? JSON.stringify(request.body)
           : undefined
+        const headers = new Headers()
+        for (const [key, value] of Object.entries(request.headers)) {
+          if (value !== undefined)
+            headers.set(key, Array.isArray(value) ? value.join(',') : value)
+        }
 
         const req = new Request(url, {
           method: request.method,
-          headers: request.headers as HeadersInit,
+          headers,
           body,
         })
 
@@ -60,7 +65,7 @@ export async function buildApp(): Promise<FastifyInstance> {
         return responseBody
       }
       catch (error) {
-        request.log.error('Auth handler error:', error)
+        request.log.error({ err: error }, 'Auth handler error')
         reply.status(500).send({ error: 'Authentication failed' })
       }
     })
