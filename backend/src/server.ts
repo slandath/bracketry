@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { buildApp } from './app.js'
+import 'dotenv/config'
 
 const PORT = Number(process.env.PORT) || 3000
 

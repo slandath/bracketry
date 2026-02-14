@@ -7,6 +7,9 @@
     "pnpm": "^8.15.9"
   },
   "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -16,13 +19,18 @@
   },
   "dependencies": {
     "@fastify/cors": "^10.1.0",
-    "fastify": "^5.0.0"
+    "dotenv": "^17.3.1",
+    "drizzle-orm": "^0.45.1",
+    "fastify": "^5.0.0",
+    "pg": "^8.18.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
     "@types/node": "^22.0.0",
+    "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9.39.2",
-    "tsx": "^4.19.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
