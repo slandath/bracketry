@@ -3,6 +3,7 @@ import process from 'node:process'
 import cors from '@fastify/cors'
 import Fastify from 'fastify'
 import healthRoutes from './routes/health.js'
+import 'dotenv/config'
 
 function getAllowedOrigins(): string | string[] {
   const corsOrigin = process.env.CORS_ORIGIN
