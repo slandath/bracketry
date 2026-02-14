@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import process from 'node:process'
 import cors from '@fastify/cors'
 import Fastify from 'fastify'
+import authRoutes from './routes/auth.js'
 import healthRoutes from './routes/health.js'
 import 'dotenv/config'
 
@@ -27,6 +28,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     origin: getAllowedOrigins(),
   })
   await app.register(healthRoutes, { prefix: '/health' })
+  await app.register(authRoutes, { prefix: '/api/auth' })
   app.get('/', async () => {
     return { hello: 'world' }
   })
