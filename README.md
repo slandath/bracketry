@@ -114,13 +114,17 @@ Access the application:
 
 ## Powered By
 
+[![better-auth](https://img.shields.io/badge/Better--Auth-3B82F6?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/better-auth/better-auth)
+[![drizzle](https://img.shields.io/badge/Drizzle-C5F74F?style=for-the-badge&logo=drizzle&logoColor=000000)](https://github.com/drizzle-team/drizzle-orm)
 [![eslint](https://img.shields.io/badge/ESLint-3A33D1?style=for-the-badge&logo=eslint)](https://github.com/eslint/eslint)
+[![fastify](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)](https://github.com/fastify/fastify)
+[![postgresql](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=ffffff)](https://github.com/prettier/prettier)
 [![sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=Sass&logoColor=white)](https://github.com/sass/dart-sass)
 [![typescript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=FFF)](https://github.com/microsoft/TypeScript)
 [![vite](https://img.shields.io/badge/-Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=white)](https://github.com/vitejs/vite)
 [![vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://github.com/vuejs)
-[![fastify](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)](https://github.com/fastify/fastify)
+[![zod](https://img.shields.io/badge/Zod-3068B7?style=for-the-badge&logo=zod&logoColor=white)](https://github.com/colinhacks/zod)
 
 - [Antfu's ESLint Config](https://github.com/antfu/eslint-config)
 - [Bracketry](https://github.com/sbachinin/bracketry)

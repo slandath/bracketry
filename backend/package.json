@@ -24,7 +24,8 @@
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
     "fastify": "^5.0.0",
-    "pg": "^8.18.0"
+    "pg": "^8.18.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",

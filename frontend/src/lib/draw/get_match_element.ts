@@ -53,7 +53,7 @@ function get_side_html(
     : ''
 
   const title = `${team.seed} ${team.name}`
-  const score = side.score ?? ''
+  const score = side.score?.toString() ?? ''
 
   return `
     <div class="side-wrapper ${winner_class} ${loser_class} ${predicted_class}">
