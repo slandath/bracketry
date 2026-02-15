@@ -6,6 +6,6 @@ import svgLoader from 'vite-svg-loader'
 export default defineConfig({
   plugins: [vue(), svgLoader()],
   server: {
-    allowedHosts: ['.up.railway.app', 'localhost'],
+    allowedHosts: ['.up.railway.app', 'localhost', 'basketball.tomslanda.com'],
   },
 })
