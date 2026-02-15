@@ -99,7 +99,7 @@ export const tournament_templates = pgTable('tournament_templates', {
   year: integer('year').notNull(),
   name: text('name').notNull(),
   data: jsonb('data').notNull(),
-  is_active: boolean('is_active').default(false),
+  is_active: boolean('is_active').default(false).notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
 })

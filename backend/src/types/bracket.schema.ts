@@ -13,9 +13,9 @@ export const TeamSchema = z.object({
 })
 
 export const SideSchema = z.object({
-  teamId: z.string().nullable(),
-  score: z.number().nullable(),
-  isWinner: z.boolean().nullable(),
+  teamId: z.string().optional(),
+  score: z.number().optional(),
+  isWinner: z.boolean().optional(),
 })
 
 export const MatchSchema = z.object({
@@ -24,6 +24,7 @@ export const MatchSchema = z.object({
   order: z.number(),
   sides: z.array(SideSchema),
   matchStatus: z.string().nullable(),
+  isLive: z.boolean().optional(),
   result: z.string().nullable(),
   prediction: z.string().nullable(),
 })
