@@ -14,9 +14,7 @@ export const TeamSchema = z.object({
 
 export const SideSchema = z.object({
   teamId: z.string().nullable(),
-  score: z.array(z.object({
-    mainScore: z.number(),
-  })).nullable(),
+  score: z.number().nullable(),
   isWinner: z.boolean().nullable(),
 })
 

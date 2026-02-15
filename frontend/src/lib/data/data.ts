@@ -40,13 +40,7 @@ export interface Match {
 // Match-specific team context (score, winner flag, etc.)
 export interface Side {
   teamId?: string // undefined = slot not filled yet
-  score?: Score[]
-  isWinner?: boolean
-}
-
-export interface Score {
-  mainScore: number | string
-  subscore?: number | string
+  score?: number // simple score for basketball (no sets/games)
   isWinner?: boolean
 }
 

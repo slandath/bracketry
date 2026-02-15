@@ -436,13 +436,6 @@
     }
   }
 
-  .subscore {
-    padding-left: 1px;
-    font-size: calc(var(--matchFontSize) / 3 * 2);
-    margin-top: calc(var(--matchFontSize) / 5 * -1);
-    margin-right: calc(var(--matchFontSize) / 5 * -1);
-  }
-
   svg.default-winner-svg {
     width: auto;
     height: var(--matchFontSize);

@@ -1,28 +1,15 @@
 import type { Side } from './data.js'
-// import { is_object, is_valid_number } from "../utils.js";
-import { is_object } from '../utils.js'
+import { is_valid_number } from '../utils.js'
 
 export function validate_single_score(score: unknown, side: Side) {
   const errors = []
 
-  if (!is_object(score)) {
+  if (score !== undefined && score !== null && !is_valid_number(score)) {
     errors.push({
       is_critical: false,
-      message: 'Score must be an object',
+      message: 'Score must be a number or null/undefined',
       data: side,
     })
-  }
-  else {
-    if (
-      typeof score.isWinner !== 'boolean'
-      && typeof score.isWinner !== 'undefined'
-    ) {
-      errors.push({
-        is_critical: false,
-        message: 'If you provide "isWinner", it must be a boolean',
-        data: side,
-      })
-    }
   }
 
   return errors
