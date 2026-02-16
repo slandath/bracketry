@@ -1,17 +1,33 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { authClient } from '../auth-client'
 import '../styles/components/Login.scss'
 
 const session = authClient.useSession()
 const app_url = import.meta.env.VITE_APP_URL || window.location.origin
-
 const error = ref('')
+const router = useRouter()
+const route = useRoute()
 
 onMounted(() => {
   watch(() => session.value.isPending, (isPending) => {
     if (!isPending && session.value.data) {
-      window.location.href = '/'
+      try {
+        const postLoginRedirect = sessionStorage.getItem('post_login_redirect')
+        const query_redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
+        const target = postLoginRedirect || query_redirect || '/'
+        if (target.startsWith('/') && !target.startsWith('//')) {
+          router.push(target)
+        }
+        else {
+          router.push('/')
+        }
+        sessionStorage.removeItem('post_login_redirect')
+      }
+      catch (error) {
+        console.error('Redirect error:', error)
+      }
     }
   }, { immediate: true })
 })
@@ -30,7 +46,7 @@ async function handleSignIn() {
 }
 
 function goBack() {
-  window.location.href = '/'
+  router.go(-1)
 }
 </script>
 

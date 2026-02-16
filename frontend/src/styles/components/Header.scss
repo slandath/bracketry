@@ -19,6 +19,8 @@
   border: none;
   cursor: pointer;
   display: flex;
+  background-color: transparent;
+  color: white;
 
   &:hover {
     opacity: 0.9;

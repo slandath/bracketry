@@ -12,6 +12,8 @@
   border: none;
   cursor: pointer;
   display: flex;
+  background-color: transparent;
+  color: white;
 
   &:hover {
     opacity: 0.9;
@@ -27,6 +29,14 @@
   background-color: $primary;
   z-index: 1000;
   font-size: 1rem;
+  padding: 1rem;
+  opacity: 0.95;
+}
+
+.btn-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
 .overlay {
@@ -35,7 +45,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); // Dark semi-transparent
+  //   background-color: rgba(0, 0, 0, 0.5); // Dark semi-transparent
   z-index: 999; // Just below the menu
 }
 

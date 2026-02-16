@@ -31,14 +31,16 @@ async function handleSignOut() {
   </Transition>
   <Transition name="slide">
     <aside v-if="isOpen" class="menu-container">
-      <button @click="emit('close')">
-        <CloseIcon />
-      </button>
+      <div class="btn-container">
+        <button class="menu-btn" @click="emit('close')">
+          <CloseIcon />
+        </button>
+        <button class="menu-btn" @click="handleSignOut">
+          <LogOutIcon />
+        </button>
+      </div>
       <p>{{ user.name }}</p>
       <p>{{ user.email }}</p>
-      <button @click="handleSignOut">
-        <LogOutIcon />
-      </button>
     </aside>
   </Transition>
 </template>

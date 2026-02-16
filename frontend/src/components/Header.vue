@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { LogInIcon, UserIcon } from '../assets'
 import { authClient } from '../auth-client'
 import UserMenu from './UserMenu.vue'
@@ -7,6 +8,8 @@ import '../styles/components/Header.scss'
 
 const session = authClient.useSession()
 const menuOpen = ref(false)
+const route = useRoute()
+const router = useRouter()
 const show_user_icon = computed(() =>
   !session.value?.isPending && !!session.value?.data,
 )
@@ -20,7 +23,8 @@ function closeUserMenu() {
 }
 
 function goToLogin() {
-  window.location.href = '/login'
+  sessionStorage.setItem('post_login_redirect', route.fullPath)
+  router.push({ path: '/login', query: { redirect: route.fullPath } })
 }
 </script>
 
