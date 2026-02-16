@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Team } from './lib/data/data'
+import type { Team } from '../lib/data/data'
 import { computed } from 'vue'
 
 interface Props {
