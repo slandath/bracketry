@@ -1,60 +1,49 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
+import { LogInIcon, UserIcon } from '../assets'
 import { authClient } from '../auth-client'
+import UserMenu from './UserMenu.vue'
 import '../styles/components/Header.scss'
 
 const session = authClient.useSession()
-const route = useRoute()
-const app_url = import.meta.env.VITE_APP_URL || window.location.origin
+const menuOpen = ref(false)
+const show_user_icon = computed(() =>
+  !session.value?.isPending && !!session.value?.data,
+)
 
-const isLoginPage = route.path === '/login'
-
-async function handleSignIn() {
-  try {
-    await authClient.signIn.social({
-      provider: 'github',
-      callbackURL: app_url,
-    })
-  }
-  catch (error) {
-    console.error('Sign In Error:', error)
-  }
+function toggleUserMenu() {
+  menuOpen.value = !menuOpen.value
 }
-async function handleSignOut() {
-  try {
-    await authClient.signOut({
-    })
-  }
-  catch (error) {
-    console.error('Sign Out Error:', error)
-  }
+
+function closeUserMenu() {
+  menuOpen.value = false
+}
+
+function goToLogin() {
+  window.location.href = '/login'
 }
 </script>
 
 <template>
   <header>
     <div class="header">
-      <h1>2025 NCAA Men's Tournament</h1>
-      <!-- Auth section - hidden on login page -->
-      <template v-if="!isLoginPage">
-        <!-- Loading state -->
-        <span v-if="session.isPending">Loading...</span>
-        <!-- Not logged in -->
-        <button
-          v-else-if="!session.data"
-          class="header-btn"
-          @click="handleSignIn"
-        >
-          Sign In with GitHub
+      <h1>Basketball</h1>
+      <div v-if="!show_user_icon" class="btn-container">
+        <button class="header-btn icon" title="Log In" @click="goToLogin">
+          <LogInIcon />
         </button>
-        <!-- Logged in -->
-        <div v-else class="user-section">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Mono Icons by Mono - https://github.com/mono-company/mono-icons/blob/master/LICENSE.md --><path fill="currentColor" d="M12 4a4 4 0 1 0 0 8a4 4 0 0 0 0-8M6 8a6 6 0 1 1 12 0A6 6 0 0 1 6 8m2 10a3 3 0 0 0-3 3a1 1 0 1 1-2 0a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5a1 1 0 1 1-2 0a3 3 0 0 0-3-3z" /></svg>
-          <button class="header-btn" @click="handleSignOut">
-            Sign Out
-          </button>
-        </div>
-      </template>
+      </div>
+      <div v-else class="btn-container">
+        <button class="header-btn icon" title="User menu" @click="toggleUserMenu">
+          <UserIcon />
+        </button>
+      </div>
+      <UserMenu
+        v-if="session.data?.user"
+        :is-open="menuOpen"
+        :user="session.data.user"
+        @close="closeUserMenu"
+      />
     </div>
   </header>
 </template>

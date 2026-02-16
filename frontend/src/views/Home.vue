@@ -158,7 +158,7 @@ watch(tournamentData, initializeBracket)
 </script>
 
 <template>
-  <div class="app-container">
+  <main class="app-container">
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
 
     <button class="open-selection-btn" @click="openDialog">
@@ -186,5 +186,5 @@ watch(tournamentData, initializeBracket)
         </div>
       </dialog>
     </Transition>
-  </div>
+  </main>
 </template>

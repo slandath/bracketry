@@ -1,3 +1,6 @@
 export { default as ArrowLeftIcon } from './ArrowLeftIcon.svg'
 export { default as ArrowRightIcon } from './ArrowRightIcon.svg'
 export { default as CloseIcon } from './CloseIcon.svg'
+export { default as LogInIcon } from './LogInIcon.svg'
+export { default as LogOutIcon } from './LogOutIcon.svg'
+export { default as UserIcon } from './UserIcon.svg'
