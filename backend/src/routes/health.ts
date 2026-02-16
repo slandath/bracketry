@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm'
 import { db } from '../index.js'
 
 export default async function healthRoutes(app: FastifyInstance) {
-  app.get('/', async () => {
+  app.get('/', async (_request, reply) => {
     try {
       await db.execute(sql`SELECT 1`)
       return {
@@ -13,11 +13,11 @@ export default async function healthRoutes(app: FastifyInstance) {
       }
     }
     catch {
-      return {
+      return reply.status(503).send({
         status: 'error',
         database: 'disconnected',
         timestamp: new Date().toISOString(),
-      }
+      })
     }
   })
 }

@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { and, eq } from 'drizzle-orm'
 import { brackets } from '../db/schema.js'
 import { db } from '../index.js'
-import { validateBracketData } from '../types/bracket.schema.js'
+import { safeValidateBracketData } from '../types/bracket.schema.js'
 import { auth } from '../utils/auth.js'
 
 async function getSessionOrThrow(request: FastifyRequest) {
@@ -25,6 +25,9 @@ export default async function bracketRoutes(app: FastifyInstance) {
       })
     }
     catch (error) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        return reply.status(401).send({ error: 'Unauthorized' })
+      }
       console.error('Error fetching brackets:', error)
       return reply.status(500).send({ error: 'Internal server error' })
     }
@@ -42,6 +45,9 @@ export default async function bracketRoutes(app: FastifyInstance) {
       })
     }
     catch (error) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        return reply.status(401).send({ error: 'Unauthorized' })
+      }
       console.error('Error fetching bracket:', error)
       return reply.status(500).send({ error: 'Internal server error' })
     }
@@ -53,10 +59,11 @@ export default async function bracketRoutes(app: FastifyInstance) {
       if (!body.template_id) {
         return reply.status(400).send({ error: 'template_id is required' })
       }
-      const validBracketData = validateBracketData(body.data)
-      if (!validBracketData) {
+      const validationResult = safeValidateBracketData(body.data)
+      if (!validationResult.success) {
         return reply.status(400).send({ error: 'Invalid bracket data' })
       }
+      const validBracketData = validationResult.data
       const UUID = randomUUID()
       const [newBracket] = await db.insert(brackets).values({
         id: UUID,
@@ -68,6 +75,9 @@ export default async function bracketRoutes(app: FastifyInstance) {
       return reply.status(201).send(newBracket)
     }
     catch (error) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        return reply.status(401).send({ error: 'Unauthorized' })
+      }
       console.error('Error writing to database:', error)
       return reply.status(500).send({ error: 'Internal server error' })
     }
@@ -83,6 +93,9 @@ export default async function bracketRoutes(app: FastifyInstance) {
       return reply.status(204).send()
     }
     catch (error) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        return reply.status(401).send({ error: 'Unauthorized' })
+      }
       console.error('Error writing to database:', error)
       return reply.status(500).send({ error: 'Internal server error' })
     }
