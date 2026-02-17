@@ -105,6 +105,9 @@ Access the application:
 
 - Bracket is saved locally - no account required.
 - GitHub OAuth is available for user sessions.
+- Login uses `/login` with a post-login redirect (stored in sessionStorage and
+  optionally passed via a `redirect` query param).
+- The header renders a user menu with profile details and sign-out.
 - Load the tournament information into the JSON template and save in `/frontend/src`.
 - Selecting "Make Picks" will open a modal to predict a winner for each match.
 - Load game results in the results.json in `/frontend/public`.

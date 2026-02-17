@@ -1,12 +1,5 @@
 // SelectionTool.scss
-$border: hsl(0 0% 73%);
-$muted: hsl(0 0% 40%);
-$primary: hsl(198 100% 44%);
-$primary-bg: hsla(210 89% 46% / 0.06);
-$card-bg: hsl(0 0% 98%);
-$placeholder-bg: hsl(0 0% 95%);
-$team-border: hsl(0 0% 93.3%);
-$team-border-dark: hsl(0 0% 87.3%);
+@use '../variables' as *;
 
 $max-width: 21.875rem;
 
