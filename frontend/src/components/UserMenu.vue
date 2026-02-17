@@ -1,23 +1,30 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { CloseIcon, LogOutIcon } from '../assets'
 import { authClient } from '../auth-client'
 import '../styles/components/UserMenu.scss'
 
-defineProps<{
-  isOpen: boolean
-  user: {
-    name: string
-    email: string
-  }
-}>()
+interface User {
+  name: string
+  email: string
+}
 
+interface Props {
+  isOpen: boolean
+  user?: User
+}
+const props = withDefaults(defineProps<Props>(), { user: undefined })
 const emit = defineEmits<{
   close: []
 }>()
 
+const router = useRouter()
+
 async function handleSignOut() {
   try {
     await authClient.signOut()
+    emit('close')
+    router.push('/')
   }
   catch (err) {
     console.error('Sign Out Error:', err)
@@ -39,8 +46,8 @@ async function handleSignOut() {
           <LogOutIcon />
         </button>
       </div>
-      <p>{{ user.name }}</p>
-      <p>{{ user.email }}</p>
+      <p>{{ props.user?.name }}</p>
+      <p>{{ props.user?.email }}</p>
     </aside>
   </Transition>
 </template>

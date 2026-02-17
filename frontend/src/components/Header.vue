@@ -11,7 +11,7 @@ const menuOpen = ref(false)
 const route = useRoute()
 const router = useRouter()
 const show_user_icon = computed(() =>
-  !session.value?.isPending && !!session.value?.data,
+  !session.value?.isPending && !!session.value?.data?.user,
 )
 
 function toggleUserMenu() {

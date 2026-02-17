@@ -34,6 +34,7 @@ onMounted(() => {
 
 async function handleSignIn() {
   try {
+    error.value = ''
     await authClient.signIn.social({
       provider: 'github',
       callbackURL: app_url,

@@ -167,7 +167,7 @@ watch(tournamentData, initializeBracket)
     <button class="open-selection-btn" @click="getUserBracketData">
       Evaluate Bracket
     </button>
-    <Transition name="modal" @leave-end="dialogRef?.close()">
+    <Transition name="modal" @after-leave="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
         <div class="selection-modal__content">
           <button
