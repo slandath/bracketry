@@ -97,6 +97,10 @@ pnpm --filter @bracketry/backend start
 - The auth handler uses a Fetch `Request` bridge in `backend/src/app.ts`.
 - `trustedOrigins` must include the frontend origin (set via `FRONTEND_URL`).
 - CORS must be registered before the auth handler and use `credentials: true`.
+- The login flow stores a redirect in `sessionStorage` and falls back to the
+  `redirect` query param for post-login navigation.
+- `UserMenu` is rendered from `Header` and is only shown for authenticated
+  sessions with a `user`.
 
 ### Required Auth Environment Variables
 
