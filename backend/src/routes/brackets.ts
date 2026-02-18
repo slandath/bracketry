@@ -76,6 +76,39 @@ export default async function bracketRoutes(app: FastifyInstance) {
       return reply.status(500).send({ error: 'Internal server error' })
     }
   })
+  app.put('/:id', async (request, reply) => {
+    try {
+      const session = await getSessionOrThrow(request)
+      const { id } = request.params as { id: string }
+      const body = request.body as { template_id: string, is_public?: boolean, data: unknown }
+      const updateValues: Record<string, unknown> = {}
+      if (body.template_id)
+        updateValues.template_id = body.template_id
+      if (body.is_public !== undefined)
+        updateValues.is_public = body.is_public
+      if (body.data) {
+        const validationResult = safeValidateBracketData(body.data)
+        if (!validationResult.success) {
+          return reply.status(400).send({ error: 'Invalid bracket data' })
+        }
+        updateValues.data = validationResult.data
+      }
+      const existing = await db.select().from(brackets).where(and(eq(brackets.id, id), eq(brackets.user_id, session.user.id)))
+      if (existing.length === 0) {
+        return reply.status(404).send({ error: 'Bracket not found' })
+      }
+
+      const [updatedBracket] = await db.update(brackets).set({ ...updateValues, updated_at: new Date() }).where(and(eq(brackets.id, id), eq(brackets.user_id, session.user.id))).returning()
+      return reply.status(200).send(updatedBracket)
+    }
+    catch (error) {
+      if (error instanceof Error && error.message === 'Unauthorized') {
+        return reply.status(401).send({ error: 'Unauthorized' })
+      }
+      console.error('Error updating bracket:', error)
+      return reply.status(500).send({ error: 'Internal server error' })
+    }
+  })
   app.post('/', async (request, reply) => {
     try {
       const session = await getSessionOrThrow(request)
