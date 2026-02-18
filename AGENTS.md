@@ -145,6 +145,21 @@ Never commit secrets from `.env` files.
   - Wrap localStorage operations in try-catch blocks
   - Return early on errors when possible
 
+- **Data Types:**
+  - Frontend types are in `frontend/src/lib/data/types.ts`
+  - Backend Zod schemas are in `backend/src/types/bracket.schema.ts`
+  - The `Match` interface fields are **required** with `string | null` for nullable fields:
+    - `id`: string
+    - `roundIndex`: number
+    - `order`: number
+    - `sides`: Side[]
+    - `matchStatus`: string | null
+    - `prediction`: string | null
+    - `result`: string | null
+    - `isLive`: boolean (optional)
+  - When adding new fields, ensure both frontend types and backend schemas are aligned
+  - JSON template files must use `null` (not empty strings) for nullable fields
+
 ### Vue 3
 
 - Use `<script setup lang="ts">` syntax
@@ -169,7 +184,8 @@ This is a pnpm monorepo with two workspaces:
 bracketry/
 ├── frontend/              # Vue 3 + Vite frontend
 │   ├── src/
-│   │   ├── lib/          # Bracket rendering library (leave unchanged)
+│   │   ├── lib/          # Bracket rendering library
+│   │   │   └── data/     # Data types (types.ts) and validation
 │   │   ├── assets/       # Icons and images
 │   │   └── *.vue         # Vue components
 │   └── package.json
@@ -177,7 +193,8 @@ bracketry/
 │   ├── src/
 │   │   ├── routes/       # API routes
 │   │   ├── plugins/      # Fastify plugins
-│   │   ├── types/        # Shared TypeScript types
+│   │   ├── db/           # Database schema and migrations
+│   │   ├── types/        # Zod schemas and TypeScript types
 │   │   ├── app.ts        # Fastify app factory
 │   │   └── server.ts     # Entry point
 │   └── package.json
