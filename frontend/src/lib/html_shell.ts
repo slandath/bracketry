@@ -1,4 +1,4 @@
-import type { Shell } from './data/data'
+import type { Shell } from './data/types'
 import { create_element_from_Html } from './utils'
 import './styles/buttons.scss'
 import './styles/main.scss'

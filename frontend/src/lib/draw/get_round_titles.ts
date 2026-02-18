@@ -1,4 +1,4 @@
-import type { Data, GetOption } from '../data/data.js'
+import type { Data, GetOption } from '../data/types.js'
 import { deep_clone_object } from '../utils.js'
 import { try_get_custom_element } from './try_get_custom_element.js'
 

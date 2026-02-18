@@ -1,4 +1,4 @@
-import type { GetOption, Shell } from '../data/data'
+import type { GetOption, Shell } from '../data/types'
 
 export function get_visible_rounds_count(shell: Shell, get_option: GetOption) {
   const rounds = shell.matches_positioner.querySelectorAll('.round-wrapper')

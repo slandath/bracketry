@@ -1,4 +1,4 @@
-import type { BracketScore, Data, Match } from './data/data'
+import type { BracketScore, Data, Match } from './data/types'
 
 const STORAGE_KEY = 'bracketry:tournament:v1'
 

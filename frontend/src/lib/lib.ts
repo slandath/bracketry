@@ -1,5 +1,5 @@
 import type { AllDataLike } from './apply_matches_updates'
-import type { BracketInstance, Data, Shell } from './data/data'
+import type { BracketInstance, Data, Shell } from './data/types'
 import { apply_matches_updates } from './apply_matches_updates'
 import { ananlyze_data } from './data/analyze_data'
 import { handle_data_errors } from './data/handle_errors'

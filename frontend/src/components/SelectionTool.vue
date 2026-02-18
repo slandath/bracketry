@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Data, Match } from '../lib/data/data'
+import type { Data, Match } from '../lib/data/types'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { ArrowLeftIcon, ArrowRightIcon } from '../assets/'
 import TeamCard from './TeamCard.vue'

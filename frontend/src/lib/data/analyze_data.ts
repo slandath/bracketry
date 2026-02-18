@@ -1,4 +1,4 @@
-import type { Data } from './data'
+import type { Data } from './types'
 import { is_object } from '../utils'
 import { validate_matches } from './validate_matches'
 

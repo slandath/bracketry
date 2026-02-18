@@ -1,4 +1,4 @@
-import type { GetOption } from '../data/data'
+import type { GetOption } from '../data/types'
 import { debounce } from '../utils'
 
 export function disable_matches_scroll_on_window_scroll(

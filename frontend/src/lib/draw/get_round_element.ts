@@ -1,4 +1,4 @@
-import type { Data, GetOption } from '../data/data'
+import type { Data, GetOption } from '../data/types'
 import { create_element_from_Html, get_n_things } from '../utils'
 import { get_match_element } from './get_match_element'
 

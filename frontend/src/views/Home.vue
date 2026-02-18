@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BracketInstance, Data, Match } from '../lib/data/data'
+import type { BracketInstance, Data, Match } from '../lib/data/types'
 import {
   computed,
   nextTick,
@@ -76,7 +76,7 @@ function recomputeRounds(data: Data) {
       ]
 
       if (!leftWinner || !rightWinner) {
-        delete target.prediction
+        target.prediction = null
         if (target.matchStatus === 'Predicted') {
           target.matchStatus = 'Scheduled'
         }

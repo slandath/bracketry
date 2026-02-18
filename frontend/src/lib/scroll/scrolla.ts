@@ -1,4 +1,4 @@
-import type { GetOption, ScrolllaApi, ScrolllaShell } from '../data/data'
+import type { GetOption, ScrolllaApi, ScrolllaShell } from '../data/types'
 import { debounce, within_range } from '../utils'
 import { adjust_offset } from './adjust_offset'
 import {

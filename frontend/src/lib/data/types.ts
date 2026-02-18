@@ -27,14 +27,14 @@ export interface Round {
 }
 
 export interface Match {
-  id?: string
+  id: string
   roundIndex: number
   order: number // 0-based index inside its round
-  sides?: Side[]
-  matchStatus?: string // flexible: "Cancelled" | "Scheduled" | "2025-05-19 18:30"
+  sides: Side[]
+  matchStatus: string | null // flexible: "Cancelled" | "Scheduled" | "2025-05-19 18:30"
   isLive?: boolean
-  prediction?: string // teamId predicted to win
-  result?: string // teamId of actual winner
+  prediction: string | null // teamId predicted to win
+  result: string | null // teamId of actual winner
 }
 
 // Match-specific team context (score, winner flag, etc.)
@@ -48,7 +48,7 @@ export interface Team {
   id: string
   name: string
   seed: number
-  logoUrl?: string
+  logoUrl: string | null
 }
 
 export interface Shell {

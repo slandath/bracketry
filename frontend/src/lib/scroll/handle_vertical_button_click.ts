@@ -1,4 +1,4 @@
-import type { GetOption, Shell } from '../data/data'
+import type { GetOption, Shell } from '../data/types'
 
 export function handle_vertical_button_click(
   html_shell: Shell,
