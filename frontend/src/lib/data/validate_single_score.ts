@@ -1,4 +1,4 @@
-import type { Side } from './data.js'
+import type { Side } from './types.js'
 import { is_valid_number } from '../utils.js'
 
 export function validate_single_score(score: unknown, side: Side) {

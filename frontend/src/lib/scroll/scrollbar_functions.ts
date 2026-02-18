@@ -1,4 +1,4 @@
-import type { GetOption, Shell } from '../data/data'
+import type { GetOption, Shell } from '../data/types'
 
 function update_position(
   shell: Shell,

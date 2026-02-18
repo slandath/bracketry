@@ -1,4 +1,4 @@
-import type { Data, GetOption, Match } from '../data/data'
+import type { Data, GetOption, Match } from '../data/types'
 import { create_element_from_Html } from '../utils.js'
 import { try_get_custom_element } from './try_get_custom_element.js'
 

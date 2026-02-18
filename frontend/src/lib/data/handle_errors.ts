@@ -1,4 +1,4 @@
-import type { DataError } from './data'
+import type { DataError } from './types'
 
 function log_data_error(msg: string, data: unknown) {
   console.warn(

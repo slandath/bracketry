@@ -1,4 +1,4 @@
-import type { OptionMeta } from '../data/data.js'
+import type { OptionMeta } from '../data/types.js'
 import { is_object, is_valid_number } from '../utils.js'
 import { get_default_options } from './options_meta_getter'
 

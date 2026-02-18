@@ -1,4 +1,4 @@
-import type { FlattenedMeta } from '../data/data'
+import type { FlattenedMeta } from '../data/types'
 import { OPTIONS } from './options_meta'
 
 export function get_options_flattened_meta(): FlattenedMeta {

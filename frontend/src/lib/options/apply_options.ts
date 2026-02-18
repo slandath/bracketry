@@ -1,4 +1,4 @@
-import type { GetOption, OptionsDealer } from '../data/data'
+import type { GetOption, OptionsDealer } from '../data/types'
 import { is_object } from '../utils'
 import { get_options_flattened_meta } from './options_meta_getter'
 

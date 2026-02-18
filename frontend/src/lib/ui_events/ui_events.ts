@@ -1,10 +1,10 @@
-import type { Data, Match, Shell } from '../data/data'
+import type { Data, Match, Shell } from '../data/types'
 import { update_highlight } from './highlight'
 
 /**
  * Extracts a match object corresponding to a clicked element.
  */
-function get_match_data_for_element(el: HTMLElement, all_data: Data): Match {
+function get_match_data_for_element(el: HTMLElement, all_data: Data): Match | null {
   const round_index = Number(
     el.closest('.round-wrapper')?.getAttribute('round-index'),
   )
@@ -17,12 +17,7 @@ function get_match_data_for_element(el: HTMLElement, all_data: Data): Match {
       m => m.roundIndex === round_index && m.order === match_order,
     ) ?? null
 
-  return (
-    found || {
-      roundIndex: round_index,
-      order: match_order,
-    }
-  )
+  return found ?? null
 }
 
 /**
@@ -54,8 +49,10 @@ export function install_ui_events(
     const onMatchClick = get_option('onMatchClick')
     if (onMatchClick !== null && typeof onMatchClick === 'function') {
       if (target.classList.contains('match-body')) {
-        const match_data = get_match_data_for_element(target, all_data);
-        (onMatchClick as (m: Match) => void)(match_data)
+        const match_data = get_match_data_for_element(target, all_data)
+        if (match_data) {
+          (onMatchClick as (m: Match) => void)(match_data)
+        }
       }
       return
     }
@@ -66,12 +63,14 @@ export function install_ui_events(
       const side_wrapper = target.closest('.side-wrapper')
       if (side_wrapper) {
         const match_data = get_match_data_for_element(target, all_data)
-        const side_index
-          = side_wrapper === target.closest('.side-wrapper:first-child') ? 0 : 1;
-        (onMatchSideClick as (m: Match, sideIndex: number) => void)(
-          match_data,
-          side_index,
-        )
+        if (match_data) {
+          const side_index
+            = side_wrapper === target.closest('.side-wrapper:first-child') ? 0 : 1;
+          (onMatchSideClick as (m: Match, sideIndex: number) => void)(
+            match_data,
+            side_index,
+          )
+        }
       }
       return
     }

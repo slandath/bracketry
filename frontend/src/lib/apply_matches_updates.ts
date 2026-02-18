@@ -1,4 +1,4 @@
-import type { Round, Team } from './data/data'
+import type { Round, Team } from './data/types'
 import { handle_data_errors } from './data/handle_errors'
 import { validate_matches } from './data/validate_matches'
 import { get_match_content } from './draw/get_match_element.js'
@@ -7,8 +7,14 @@ import { is_valid_number } from './utils'
 
 // You can replace Record<string, unknown> with your real "Match" and "Data" interfaces when available
 export interface MatchLike extends Record<string, unknown> {
+  id: string
   order: number
   roundIndex: number
+  sides: { teamId?: string, score?: number, isWinner?: boolean }[]
+  matchStatus: string | null
+  prediction: string | null
+  result: string | null
+  isLive?: boolean
 }
 
 export interface AllDataLike extends Record<string, unknown> {

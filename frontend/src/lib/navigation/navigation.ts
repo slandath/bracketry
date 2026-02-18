@@ -1,4 +1,4 @@
-import type { BaseIndex, GetOption, ScrolllaApi, Shell } from '../data/data.js'
+import type { BaseIndex, GetOption, ScrolllaApi, Shell } from '../data/types.js'
 import { observe_resize_later, within_range } from '../utils.js'
 import {
   get_max_base_index,

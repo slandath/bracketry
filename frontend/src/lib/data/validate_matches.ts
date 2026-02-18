@@ -1,4 +1,4 @@
-import type { Match, Side, Team } from './data.js'
+import type { Match, Side, Team } from './types.js'
 import { is_object, is_valid_number } from '../utils.js'
 
 export function validate_matches(

@@ -1,4 +1,4 @@
-import type { GetOption, Shell } from '../data/data'
+import type { GetOption, Shell } from '../data/types'
 import { is_last_round_fully_visible } from './calc'
 
 export function update_nav_buttons(

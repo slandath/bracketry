@@ -470,8 +470,8 @@
       "order": 0,
       "sides": [{ "teamId": "t1" }, { "teamId": "t40" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -480,8 +480,8 @@
       "order": 1,
       "sides": [{ "teamId": "t32" }, { "teamId": "t33" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -490,8 +490,8 @@
       "order": 2,
       "sides": [{ "teamId": "t9" }, { "teamId": "t36" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -500,8 +500,8 @@
       "order": 3,
       "sides": [{ "teamId": "t30" }, { "teamId": "t37" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -510,8 +510,8 @@
       "order": 4,
       "sides": [{ "teamId": "t10" }, { "teamId": "t35" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -520,8 +520,8 @@
       "order": 5,
       "sides": [{ "teamId": "t29" }, { "teamId": "t38" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -530,8 +530,8 @@
       "order": 6,
       "sides": [{ "teamId": "t31" }, { "teamId": "t34" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -540,8 +540,8 @@
       "order": 7,
       "sides": [{ "teamId": "t8" }, { "teamId": "t39" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -550,8 +550,8 @@
       "order": 8,
       "sides": [{ "teamId": "t4" }, { "teamId": "t61" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -560,8 +560,8 @@
       "order": 9,
       "sides": [{ "teamId": "t54" }, { "teamId": "t55" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -570,8 +570,8 @@
       "order": 10,
       "sides": [{ "teamId": "t51" }, { "teamId": "t57" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -580,8 +580,8 @@
       "order": 11,
       "sides": [{ "teamId": "t11" }, { "teamId": "t58" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -590,8 +590,8 @@
       "order": 12,
       "sides": [{ "teamId": "t52" }, { "teamId": "t56" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -600,8 +600,8 @@
       "order": 13,
       "sides": [{ "teamId": "t5" }, { "teamId": "t59" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -610,8 +610,8 @@
       "order": 14,
       "sides": [{ "teamId": "t53" }, { "teamId": "t12" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -620,8 +620,8 @@
       "order": 15,
       "sides": [{ "teamId": "t64" }, { "teamId": "t60" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -630,8 +630,8 @@
       "order": 16,
       "sides": [{ "teamId": "t3" }, { "teamId": "t50" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -640,8 +640,8 @@
       "order": 17,
       "sides": [{ "teamId": "t42" }, { "teamId": "t43" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -650,8 +650,8 @@
       "order": 18,
       "sides": [{ "teamId": "t63" }, { "teamId": "t46" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -660,8 +660,8 @@
       "order": 19,
       "sides": [{ "teamId": "t13" }, { "teamId": "t47" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -670,8 +670,8 @@
       "order": 20,
       "sides": [{ "teamId": "t14" }, { "teamId": "t45" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -680,8 +680,8 @@
       "order": 21,
       "sides": [{ "teamId": "t62" }, { "teamId": "t48" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -690,8 +690,8 @@
       "order": 22,
       "sides": [{ "teamId": "t41" }, { "teamId": "t44" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -700,8 +700,8 @@
       "order": 23,
       "sides": [{ "teamId": "t6" }, { "teamId": "t49" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -710,8 +710,8 @@
       "order": 24,
       "sides": [{ "teamId": "t2" }, { "teamId": "t28" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -720,8 +720,8 @@
       "order": 25,
       "sides": [{ "teamId": "t20" }, { "teamId": "t21" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -730,8 +730,8 @@
       "order": 26,
       "sides": [{ "teamId": "t17" }, { "teamId": "t24" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -740,8 +740,8 @@
       "order": 27,
       "sides": [{ "teamId": "t15" }, { "teamId": "t25" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -750,8 +750,8 @@
       "order": 28,
       "sides": [{ "teamId": "t18" }, { "teamId": "t23" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -760,8 +760,8 @@
       "order": 29,
       "sides": [{ "teamId": "t16" }, { "teamId": "t26" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -770,8 +770,8 @@
       "order": 30,
       "sides": [{ "teamId": "t19" }, { "teamId": "t22" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -780,8 +780,8 @@
       "order": 31,
       "sides": [{ "teamId": "t7" }, { "teamId": "t27" }],
       "matchStatus": "Scheduled",
-      "result": "",
-      "prediction": ""
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -789,8 +789,9 @@
       "roundIndex": 1,
       "order": 0,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -798,8 +799,9 @@
       "roundIndex": 1,
       "order": 1,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -807,8 +809,9 @@
       "roundIndex": 1,
       "order": 2,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -816,8 +819,9 @@
       "roundIndex": 1,
       "order": 3,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -825,8 +829,9 @@
       "roundIndex": 1,
       "order": 4,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -834,8 +839,9 @@
       "roundIndex": 1,
       "order": 5,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -843,8 +849,9 @@
       "roundIndex": 1,
       "order": 6,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -852,8 +859,9 @@
       "roundIndex": 1,
       "order": 7,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -861,8 +869,9 @@
       "roundIndex": 1,
       "order": 8,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -870,8 +879,9 @@
       "roundIndex": 1,
       "order": 9,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -879,8 +889,9 @@
       "roundIndex": 1,
       "order": 10,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -888,8 +899,9 @@
       "roundIndex": 1,
       "order": 11,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -897,8 +909,9 @@
       "roundIndex": 1,
       "order": 12,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -906,8 +919,9 @@
       "roundIndex": 1,
       "order": 13,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -915,8 +929,9 @@
       "roundIndex": 1,
       "order": 14,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -924,8 +939,9 @@
       "roundIndex": 1,
       "order": 15,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -933,8 +949,9 @@
       "roundIndex": 2,
       "order": 0,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -942,8 +959,9 @@
       "roundIndex": 2,
       "order": 1,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -951,8 +969,9 @@
       "roundIndex": 2,
       "order": 2,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -960,8 +979,9 @@
       "roundIndex": 2,
       "order": 3,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -969,8 +989,9 @@
       "roundIndex": 2,
       "order": 4,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -978,8 +999,9 @@
       "roundIndex": 2,
       "order": 5,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -987,8 +1009,9 @@
       "roundIndex": 2,
       "order": 6,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -996,8 +1019,9 @@
       "roundIndex": 2,
       "order": 7,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1005,8 +1029,9 @@
       "roundIndex": 3,
       "order": 0,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1014,8 +1039,9 @@
       "roundIndex": 3,
       "order": 1,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1023,8 +1049,9 @@
       "roundIndex": 3,
       "order": 2,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1032,8 +1059,9 @@
       "roundIndex": 3,
       "order": 3,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1041,8 +1069,9 @@
       "roundIndex": 4,
       "order": 0,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1050,8 +1079,9 @@
       "roundIndex": 4,
       "order": 1,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     },
 
     {
@@ -1059,8 +1089,9 @@
       "roundIndex": 5,
       "order": 0,
       "sides": [],
-      "result": "",
-      "prediction": ""
+      "matchStatus": null,
+      "result": null,
+      "prediction": null
     }
   ]
 }

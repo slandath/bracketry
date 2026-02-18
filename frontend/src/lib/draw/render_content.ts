@@ -1,4 +1,4 @@
-import type { Data, GetOption, Match, Shell } from '../data/data.js'
+import type { Data, GetOption, Match, Shell } from '../data/types.js'
 import { create_element_from_Html, do_n_times } from '../utils.js'
 import { get_round_element } from './get_round_element'
 import { get_round_titles } from './get_round_titles'

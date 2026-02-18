@@ -1,4 +1,4 @@
-import type { FlattenedMeta } from '../data/data.js'
+import type { FlattenedMeta } from '../data/types.js'
 import { is_object } from '../utils.js'
 import { get_options_flattened_meta } from './options_meta_getter'
 import { is_valid_option } from './validate_user_options.js'

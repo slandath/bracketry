@@ -1,4 +1,4 @@
-import type { GetOption, Shell } from '../data/data.js'
+import type { GetOption, Shell } from '../data/types.js'
 import { within_range } from '../utils.js'
 import { apply_translateY } from './apply_translateY.js'
 import { scrollbar_functions } from './scrollbar_functions.js'

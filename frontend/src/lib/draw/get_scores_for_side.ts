@@ -1,4 +1,4 @@
-import type { Side } from '../data/data'
+import type { Side } from '../data/types'
 import {
   is_valid_number,
   remove_whitespace_from_html,
