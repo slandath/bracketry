@@ -39,12 +39,12 @@ export const auth = betterAuth({
   },
   plugins: [
     admin({
-      adminUserIds: ['RQHhPqXnD5ZJSvyLJl1yk0NZr5DGXnOb'],
+      adminUserIds: process.env.ADMIN_USERS_IDS ? process.env.ADMIN_USER_IDS?.split(',') : [],
     }),
   ],
 })
 
-export async function getAdminOrThrow(request: FastifyRequest) {
+export async function getAdminOrThrow(request: FastifyRequest): Promise<Awaited<ReturnType<typeof auth.api.getSession>>> {
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session)
     throw new Error('Unauthorized')
@@ -53,7 +53,7 @@ export async function getAdminOrThrow(request: FastifyRequest) {
   return session
 }
 
-export async function getSessionOrThrow(request: FastifyRequest) {
+export async function getSessionOrThrow(request: FastifyRequest): Promise<Awaited<ReturnType<typeof auth.api.getSession>>> {
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session) {
     throw new Error('Unauthorized')

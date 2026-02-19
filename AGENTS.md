@@ -120,7 +120,7 @@ Never commit secrets from `.env` files.
 ### TypeScript/JavaScript
 
 - **Naming:**
-  - Functions and variables: `snake_case` (e.g., `try_assign_new_data`, `create_bracket`)
+  - Functions and variables: `camelCase` (e.g., `tryAssignNewData`, `createBracket`)
   - Types and interfaces: `PascalCase` (e.g., `BracketInstance`, `Data`, `Match`)
   - Constants: `SCREAMING_SNAKE_CASE` (e.g., `STORAGE_KEY`)
 - **Imports:**

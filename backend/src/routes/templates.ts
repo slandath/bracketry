@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { eq } from 'drizzle-orm'
 import { tournament_templates } from '../db/schema.js'
 import { db } from '../index.js'
-import { safeValidateTemplateData } from '../types/template.schema.js'
+import { safeValidateBracketData, safeValidateTemplateData } from '../types/template.schema.js'
 import { getAdminOrThrow, getSessionOrThrow } from '../utils/auth.js'
 
 export default async function templateRoutes(app: FastifyInstance) {
@@ -46,13 +46,13 @@ export default async function templateRoutes(app: FastifyInstance) {
     try {
       await getAdminOrThrow(request)
       const body = request.body as { year: number, name: string, is_active?: boolean, data: unknown }
-      if (!body.year) {
+      if (body.year === undefined) {
         return reply.status(400).send({ error: 'year is required' })
       }
       if (!body.name) {
         return reply.status(400).send({ error: 'name is required' })
       }
-      const validationResult = safeValidateTemplateData(body.data)
+      const validationResult = safeValidateTemplateData(body)
       if (!validationResult.success) {
         return reply.status(400).send({ error: 'Invalid template data' })
       }
@@ -82,17 +82,27 @@ export default async function templateRoutes(app: FastifyInstance) {
     try {
       await getAdminOrThrow(request)
       const { id } = request.params as { id: string }
-      const body = request.body as { year?: number, name?: string, is_active?: boolean, data: unknown }
-      const validationResult = safeValidateTemplateData(body.data)
-      if (!validationResult.success) {
-        return reply.status(400).send({ error: 'Invalid template data' })
+      const body = request.body as {
+        year?: number
+        name?: string
+        is_active?: boolean
+        data?: unknown
       }
-      const validatedData = validationResult.data
+      let validatedData
+      if (body.data !== undefined) {
+        const validationResult = safeValidateBracketData(body.data)
+        if (!validationResult.success) {
+          return reply.status(400).send({
+            error: 'Invalid template data',
+          })
+        }
+        validatedData = validationResult.data
+      }
       const [updatedTemplate] = await db.update(tournament_templates).set({
-        ...(body.year && { year: body.year }),
-        ...(body.name && { name: body.name }),
+        ...(body.year !== undefined && { year: body.year }),
+        ...(body.name !== undefined && { name: body.name }),
         ...(body.is_active !== undefined && { is_active: body.is_active }),
-        ...(validatedData && { data: validatedData }),
+        ...(validatedData !== undefined && { data: validatedData }),
       }).where(eq(tournament_templates.id, id)).returning()
       if (!updatedTemplate) {
         return reply.status(404).send({ error: 'Template could not be updated' })
