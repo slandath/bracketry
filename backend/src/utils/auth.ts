@@ -39,7 +39,7 @@ export const auth = betterAuth({
   },
   plugins: [
     admin({
-      adminUserIds: process.env.ADMIN_USERS_IDS ? process.env.ADMIN_USER_IDS?.split(',') : [],
+      adminUserIds: process.env.ADMIN_USER_IDS?.split(',') ?? [],
     }),
   ],
 })

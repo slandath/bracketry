@@ -1,6 +1,6 @@
 import type { ZodError } from 'zod'
 import { z } from 'zod'
-import { BracketDataSchema, type BracketData } from './bracket.schema.js'
+import { BracketDataSchema } from './bracket.schema.js'
 
 export const TemplateSchema = z.object({
   id: z.string(),
@@ -21,18 +21,6 @@ export function safeValidateTemplateData(data: unknown):
   | { success: true, data: CreateTemplate }
   | { success: false, errors: ZodError } {
   const result = CreateTemplateSchema.safeParse(data)
-  if (result.success) {
-    return { success: true, data: result.data }
-  }
-  else {
-    return { success: false, errors: result.error }
-  }
-}
-
-export function safeValidateBracketData(data: unknown):
-  | { success: true, data: BracketData }
-  | { success: false, errors: ZodError } {
-  const result = BracketDataSchema.safeParse(data)
   if (result.success) {
     return { success: true, data: result.data }
   }

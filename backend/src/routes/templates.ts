@@ -3,7 +3,8 @@ import { randomUUID } from 'node:crypto'
 import { eq } from 'drizzle-orm'
 import { tournament_templates } from '../db/schema.js'
 import { db } from '../index.js'
-import { safeValidateBracketData, safeValidateTemplateData } from '../types/template.schema.js'
+import { safeValidateBracketData } from '../types/bracket.schema.js'
+import { safeValidateTemplateData } from '../types/template.schema.js'
 import { getAdminOrThrow, getSessionOrThrow } from '../utils/auth.js'
 
 export default async function templateRoutes(app: FastifyInstance) {
