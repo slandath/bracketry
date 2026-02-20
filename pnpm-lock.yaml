@@ -60,7 +60,7 @@ importers:
   frontend:
     dependencies:
       '@tanstack/vue-query':
-        specifier: ^5.62.0
+        specifier: ^5.92.9
         version: 5.92.9(vue@3.5.27)
       better-auth:
         specifier: ^1.4.18
