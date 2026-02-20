@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   pick: [match: Match, teamId: string]
   refresh: []
+  save: []
 }>()
 
 const SELECTION_STATE_KEY = 'bracketry:selection:state'
@@ -158,6 +159,7 @@ async function handleSaveAll() {
     pendingPicks.value = updated
 
     emit('refresh')
+    emit('save')
 
     // Advance to next round
     if (currentRound.value < maxRound.value) {
@@ -404,7 +406,9 @@ watch(
   padding: 0.625rem;
   border: 1px solid hsl(0 0% 93.3%);
   background: hsl(0 0% 98%);
-  transition: box-shadow 120ms ease, border-color 120ms ease;
+  transition:
+    box-shadow 120ms ease,
+    border-color 120ms ease;
   cursor: pointer;
   user-select: none;
 }

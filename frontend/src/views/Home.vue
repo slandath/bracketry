@@ -194,18 +194,11 @@ watch(tournamentData, initializeBracket)
       {{ bracketLoading ? 'Loading your bracket...' : 'Loading template...' }}
     </div>
     <div ref="bracketContainerRef" class="bracketry-wrapper" />
-    <button class="open-selection-btn" @click="openDialog">
+    <button class="open-selection-btn" :disabled="!!currentBracketData?.bracket" @click="openDialog">
       Make Picks
     </button>
     <button class="open-selection-btn" @click="getUserBracketData">
       Evaluate Bracket
-    </button>
-    <button
-      class="open-selection-btn"
-      :disabled="createBracketMutation.isPending || updateBracketMutation.isPending"
-      @click="handleSave"
-    >
-      {{ createBracketMutation.isPending || updateBracketMutation.isPending ? 'Saving...' : currentBracketData?.bracket ? 'Save' : 'Create Bracket' }}
     </button>
     <Transition name="modal" @after-leave="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
@@ -222,6 +215,7 @@ watch(tournamentData, initializeBracket)
             :data="tournamentData"
             @pick="handlePick"
             @refresh="handleRefresh"
+            @save="handleSave"
           />
         </div>
       </dialog>

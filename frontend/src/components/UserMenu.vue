@@ -102,7 +102,9 @@ async function handleSignOut() {
 
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.3s ease-out;
 }
 
 .slide-enter-from,
