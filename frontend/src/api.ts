@@ -14,7 +14,9 @@ export async function fetchFromAPI(endpoint: string, options?: RequestInit) {
   })
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status} ${response.statusText}`)
+    const body = await response.json().catch(() => ({}))
+    const message = body.message || response.statusText
+    throw new Error(`API error: ${response.status} ${message}`)
   }
 
   return response.json()
@@ -31,22 +33,22 @@ export async function getBrackets(): Promise<BracketsResponse> {
 }
 
 export async function getBracket(id: string): Promise<BracketResponse> {
-  return fetchFromAPI(`/api/brackets/${id}`)
+  return fetchFromAPI(`/api/brackets/${encodeURIComponent(id)}`)
 }
 
-export async function getCurrentBracket(): Promise<{ bracket: Bracket }> {
+export async function getCurrentBracket(): Promise<BracketResponse> {
   return fetchFromAPI('/api/brackets/current')
 }
 
-export async function createBracket(data: { template_id: string, data: Data, is_public?: boolean }): Promise<Bracket> {
+export async function createBracket(params: { template_id: string, data: Data, is_public?: boolean }): Promise<Bracket> {
   return fetchFromAPI('/api/brackets', {
     method: 'POST',
-    body: JSON.stringify(data),
+    body: JSON.stringify(params),
   })
 }
 
 export async function updateBracket(id: string, data: { data?: Data, is_public?: boolean }): Promise<Bracket> {
-  return fetchFromAPI(`/api/brackets/${id}`, {
+  return fetchFromAPI(`/api/brackets/${encodeURIComponent(id)}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   })

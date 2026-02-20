@@ -129,6 +129,11 @@ export default async function bracketRoutes(app: FastifyInstance) {
         validatedData = validationResult.data
       }
 
+      // Check if there is anything to update
+      if (validatedData === undefined && body.is_public === undefined) {
+        return reply.status(400).send({ error: 'No values to update' })
+      }
+
       // Update the bracket
       const [updatedBracket] = await db.update(brackets).set({
         ...(validatedData !== undefined && { data: validatedData }),

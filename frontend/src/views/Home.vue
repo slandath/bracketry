@@ -193,13 +193,15 @@ watch(tournamentData, initializeBracket)
     <div v-if="templateLoading || bracketLoading">
       {{ bracketLoading ? 'Loading your bracket...' : 'Loading template...' }}
     </div>
-    <div ref="bracketContainerRef" class="bracketry-wrapper" />
-    <button class="open-selection-btn" :disabled="!!currentBracketData?.bracket" @click="openDialog">
-      Make Picks
-    </button>
-    <button class="open-selection-btn" @click="getUserBracketData">
-      Evaluate Bracket
-    </button>
+    <template v-else>
+      <div ref="bracketContainerRef" class="bracketry-wrapper" />
+      <button class="open-selection-btn" :disabled="!!currentBracketData?.bracket" @click="openDialog">
+        Make Picks
+      </button>
+      <button class="open-selection-btn" @click="getUserBracketData">
+        Evaluate Bracket
+      </button>
+    </template>
     <Transition name="modal" @after-leave="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
         <div class="selection-modal__content">
