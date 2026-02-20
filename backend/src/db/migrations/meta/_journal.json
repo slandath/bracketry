@@ -22,6 +22,13 @@
       "when": 1771182699275,
       "tag": "0002_robust_whizzer",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1771578640239,
+      "tag": "0003_messy_night_thrasher",
+      "breakpoints": true
     }
   ]
 }
