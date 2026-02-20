@@ -102,4 +102,39 @@ export interface OptionMeta {
   options?: unknown[]
 }
 
+// API response types
+export interface Bracket {
+  id: string
+  user_id: string
+  template_id: string
+  data: Data
+  is_public: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Template {
+  id: string
+  year: number
+  name: string
+  data: Data
+  is_active: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+// API response wrappers
+export interface BracketsResponse {
+  brackets: Bracket[]
+  message?: string
+}
+
+export interface BracketResponse {
+  bracket: Bracket
+}
+
+export interface TemplatesResponse {
+  templates: Template[]
+}
+
 export type FlattenedMeta = Record<string, OptionMeta>

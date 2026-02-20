@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Footer from './components/Footer.vue'
 import Header from './components/Header.vue'
+import Toast from './components/Toast.vue'
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import Header from './components/Header.vue'
     <Header />
     <router-view />
     <Footer />
+    <Toast />
   </div>
 </template>
 

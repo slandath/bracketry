@@ -2,7 +2,6 @@
 import { useRouter } from 'vue-router'
 import { CloseIcon, LogOutIcon } from '../assets'
 import { authClient } from '../auth-client'
-import '../styles/components/UserMenu.scss'
 
 interface User {
   name: string
@@ -51,3 +50,72 @@ async function handleSignOut() {
     </aside>
   </Transition>
 </template>
+
+<style scoped>
+.icon {
+  display: flex;
+  align-items: center;
+  color: hsl(198 100% 44%);
+}
+
+.menu-btn {
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  background-color: transparent;
+  color: white;
+}
+
+.menu-btn:hover {
+  opacity: 0.9;
+}
+
+.menu-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: hsl(198 100% 44%);
+  z-index: 1000;
+  font-size: 1rem;
+  padding: 1rem;
+  opacity: 0.95;
+}
+
+.btn-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition:
+    transform 0.3s ease-out,
+    opacity 0.3s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateX(0);
+  opacity: 1;
+}
+</style>

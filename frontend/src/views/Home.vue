@@ -8,20 +8,36 @@ import {
   ref,
   watch,
 } from 'vue'
-import bracketData from '../2025-tournament-blank.json'
+import defaultTemplateData from '../2025-tournament-blank.json'
 import { CloseIcon } from '../assets'
 import SelectionTool from '../components/SelectionTool.vue'
+import { useActiveTemplate, useCreateBracket, useCurrentBracket, useUpdateBracket } from '../composables'
 import { createBracket } from '../lib/lib'
 import { evaluateUserPicks } from '../lib/results_comparison'
 
-const STORAGE_KEY = 'bracketry:tournament:v1'
+const STORAGE_KEY = 'bballBracket:tournament:v1'
+
+const { data: templateData, isLoading: templateLoading } = useActiveTemplate()
+const { data: currentBracketData, isLoading: bracketLoading } = useCurrentBracket()
+const createBracketMutation = useCreateBracket()
+const updateBracketMutation = useUpdateBracket()
 
 // State
-const tournamentData = ref<Data>(bracketData as Data)
+const tournamentData = ref<Data>(defaultTemplateData as Data)
 const bracketContainerRef = ref<HTMLDivElement>()
 const bracketInstanceRef = ref<BracketInstance>()
 const isSelectionOpen = ref(false)
 const dialogRef = ref<HTMLDialogElement>()
+
+// Initialize tournament data from API when available
+watch([templateData, currentBracketData], () => {
+  if (currentBracketData.value?.bracket) {
+    tournamentData.value = currentBracketData.value.bracket.data as Data
+  }
+  else if (templateData.value?.template) {
+    tournamentData.value = templateData.value.template.data as Data
+  }
+}, { immediate: true })
 
 // Computed
 const allPicked = computed(() => {
@@ -29,15 +45,30 @@ const allPicked = computed(() => {
   return matches.length > 0 && matches.every(m => m.prediction)
 })
 
+function handleSave() {
+  if (currentBracketData.value?.bracket) {
+    updateBracketMutation.mutate({
+      id: currentBracketData.value.bracket.id,
+      data: { data: tournamentData.value },
+    })
+  }
+  else if (templateData.value?.template) {
+    createBracketMutation.mutate({
+      template_id: templateData.value.template.id,
+      data: tournamentData.value,
+    })
+  }
+}
+
 // Storage
 function loadFromStorage(): Data {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : bracketData
+    return raw ? JSON.parse(raw) : defaultTemplateData
   }
   catch {
     console.warn('Corrupted bracket data, using default')
-    return bracketData as Data
+    return defaultTemplateData as Data
   }
 }
 
@@ -159,14 +190,18 @@ watch(tournamentData, initializeBracket)
 
 <template>
   <main class="app-container">
-    <div ref="bracketContainerRef" class="bracketry-wrapper" />
-
-    <button class="open-selection-btn" @click="openDialog">
-      Make Picks
-    </button>
-    <button class="open-selection-btn" @click="getUserBracketData">
-      Evaluate Bracket
-    </button>
+    <div v-if="templateLoading || bracketLoading">
+      {{ bracketLoading ? 'Loading your bracket...' : 'Loading template...' }}
+    </div>
+    <template v-else>
+      <div ref="bracketContainerRef" class="bracketry-wrapper" />
+      <button class="open-selection-btn" :disabled="!!currentBracketData?.bracket" @click="openDialog">
+        Make Picks
+      </button>
+      <button class="open-selection-btn" @click="getUserBracketData">
+        Evaluate Bracket
+      </button>
+    </template>
     <Transition name="modal" @after-leave="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
         <div class="selection-modal__content">
@@ -182,6 +217,7 @@ watch(tournamentData, initializeBracket)
             :data="tournamentData"
             @pick="handlePick"
             @refresh="handleRefresh"
+            @save="handleSave"
           />
         </div>
       </dialog>
