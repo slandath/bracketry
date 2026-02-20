@@ -175,6 +175,19 @@ Never commit secrets from `.env` files.
 - SCSS nesting for component styles
 - Use `var()` for CSS variables
 
+### Tanstack Query (Vue Query)
+
+- Use `@tanstack/vue-query` for data fetching and caching
+- Configure global defaults in `main.ts` via `VueQueryPlugin`:
+  - `staleTime` for caching duration
+  - `retry` for automatic retry on failure
+  - Use `QueryCache` and `MutationCache` for global error handling
+- Create composables in `frontend/src/composables/` for API queries:
+  - `useActiveTemplate()` - fetch active tournament template
+  - `useCurrentBracket()` - fetch user's current bracket
+  - `useCreateBracket()` / `useUpdateBracket()` - mutations for saving
+- Use toast notifications for global error handling (see `components/Toast.vue`)
+
 ### Project Structure
 
 This is a pnpm monorepo with two workspaces:
@@ -186,6 +199,9 @@ bracketry/
 │   │   ├── lib/          # Bracket rendering library
 │   │   │   └── data/     # Data types (types.ts) and validation
 │   │   ├── assets/       # Icons and images
+│   │   ├── components/   # Vue components (Header, Footer, SelectionTool, etc.)
+│   │   ├── composables/  # Tanstack Query composables (useBrackets, useTemplates, useToast)
+│   │   ├── views/        # Page components (Home, Login)
 │   │   └── *.vue         # Vue components
 │   └── package.json
 ├── backend/               # Fastify API server

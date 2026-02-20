@@ -22,7 +22,8 @@ This is a **pnpm monorepo** with two workspaces:
 
 - **Vue 3** with Composition API and TypeScript
 - **Vite** for development and building
-- Bracket visualization using the Bracketry library
+- **Tanstack Query** for data fetching, caching, and sync
+- **Bracketry** library for bracket visualization
 - Runs on port 5173 (dev) or 80 (production)
 
 ### Backend (`backend/`)
@@ -103,15 +104,17 @@ Access the application:
 
 ## How It Works
 
-- Bracket is saved locally - no account required.
-- GitHub OAuth is available for user sessions.
+- Bracket data syncs to the server for cross-device access
+- GitHub OAuth is available for user sessions
 - Login uses `/login` with a post-login redirect (stored in sessionStorage and
-  optionally passed via a `redirect` query param).
-- The header renders a user menu with profile details and sign-out.
-- Load the tournament information into the JSON template and save in `/frontend/src`.
-- Selecting "Make Picks" will open a modal to predict a winner for each match.
-- Load game results in the results.json in `/frontend/public`.
-- Selecting "Evaluate Bracket" will compare your bracket against the real-game results, highlighting correct picks in green and incorrect picks in red.
+  optionally passed via a `redirect` query param)
+- The header renders a user menu with profile details and sign-out
+- Tournament template is fetched from the API (falls back to local JSON if offline)
+- Selecting "Make Picks" will open a modal to predict a winner for each match
+- Selecting "Confirm Picks" saves the bracket to the server
+- Users can only have one bracket per tournament
+- Load game results in the results.json in `/frontend/public`
+- Selecting "Evaluate Bracket" will compare your bracket against the real-game results, highlighting correct picks in green and incorrect picks in red
 
 ---
 
@@ -124,6 +127,7 @@ Access the application:
 [![postgresql](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=ffffff)](https://github.com/prettier/prettier)
 [![sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=Sass&logoColor=white)](https://github.com/sass/dart-sass)
+[![tanstack-query](https://img.shields.io/badge/Tanstack_Query-FF4154?style=for-the-badge&logo=tanstack&logoColor=white)](https://github.com/TanStack/query)
 [![typescript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=FFF)](https://github.com/microsoft/TypeScript)
 [![vite](https://img.shields.io/badge/-Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=white)](https://github.com/vitejs/vite)
 [![vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://github.com/vuejs)
