@@ -125,13 +125,12 @@ Never commit secrets from `.env` files.
   - Constants: `SCREAMING_SNAKE_CASE` (e.g., `STORAGE_KEY`)
 - **Imports:**
   - Use `import type` for type-only imports
-  - Group imports: types first, then external libraries, then internal modules
 - **Formatting:**
   - 2 spaces indentation
   - Single quotes for strings
   - No semicolons (enforced by ESLint)
   - Trailing commas in multi-line objects/arrays
-  - Max line length: 80 characters
+  - Max line length: 100 characters
 
 - **Types:**
   - Enable `strict: true` in TypeScript
