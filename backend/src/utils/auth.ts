@@ -44,7 +44,7 @@ export const auth = betterAuth({
   ],
 })
 
-export async function getAdminOrThrow(request: FastifyRequest): Promise<Awaited<ReturnType<typeof auth.api.getSession>>> {
+export async function getAdminOrThrow(request: FastifyRequest): Promise<NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>> {
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session)
     throw new Error('Unauthorized')
@@ -53,7 +53,7 @@ export async function getAdminOrThrow(request: FastifyRequest): Promise<Awaited<
   return session
 }
 
-export async function getSessionOrThrow(request: FastifyRequest): Promise<Awaited<ReturnType<typeof auth.api.getSession>>> {
+export async function getSessionOrThrow(request: FastifyRequest): Promise<NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>> {
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session) {
     throw new Error('Unauthorized')
