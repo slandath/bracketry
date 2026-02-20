@@ -12,5 +12,6 @@ export function useActiveTemplate() {
   return useQuery({
     queryKey: ['templates', 'active'],
     queryFn: getActiveTemplate,
+    staleTime: 1000 * 60 * 60,
   })
 }

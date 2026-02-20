@@ -13,6 +13,7 @@ export function useCurrentBracket() {
   return useQuery({
     queryKey: ['bracket', 'current'],
     queryFn: getCurrentBracket,
+    staleTime: 1000 * 60 * 5,
   })
 }
 
