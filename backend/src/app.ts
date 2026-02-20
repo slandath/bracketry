@@ -5,6 +5,7 @@ import rateLimit from '@fastify/rate-limit'
 import Fastify from 'fastify'
 import bracketRoutes from './routes/brackets.js'
 import healthRoutes from './routes/health.js'
+import templateRoutes from './routes/templates.js'
 import { auth } from './utils/auth.js'
 import 'dotenv/config'
 
@@ -76,6 +77,7 @@ export async function buildApp(): Promise<FastifyInstance> {
 
   await app.register(healthRoutes, { prefix: '/health' })
   await app.register(bracketRoutes, { prefix: '/api/brackets' })
+  await app.register(templateRoutes, { prefix: '/api/templates' })
 
   app.get('/', async () => {
     return { hello: 'world' }

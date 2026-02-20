@@ -1,6 +1,8 @@
+import type { FastifyRequest } from 'fastify'
 import process from 'node:process'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { admin } from 'better-auth/plugins'
 import * as schema from '../db/schema.js'
 import { db } from '../index.js'
 
@@ -35,4 +37,26 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 24 * 7,
     },
   },
+  plugins: [
+    admin({
+      adminUserIds: process.env.ADMIN_USER_IDS?.split(',') ?? [],
+    }),
+  ],
 })
+
+export async function getAdminOrThrow(request: FastifyRequest): Promise<Awaited<ReturnType<typeof auth.api.getSession>>> {
+  const session = await auth.api.getSession({ headers: request.headers })
+  if (!session)
+    throw new Error('Unauthorized')
+  if (session.user.role !== 'admin')
+    throw new Error('Forbidden')
+  return session
+}
+
+export async function getSessionOrThrow(request: FastifyRequest): Promise<Awaited<ReturnType<typeof auth.api.getSession>>> {
+  const session = await auth.api.getSession({ headers: request.headers })
+  if (!session) {
+    throw new Error('Unauthorized')
+  }
+  return session
+}

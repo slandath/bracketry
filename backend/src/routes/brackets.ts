@@ -1,18 +1,10 @@
-import type { FastifyInstance, FastifyRequest } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 import { randomUUID } from 'node:crypto'
 import { and, eq } from 'drizzle-orm'
 import { brackets } from '../db/schema.js'
 import { db } from '../index.js'
 import { safeValidateBracketData } from '../types/bracket.schema.js'
-import { auth } from '../utils/auth.js'
-
-async function getSessionOrThrow(request: FastifyRequest) {
-  const session = await auth.api.getSession({ headers: request.headers })
-  if (!session) {
-    throw new Error('Unauthorized')
-  }
-  return session
-}
+import { getSessionOrThrow } from '../utils/auth.js'
 
 export default async function bracketRoutes(app: FastifyInstance) {
   app.get('/', async (request, reply) => {
