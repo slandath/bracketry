@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { authClient } from '../auth-client'
+import { showToast } from '../composables/useToast'
 import '../styles/components/Login.scss'
 
 const session = authClient.useSession()
 const app_url = import.meta.env.VITE_APP_URL || window.location.origin
-const error = ref('')
 const router = useRouter()
 const route = useRoute()
 
@@ -26,7 +26,7 @@ onMounted(() => {
         sessionStorage.removeItem('post_login_redirect')
       }
       catch (error) {
-        console.error('Redirect error:', error)
+        showToast(`Redirect error: ${error}`, 'error')
       }
     }
   }, { immediate: true })
@@ -34,15 +34,13 @@ onMounted(() => {
 
 async function handleSignIn() {
   try {
-    error.value = ''
     await authClient.signIn.social({
       provider: 'github',
       callbackURL: app_url,
     })
   }
   catch (err) {
-    error.value = 'Authentication failed. Please try again'
-    console.error('Sign In Error:', err)
+    showToast(`Authentication failed: ${err}`, 'error')
   }
 }
 
@@ -57,9 +55,6 @@ function goBack() {
       <h1>Login</h1>
       <div v-if="session.isPending">
         Loading...
-      </div>
-      <div v-else-if="error" class="error-message">
-        <span>{{ error }}</span>
       </div>
       <button v-else-if="!session.data" class="github-btn" @click="handleSignIn">
         <svg viewBox="0 0 24 24" width="20" height="20">
