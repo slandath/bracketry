@@ -1,13 +1,33 @@
 <script setup lang="ts">
 import type { Data } from '../lib/data/types'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { authClient } from '../auth-client'
 import { useActiveTemplateOnLogin } from '../composables'
+import { loadFromStorage } from '../composables/useBracketStorage'
 import { showToast } from '../composables/useToast'
 import { createBracket } from '../lib/lib'
 
-const { data: templateData, isLoading, isError, error } = useActiveTemplateOnLogin()
 const tournamentData = ref<Data | null>(null)
 const bracketContainerRef = ref<HTMLElement | null>(null)
+const router = useRouter()
+const session = authClient.useSession()
+const storedData = loadFromStorage()
+const hasStoredData = storedData && (storedData.rounds?.length || storedData.matches?.length)
+const isLoggedIn = computed(() => !!session.value.data)
+
+const { data: templateData, isLoading, isError, error } = hasStoredData
+  ? { data: ref(null), isLoading: ref(false), isError: ref(false), error: ref(null) }
+  : useActiveTemplateOnLogin()
+
+watch(() => isLoggedIn.value, (loggedIn) => {
+  if (hasStoredData && loggedIn) {
+    tournamentData.value = storedData
+  }
+  else if (!hasStoredData && !loggedIn) {
+    router.push('/login')
+  }
+}, { immediate: true })
 
 watch(templateData, (newData) => {
   if (newData?.template)
