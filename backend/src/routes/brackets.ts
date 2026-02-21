@@ -100,12 +100,10 @@ export default async function bracketRoutes(app: FastifyInstance) {
         }
         updateValues.data = validationResult.data
       }
-      const existing = await db.select().from(brackets).where(and(eq(brackets.id, id), eq(brackets.user_id, session.user.id)))
-      if (existing.length === 0) {
+      const [updatedBracket] = await db.update(brackets).set(updateValues).where(and(eq(brackets.id, id), eq(brackets.user_id, session.user.id))).returning()
+      if (!updatedBracket) {
         return reply.status(404).send({ error: 'Bracket not found' })
       }
-
-      const [updatedBracket] = await db.update(brackets).set({ ...updateValues, updated_at: new Date() }).where(and(eq(brackets.id, id), eq(brackets.user_id, session.user.id))).returning()
       return reply.status(200).send(updatedBracket)
     }
     catch (error) {
