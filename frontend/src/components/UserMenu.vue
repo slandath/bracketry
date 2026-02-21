@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { CloseIcon, LogOutIcon } from '../assets'
 import { authClient } from '../auth-client'
+import { showToast } from '../composables/useToast'
 
 interface User {
   name: string
@@ -26,7 +27,7 @@ async function handleSignOut() {
     router.push('/')
   }
   catch (err) {
-    console.error('Sign Out Error:', err)
+    showToast(`Sign out error: ${err}`, 'error')
   }
 }
 </script>
