@@ -177,7 +177,10 @@ Never commit secrets from `.env` files.
 
 ### Tanstack Query (Vue Query)
 
-- Use `@tanstack/vue-query` for data fetching and caching
+- Use `@tanstack/vue-query` for **all** data fetching and CRUD operations
+- **All** loading states must come from TanStack Query (`isLoading`, `isPending`)
+- **All** errors must be handled via TanStack Query (`isError`, `error`) and displayed using the toast system
+- Never use manual `fetch` calls or `await` in components for data operations—always use TanStack Query composables
 - Configure global defaults in `main.ts` via `VueQueryPlugin`:
   - `staleTime` for caching duration
   - `retry` for automatic retry on failure
