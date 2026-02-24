@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import '../styles/components/Footer.scss'
 </script>
 
 <template>
