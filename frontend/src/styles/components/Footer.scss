@@ -1,0 +1,26 @@
+@use '../variables' as *;
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: $primary;
+  color: white;
+
+  p {
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    color: white;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}

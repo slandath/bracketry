@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { LogInIcon, UserIcon } from '../assets'
 import { authClient } from '../auth-client'
 import UserMenu from './UserMenu.vue'
+import '../styles/components/Header.scss'
 
 const session = authClient.useSession()
 const menuOpen = ref(false)
@@ -50,37 +51,3 @@ function goToLogin() {
     </div>
   </header>
 </template>
-
-<style scoped>
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
-}
-
-.icon {
-  display: flex;
-  align-items: center;
-  color: hsl(198 100% 44%);
-}
-
-.header-btn {
-  font-size: 1rem;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  background-color: transparent;
-  color: white;
-}
-
-.header-btn:hover {
-  opacity: 0.9;
-}
-
-.btn-container {
-  display: flex;
-  gap: 1rem;
-}
-</style>
