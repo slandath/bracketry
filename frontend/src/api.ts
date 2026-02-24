@@ -29,15 +29,23 @@ export async function checkHealth() {
 
 // Brackets
 export async function getBrackets(): Promise<BracketsResponse> {
-  return fetchFromAPI('/api/brackets')
+  return await fetchFromAPI('/api/brackets')
 }
 
 export async function getBracket(id: string): Promise<BracketResponse> {
   return fetchFromAPI(`/api/brackets/${encodeURIComponent(id)}`)
 }
 
-export async function getCurrentBracket(): Promise<BracketResponse> {
-  return fetchFromAPI('/api/brackets/current')
+export async function getCurrentBracket(): Promise<BracketResponse | null> {
+  try {
+    return await fetchFromAPI('/api/brackets/current')
+  }
+  catch (err) {
+    if (err instanceof Error && err.message.includes('404')) {
+      return null
+    }
+    throw err
+  }
 }
 
 export async function createBracket(params: { template_id: string, data: Data, is_public?: boolean }): Promise<Bracket> {

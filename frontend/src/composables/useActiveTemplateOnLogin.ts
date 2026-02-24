@@ -9,7 +9,7 @@ export function useActiveTemplateOnLogin() {
   const enabled = computed(() => !!session.value.data)
 
   return useQuery({
-    queryKey: ['template', 'active'],
+    queryKey: ['templates', 'active'],
     queryFn: getActiveTemplate,
     enabled,
   })

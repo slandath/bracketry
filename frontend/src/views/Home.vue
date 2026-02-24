@@ -1,49 +1,100 @@
 <script setup lang="ts">
-import type { Data } from '../lib/data/types'
-import { computed, ref, watch } from 'vue'
+import type { BracketInstance, Data } from '../lib/data/types'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { authClient } from '../auth-client'
-import { useActiveTemplateOnLogin } from '../composables'
-import { loadFromStorage } from '../composables/useBracketStorage'
-import { showToast } from '../composables/useToast'
+import { useActiveTemplateOnLogin, useCurrentBracketOnLogin } from '../composables'
 import { createBracket } from '../lib/lib'
 
 const tournamentData = ref<Data | null>(null)
 const bracketContainerRef = ref<HTMLElement | null>(null)
+const bracketInstanceRef = ref<BracketInstance>()
 const router = useRouter()
 const session = authClient.useSession()
-const storedData = loadFromStorage()
-const hasStoredData = storedData && (storedData.rounds?.length || storedData.matches?.length)
 const isLoggedIn = computed(() => !!session.value.data)
 
-const { data: templateData, isLoading, isError, error } = hasStoredData
-  ? { data: ref(null), isLoading: ref(false), isError: ref(false), error: ref(null) }
-  : useActiveTemplateOnLogin()
+const {
+  data: templateData,
+  isLoading: templateLoading,
+  isError: templateError,
+} = useActiveTemplateOnLogin()
+const {
+  data: currentBracketData,
+  isLoading: bracketLoading,
+} = useCurrentBracketOnLogin()
 
-watch(() => isLoggedIn.value, (loggedIn) => {
-  if (hasStoredData && loggedIn) {
-    tournamentData.value = storedData
+const isLoading = computed(() =>
+  isLoggedIn.value && (templateLoading.value || bracketLoading.value),
+)
+
+// Accepts either a direct Data object or a wrapped payload (e.g. { data: Data })
+// so Home can consume both template API shapes safely.
+function normalizeTemplateData(value: unknown): Data | null {
+  if (!value || typeof value !== 'object')
+    return null
+
+  const candidate = value as Record<string, unknown>
+  if ('matches' in candidate || 'rounds' in candidate)
+    return candidate as Data
+
+  if ('data' in candidate && candidate.data && typeof candidate.data === 'object') {
+    return candidate.data as Data
   }
-  else if (!hasStoredData && !loggedIn) {
+
+  return null
+}
+
+const resolvedTournamentData = computed<Data | null>(() => {
+  // Logged-out users should never have bracket data in memory on this page.
+  if (!isLoggedIn.value)
+    return null
+
+  // Priority 1: if the user has a saved bracket, render that.
+  if (currentBracketData.value?.bracket?.data) {
+    return currentBracketData.value.bracket.data as Data
+  }
+
+  // Priority 2: if there is no saved bracket (404 -> null), use active template.
+  return normalizeTemplateData(templateData.value?.template?.data)
+})
+
+watch([isLoggedIn, () => session.value.isPending], ([loggedIn, isPending]) => {
+  // Guard route access: redirect only after auth session initialization
+  // finishes, then clear any in-memory bracket for logged-out users.
+  if (!loggedIn && !isPending) {
+    tournamentData.value = null
     router.push('/login')
   }
 }, { immediate: true })
 
-watch(templateData, (newData) => {
-  if (newData?.template)
-    tournamentData.value = newData.template.data.data as Data
+watch(resolvedTournamentData, (data) => {
+  // Keep the render source in one place by mirroring the resolved data
+  // into local reactive state used by the bracket renderer.
+  tournamentData.value = data
+}, { immediate: true })
+
+watch([tournamentData, bracketContainerRef], ([data, container]) => {
+  // Render only when both data and container exist.
+  // Watching both values avoids race conditions when data loads before DOM mount.
+  if (!data || !container)
+    return
+
+  // Recreate the bracket instance when source data changes to keep UI in sync.
+  bracketInstanceRef.value?.uninstall?.()
+  bracketInstanceRef.value = createBracket(data, container, {})
+}, { flush: 'post', immediate: true })
+
+watch(templateError, (hasError) => {
+  // If template loading fails and no current bracket exists, clear stale UI data.
+  const hasValidCurrentBracket = !!currentBracketData.value?.bracket?.data
+  if (hasError && !hasValidCurrentBracket && !resolvedTournamentData.value) {
+    tournamentData.value = null
+  }
 })
 
-watch(tournamentData, (data) => {
-  if (data && bracketContainerRef.value)
-    createBracket(data, bracketContainerRef.value, {})
-}, { flush: 'post' })
-
-watch(isError, (hasError) => {
-  if (hasError && error.value) {
-    const message = error.value instanceof Error ? error.value.message : 'Failed to load template'
-    showToast(message, 'error')
-  }
+onBeforeUnmount(() => {
+  // Prevent event listener/memory leaks from the bracket library instance.
+  bracketInstanceRef.value?.uninstall?.()
 })
 </script>
 
