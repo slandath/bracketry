@@ -58,10 +58,10 @@ const resolvedTournamentData = computed<Data | null>(() => {
   return normalizeTemplateData(templateData.value?.template?.data)
 })
 
-watch(() => isLoggedIn.value, (loggedIn) => {
-  // Guard route access: unauthenticated users are redirected to login,
-  // and any in-memory bracket is cleared.
-  if (!loggedIn) {
+watch([isLoggedIn, () => session.value.isPending], ([loggedIn, isPending]) => {
+  // Guard route access: redirect only after auth session initialization
+  // finishes, then clear any in-memory bracket for logged-out users.
+  if (!loggedIn && !isPending) {
     tournamentData.value = null
     router.push('/login')
   }
@@ -86,7 +86,8 @@ watch([tournamentData, bracketContainerRef], ([data, container]) => {
 
 watch(templateError, (hasError) => {
   // If template loading fails and no current bracket exists, clear stale UI data.
-  if (hasError) {
+  const hasValidCurrentBracket = !!currentBracketData.value?.bracket?.data
+  if (hasError && !hasValidCurrentBracket && !resolvedTournamentData.value) {
     tournamentData.value = null
   }
 })
