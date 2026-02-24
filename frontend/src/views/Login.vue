@@ -1,42 +1,20 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { authClient } from '../auth-client'
+import { useAuthRedirect } from '../composables'
 import { showToast } from '../composables/useToast'
 import '../styles/components/Login.scss'
 
-const session = authClient.useSession()
-const app_url = import.meta.env.VITE_APP_URL || window.location.origin
-const router = useRouter()
-const route = useRoute()
+const { session } = useAuthRedirect()
 
-onMounted(() => {
-  watch(() => session.value.isPending, (isPending) => {
-    if (!isPending && session.value.data) {
-      try {
-        const postLoginRedirect = sessionStorage.getItem('post_login_redirect')
-        const query_redirect = typeof route.query.redirect === 'string' ? route.query.redirect : ''
-        const target = postLoginRedirect || query_redirect || '/'
-        if (target.startsWith('/') && !target.startsWith('//')) {
-          router.push(target)
-        }
-        else {
-          router.push('/')
-        }
-        sessionStorage.removeItem('post_login_redirect')
-      }
-      catch (error) {
-        showToast(`Redirect error: ${error}`, 'error')
-      }
-    }
-  }, { immediate: true })
-})
+const appUrl = import.meta.env.VITE_APP_URL || window.location.origin
+const router = useRouter()
 
 async function handleSignIn() {
   try {
     await authClient.signIn.social({
       provider: 'github',
-      callbackURL: app_url,
+      callbackURL: appUrl,
     })
   }
   catch (err) {
