@@ -1,6 +1,8 @@
 import type { Data } from '../lib/data/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
+import { computed } from 'vue'
 import { createBracket, getBrackets, getCurrentBracket, updateBracket } from '../api'
+import { authClient } from '../auth-client'
 
 export function useBrackets() {
   return useQuery({
@@ -14,6 +16,18 @@ export function useCurrentBracket() {
     queryKey: ['bracket', 'current'],
     queryFn: getCurrentBracket,
     staleTime: 1000 * 60 * 5,
+  })
+}
+
+export function useCurrentBracketOnLogin() {
+  const session = authClient.useSession()
+  const enabled = computed(() => !!session.value.data)
+
+  return useQuery({
+    queryKey: ['bracket', 'current'],
+    queryFn: getCurrentBracket,
+    staleTime: 1000 * 60 * 5,
+    enabled,
   })
 }
 
