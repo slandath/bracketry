@@ -13,6 +13,7 @@ const router = useRouter()
 const show_user_icon = computed(() =>
   !session.value?.isPending && !!session.value?.data?.user,
 )
+const currentYear = computed(() => new Date().getFullYear())
 
 function toggleUserMenu() {
   menuOpen.value = !menuOpen.value
@@ -31,7 +32,7 @@ function goToLogin() {
 <template>
   <header>
     <div class="header">
-      <h1>Basketball</h1>
+      <h1>{{ currentYear }} March Madness Bracket</h1>
       <div v-if="!show_user_icon" class="btn-container">
         <button class="header-btn icon" title="Log In" @click="goToLogin">
           <LogInIcon />
