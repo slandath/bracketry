@@ -87,7 +87,7 @@ const rounds = computed(() => {
   for (let i = 0; i <= maxRound.value; i++) {
     roundArray.push({
       index: i,
-      name: names.value[i] || `Round ${i + 1}`,
+      name: names.value[i - 1] || `Round ${i}`,
     })
   }
   return roundArray
@@ -246,19 +246,19 @@ async function handleSaveAll() {
     </div>
 
     <div v-else class="selection-tool">
-      <div class="selection-tool__panel">
-        <Stepper :value="currentRound.toString()" linear class="selection-tool__stepper">
+      <div>
+        <Stepper :value="(currentRound + 1).toString()" linear class="selection-tool__stepper">
           <StepList>
             <Step
               v-for="round in rounds"
               :key="round.index"
-              :value="round.index.toString()"
+              :value="(round.index + 1).toString()"
             >
               <div
                 class="selection-tool__step-label"
                 :class="{
-                  'is-active': round.index === currentRound,
-                  'is-complete': round.index < currentRound,
+                  'is-active': round.index === currentRound + 1,
+                  'is-complete': round.index < currentRound + 1,
                 }"
               />
             </Step>
@@ -302,24 +302,25 @@ async function handleSaveAll() {
           >
             <template #header>
               <div class="selection-tool__panel-header">
-                <img
-                  v-if="left?.logoUrl"
-                  class="selection-tool__team-logo"
-                  :src="left.logoUrl"
-                  :alt="`${left.name} logo`"
-                >
-                <div class="selection-tool__team-title">
-                  <span v-if="left?.seed" class="selection-tool__team-seed">({{ left.seed }})</span>
-                  <span class="selection-tool__team-name">{{ left?.name || 'TBD' }}</span>
+                <div class="selection-tool__panel-header-left">
+                  <img
+                    v-if="left?.logoUrl"
+                    class="selection-tool__team-logo"
+                    :src="left.logoUrl"
+                    :alt="`${left.name} logo`"
+                  >
+                  <div class="selection-tool__team-title">
+                    <span v-if="left?.seed" class="selection-tool__team-seed">({{ left.seed }})</span>
+                    <span class="selection-tool__team-name">{{ left?.name || 'TBD' }}</span>
+                  </div>
                 </div>
+                <span v-if="currentPick === left?.id" class="selection-tool__selected-label">
+                  Selected
+                </span>
               </div>
             </template>
 
-            <div class="selection-tool__panel-body">
-              <div v-if="currentPick === left?.id" class="selection-tool__selected-label">
-                Selected
-              </div>
-            </div>
+            <div class="selection-tool__panel-body" />
           </Panel>
 
           <div class="selection-tool__vs-divider">
@@ -335,24 +336,25 @@ async function handleSaveAll() {
           >
             <template #header>
               <div class="selection-tool__panel-header">
-                <img
-                  v-if="right?.logoUrl"
-                  class="selection-tool__team-logo"
-                  :src="right.logoUrl"
-                  :alt="`${right.name} logo`"
-                >
-                <div class="selection-tool__team-title">
-                  <span v-if="right?.seed" class="selection-tool__team-seed">({{ right.seed }})</span>
-                  <span class="selection-tool__team-name">{{ right?.name || 'TBD' }}</span>
+                <div class="selection-tool__panel-header-left">
+                  <img
+                    v-if="right?.logoUrl"
+                    class="selection-tool__team-logo"
+                    :src="right.logoUrl"
+                    :alt="`${right.name} logo`"
+                  >
+                  <div class="selection-tool__team-title">
+                    <span v-if="right?.seed" class="selection-tool__team-seed">({{ right.seed }})</span>
+                    <span class="selection-tool__team-name">{{ right?.name || 'TBD' }}</span>
+                  </div>
                 </div>
+                <span v-if="currentPick === right?.id" class="selection-tool__selected-label">
+                  Selected
+                </span>
               </div>
             </template>
 
-            <div class="selection-tool__panel-body">
-              <div v-if="currentPick === right?.id" class="selection-tool__selected-label">
-                Selected
-              </div>
-            </div>
+            <div class="selection-tool__panel-body" />
           </Panel>
         </div>
 

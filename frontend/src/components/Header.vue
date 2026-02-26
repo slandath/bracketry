@@ -40,7 +40,7 @@ function goToLogin() {
         <Button icon="pi pi-sign-in" title="Log In" text @click="goToLogin" />
       </div>
       <div v-else class="btn-container">
-        <Button icon="pi pi-user" text title="User menu" style="color: #ffffff" @click="toggleUserMenu" />
+        <Button icon="pi pi-user" title="User menu" variant="outlined" size="large" @click="toggleUserMenu" />
       </div>
       <UserMenu
         v-if="session.data?.user"

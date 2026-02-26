@@ -21,7 +21,7 @@
   }
 
   &__step-label {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: rgba(15, 23, 42, 0.55);
@@ -38,6 +38,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    padding: 1rem;
   }
 
   &__nav-button {
@@ -80,6 +81,20 @@
     border-radius: 0.5rem;
   }
 
+  &__panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  &__panel-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
   &__team-title {
     display: flex;
     align-items: center;
@@ -120,6 +135,7 @@
   }
 
   &__helper {
+    margin-top: 0.5rem;
     font-size: 0.9rem;
     color: rgba(15, 23, 42, 0.6);
   }
@@ -132,24 +148,25 @@
   }
 }
 
-:deep(.p-stepper-nav) {
+.p-stepper .p-stepper-nav {
   gap: 0.5rem;
 }
 
-:deep(.p-stepper-header) {
+.p-stepper .p-stepper-header {
   flex: 1;
 }
 
-:deep(.p-progressbar) {
+.p-progressbar {
   background: rgba(15, 23, 42, 0.08);
   height: 8px;
 }
 
-:deep(.p-progressbar-value) {
+.p-progressbar .p-progressbar-value {
   background: $primary;
 }
+
 .selection-tool__team-panel {
-  :deep(.p-panel) {
+  & > .p-panel {
     background: #fff;
     border-radius: 0.85rem;
     border: 1px solid rgba(15, 23, 42, 0.12);
@@ -159,31 +176,29 @@
     cursor: pointer;
   }
 
-  :deep(.p-panel:hover) {
+  & > .p-panel:hover {
     border-color: rgba(15, 23, 42, 0.35);
     box-shadow: 0 0.75rem 1.5rem rgba(15, 23, 42, 0.08);
   }
 
-  :deep(.p-panel-content) {
+  & > .p-panel .p-panel-content {
     background: #fff;
     border-top: 1px solid rgba(15, 23, 42, 0.08);
     color: rgba(15, 23, 42, 0.8);
   }
 
-  &.border-primary {
-    :deep(.p-panel) {
-      border: 2px solid $primary;
-      box-shadow: 0 0.75rem 1.5rem rgba($primary, 0.25);
-    }
+  &.border-primary > .p-panel {
+    border: 2px solid $primary;
+    box-shadow: 0 0.75rem 1.5rem rgba($primary, 0.25);
   }
 
-  :deep(.p-panel-header) {
+  & > .p-panel .p-panel-header {
     background: transparent;
     border: none;
-    padding: 1rem 1rem 0.5rem;
+    padding: 1rem 1rem 0.25rem;
   }
 
-  :deep(.p-panel-content) {
+  & > .p-panel .p-panel-content {
     padding: 0.75rem 1rem 1rem;
   }
 }
