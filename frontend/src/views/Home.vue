@@ -127,8 +127,8 @@ function handleSave() {
   if (!tournamentData.value)
     return
   const updatedData = { ...tournamentData.value }
-  Object.entries(pendingPicks.value).forEach(([keycloak, teamId]) => {
-    const [roundIndex, order] = keycloak.split(':').map(Number)
+  Object.entries(pendingPicks.value).forEach(([key, teamId]) => {
+    const [roundIndex, order] = key.split(':').map(Number)
     const match = updatedData.matches?.find(
       m => m.roundIndex === roundIndex && m.order === order,
     )

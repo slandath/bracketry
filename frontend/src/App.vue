@@ -2,7 +2,7 @@
 import Footer from './components/Footer.vue'
 import Header from './components/Header.vue'
 import Toast from './components/Toast.vue'
-import '../src/styles/components/App.scss'
+import './styles/components/App.scss'
 </script>
 
 <template>
