@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { CloseIcon, LogOutIcon } from '../assets'
 import { authClient } from '../auth-client'
+import { useBracketActions } from '../composables/useBracketActions'
 import { showToast } from '../composables/useToast'
 import '../styles/components/UserMenu.scss'
 
@@ -20,6 +21,7 @@ const emit = defineEmits<{
 }>()
 
 const router = useRouter()
+const { openSelectionTool, triggerEvaluate } = useBracketActions()
 
 async function handleSignOut() {
   try {
@@ -49,6 +51,14 @@ async function handleSignOut() {
       </div>
       <p>{{ props.user?.name }}</p>
       <p>{{ props.user?.email }}</p>
+      <div class="button-container">
+        <button class="open-selection-btn" @click="openSelectionTool(); emit('close')">
+          Make Picks
+        </button>
+        <button class="open-selection-btn" @click="triggerEvaluate(); emit('close')">
+          Evaluate Bracket
+        </button>
+      </div>
     </aside>
   </Transition>
 </template>

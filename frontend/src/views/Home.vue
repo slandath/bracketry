@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { BracketInstance, Data } from '../lib/data/types'
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import type { BracketInstance, Data, Match } from '../lib/data/types'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { CloseIcon } from '../assets'
 import { authClient } from '../auth-client'
-import { useActiveTemplateOnLogin, useCurrentBracketOnLogin } from '../composables'
+import SelectionTool from '../components/SelectionTool.vue'
+import { useActiveTemplateOnLogin, useBracketActions, useCurrentBracketOnLogin } from '../composables'
 import { createBracket } from '../lib/lib'
 
 const tournamentData = ref<Data | null>(null)
@@ -12,6 +14,9 @@ const bracketInstanceRef = ref<BracketInstance>()
 const router = useRouter()
 const session = authClient.useSession()
 const isLoggedIn = computed(() => !!session.value.data)
+const { isSelectionOpen, closeSelectionTool } = useBracketActions()
+const dialogRef = ref<HTMLDialogElement | null>(null)
+const pendingPicks = ref<Record<string, string>>({})
 
 const {
   data: templateData,
@@ -92,10 +97,49 @@ watch(templateError, (hasError) => {
   }
 })
 
+watch(isSelectionOpen, (shouldOpen) => {
+  if (shouldOpen) {
+    nextTick(() => {
+      dialogRef.value?.showModal()
+    })
+  }
+})
+
 onBeforeUnmount(() => {
   // Prevent event listener/memory leaks from the bracket library instance.
   bracketInstanceRef.value?.uninstall?.()
 })
+
+function closeDialog() {
+  closeSelectionTool()
+}
+
+function handlePick(match: Match, teamId: string) {
+  const key = `${match.roundIndex}:${match.order}`
+  pendingPicks.value[key] = teamId
+}
+
+function handleRefresh() {
+  pendingPicks.value = {}
+}
+
+function handleSave() {
+  if (!tournamentData.value)
+    return
+  const updatedData = { ...tournamentData.value }
+  Object.entries(pendingPicks.value).forEach(([key, teamId]) => {
+    const [roundIndex, order] = key.split(':').map(Number)
+    const match = updatedData.matches?.find(
+      m => m.roundIndex === roundIndex && m.order === order,
+    )
+    if (match) {
+      match.prediction = teamId
+    }
+  })
+  tournamentData.value = updatedData
+  pendingPicks.value = {}
+  closeDialog()
+}
 </script>
 
 <template>
@@ -105,14 +149,8 @@ onBeforeUnmount(() => {
     </div>
     <template v-else>
       <div ref="bracketContainerRef" class="bracketry-wrapper" />
-      <button class="open-selection-btn">
-        Make Picks
-      </button>
-      <button class="open-selection-btn">
-        Evaluate Bracket
-      </button>
     </template>
-    <!-- <Transition name="modal" @after-leave="dialogRef?.close()">
+    <Transition name="modal" @after-leave="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
         <div class="selection-modal__content">
           <button
@@ -123,7 +161,7 @@ onBeforeUnmount(() => {
             <CloseIcon />
           </button>
           <SelectionTool
-            v-if="isSelectionOpen"
+            v-if="isSelectionOpen && tournamentData"
             :data="tournamentData"
             @pick="handlePick"
             @refresh="handleRefresh"
@@ -131,6 +169,6 @@ onBeforeUnmount(() => {
           />
         </div>
       </dialog>
-    </Transition> -->
+    </Transition>
   </main>
 </template>

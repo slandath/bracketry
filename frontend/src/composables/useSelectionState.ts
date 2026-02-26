@@ -180,5 +180,6 @@ export function useSelectionState(data: () => Data, roundNames?: () => Record<nu
     selectTeam,
     handleReset,
     navigate,
+    maxRound,
   }
 }
