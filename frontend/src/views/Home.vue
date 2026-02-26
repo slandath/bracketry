@@ -5,16 +5,19 @@ import { useRouter } from 'vue-router'
 import { CloseIcon } from '../assets'
 import { authClient } from '../auth-client'
 import SelectionTool from '../components/SelectionTool.vue'
-import { useActiveTemplateOnLogin, useBracketActions, useCurrentBracketOnLogin } from '../composables'
+import { loadFromStorage, SELECTION_STATE_KEY, useActiveTemplateOnLogin, useBracketActions, useCreateBracket, useCurrentBracketOnLogin } from '../composables'
+import { showToast } from '../composables/useToast'
 import { createBracket } from '../lib/lib'
 
 const tournamentData = ref<Data | null>(null)
 const bracketContainerRef = ref<HTMLElement | null>(null)
 const bracketInstanceRef = ref<BracketInstance>()
+const saveLoading = ref(false)
 const router = useRouter()
 const session = authClient.useSession()
 const isLoggedIn = computed(() => !!session.value.data)
 const { isSelectionOpen, closeSelectionTool } = useBracketActions()
+const createBracketMutation = useCreateBracket()
 const dialogRef = ref<HTMLDialogElement | null>(null)
 const pendingPicks = ref<Record<string, string>>({})
 
@@ -123,22 +126,53 @@ function handleRefresh() {
   pendingPicks.value = {}
 }
 
-function handleSave() {
-  if (!tournamentData.value)
+async function handleSave(roundIndex: number) {
+  // Check if bracket already exists - if so, block
+  if (currentBracketData.value?.bracket) {
+    showToast('Picks already made!  Delete your bracket to start over.', 'error')
     return
-  const updatedData = { ...tournamentData.value }
-  Object.entries(pendingPicks.value).forEach(([key, teamId]) => {
-    const [roundIndex, order] = key.split(':').map(Number)
-    const match = updatedData.matches?.find(
-      m => m.roundIndex === roundIndex && m.order === order,
-    )
-    if (match) {
-      match.prediction = teamId
-    }
-  })
-  tournamentData.value = updatedData
-  pendingPicks.value = {}
-  closeDialog()
+  }
+  // Check for active template
+  const templateId = templateData.value?.template?.id
+  if (!templateId) {
+    showToast('No active tournament template found.', 'error')
+    return
+  }
+  // Get matches from tournamentData to calculate maxRound
+  const matches = tournamentData.value?.matches ?? []
+  const maxRound = matches.length > 0 ? Math.max(...matches.map(m => m.roundIndex)) : -1
+
+  // Non-final round: do nothing in Home.vue (SelectionTool handles local storage)
+  if (roundIndex !== maxRound) {
+    pendingPicks.value = {}
+    return
+  }
+
+  // Final round: load complete bracket from localStorage and submit to DB
+  const savedBracket = loadFromStorage()
+  if (!savedBracket || !Array.isArray(savedBracket.matches) || savedBracket.matches.length === 0) {
+    showToast('No saved picks found.  Please confirm your picks again.', 'error')
+    return
+  }
+  saveLoading.value = true
+  try {
+    await createBracketMutation.mutateAsync({
+      template_id: templateId,
+      data: savedBracket,
+    })
+    // Clear local selection state
+    localStorage.removeItem(SELECTION_STATE_KEY)
+    showToast('Bracket saved!', 'success')
+    pendingPicks.value = {}
+    closeDialog()
+  }
+  catch (err) {
+    const message = err instanceof Error ? err.message : 'Failed to save bracket'
+    showToast(message, 'error')
+  }
+  finally {
+    saveLoading.value = false
+  }
 }
 </script>
 
@@ -163,6 +197,7 @@ function handleSave() {
           <SelectionTool
             v-if="isSelectionOpen && tournamentData"
             :data="tournamentData"
+            :save-loading="saveLoading"
             @pick="handlePick"
             @refresh="handleRefresh"
             @save="handleSave"
