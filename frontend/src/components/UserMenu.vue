@@ -14,8 +14,9 @@ interface User {
 interface Props {
   isOpen: boolean
   user?: User
+  hasBracket?: boolean
 }
-const props = withDefaults(defineProps<Props>(), { user: undefined })
+const props = withDefaults(defineProps<Props>(), { user: undefined, hasBracket: false })
 const emit = defineEmits<{
   close: []
 }>()
@@ -52,8 +53,8 @@ async function handleSignOut() {
       <p>{{ props.user?.name }}</p>
       <p>{{ props.user?.email }}</p>
       <div class="button-container">
-        <button class="open-selection-btn" @click="openSelectionTool(); emit('close')">
-          Make Picks
+        <button class="open-selection-btn" :disabled="hasBracket" @click="openSelectionTool(); emit('close')">
+          {{ hasBracket ? 'Picks Made!' : 'Make Picks' }}
         </button>
         <button class="open-selection-btn" @click="triggerEvaluate(); emit('close')">
           Evaluate Bracket

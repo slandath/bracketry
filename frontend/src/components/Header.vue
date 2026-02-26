@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { LogInIcon, UserIcon } from '../assets'
 import { authClient } from '../auth-client'
+import { useCurrentBracketOnLogin } from '../composables'
 import UserMenu from './UserMenu.vue'
 import '../styles/components/Header.scss'
 
@@ -13,6 +14,8 @@ const router = useRouter()
 const show_user_icon = computed(() =>
   !session.value?.isPending && !!session.value?.data?.user,
 )
+const { data: currentBracketData } = useCurrentBracketOnLogin()
+const hasBracket = computed(() => !!currentBracketData.value?.bracket)
 const currentYear = computed(() => new Date().getFullYear())
 
 function toggleUserMenu() {
@@ -47,6 +50,7 @@ function goToLogin() {
         v-if="session.data?.user"
         :is-open="menuOpen"
         :user="session.data.user"
+        :has-bracket="hasBracket"
         @close="closeUserMenu"
       />
     </div>
