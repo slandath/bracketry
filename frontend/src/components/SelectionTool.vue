@@ -149,12 +149,6 @@ async function handleSaveAll() {
             picks: roundPicks,
           })
         }
-        else {
-          console.info('[SelectionTool] Round picks persisted to localStorage', {
-            round: currentRound.value,
-            picksSaved: roundPicks.length,
-          })
-        }
       }
     }
 

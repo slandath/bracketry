@@ -150,7 +150,7 @@ async function handleSave(roundIndex: number) {
 
   // Final round: load complete bracket from localStorage and submit to DB
   const savedBracket = loadFromStorage()
-  
+
   saveLoading.value = true
   try {
     await createBracketMutation.mutateAsync({
