@@ -1,8 +1,11 @@
+import Material from '@primeuix/themes/material'
 import { MutationCache, QueryCache, QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
+import PrimeVue from 'primevue/config'
 import { createApp } from 'vue'
 import App from './App.vue'
 import { showToast } from './composables/useToast'
 import router from './router'
+import 'primeicons/primeicons.css'
 
 const queryCache = new QueryCache({
   onError: (error: Error) => {
@@ -31,4 +34,12 @@ const queryClient = new QueryClient({
 const app = createApp(App)
 app.use(router)
 app.use(VueQueryPlugin, { queryClient })
+app.use(PrimeVue, {
+  theme: {
+    preset: Material,
+    options: {
+      darkModeSelector: '.light',
+    },
+  },
+})
 app.mount('#app')

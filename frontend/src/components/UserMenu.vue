@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { Drawer } from 'primevue'
+import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
-import { CloseIcon, LogOutIcon } from '../assets'
 import { authClient } from '../auth-client'
 import { useBracketActions } from '../composables/useBracketActions'
 import { showToast } from '../composables/useToast'
@@ -18,7 +19,8 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), { user: undefined, hasBracket: false })
 const emit = defineEmits<{
-  close: []
+  'close': []
+  'update:isOpen': [value: boolean]
 }>()
 
 const router = useRouter()
@@ -37,29 +39,21 @@ async function handleSignOut() {
 </script>
 
 <template>
-  <Transition name="slide">
-    <div v-if="isOpen" class="overlay" @click="emit('close')" />
-  </Transition>
-  <Transition name="slide">
-    <aside v-if="isOpen" class="menu-container">
-      <div class="btn-container">
-        <button class="menu-btn" @click="emit('close')">
-          <CloseIcon />
-        </button>
-        <button class="menu-btn" @click="handleSignOut">
-          <LogOutIcon />
-        </button>
-      </div>
-      <p>{{ props.user?.name }}</p>
-      <p>{{ props.user?.email }}</p>
-      <div class="button-container">
-        <button class="open-selection-btn" :disabled="hasBracket" @click="openSelectionTool(); emit('close')">
-          {{ hasBracket ? 'Picks Made!' : 'Make Picks' }}
-        </button>
-        <button class="open-selection-btn" @click="triggerEvaluate(); emit('close')">
-          Evaluate Bracket
-        </button>
-      </div>
-    </aside>
-  </Transition>
+  <Drawer
+    :visible="isOpen"
+    position="right"
+    :header="props.user?.name"
+    @update:visible="$emit('update:isOpen', $event)"
+  >
+    <p>{{ props.user?.email }}</p>
+    <div class="btn-container">
+      <Button :disabled="hasBracket" @click="openSelectionTool(); emit('close')">
+        {{ hasBracket ? 'Picks Made!' : 'Make Picks' }}
+      </Button>
+      <Button label="Evaluate Bracket" @click="triggerEvaluate(); emit('close')" />
+    </div>
+    <div class="btn-container" style="margin-top: auto;">
+      <Button icon="pi pi-sign-out" text aria-label="Sign out" @click="handleSignOut" />
+    </div>
+  </Drawer>
 </template>

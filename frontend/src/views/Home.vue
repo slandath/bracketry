@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { BracketInstance, Data, Match } from '../lib/data/types'
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import Dialog from 'primevue/dialog'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { CloseIcon } from '../assets'
 import { authClient } from '../auth-client'
 import SelectionTool from '../components/SelectionTool.vue'
 import { loadFromStorage, SELECTION_STATE_KEY, useActiveTemplateOnLogin, useBracketActions, useCreateBracket, useCurrentBracketOnLogin } from '../composables'
@@ -18,7 +18,6 @@ const session = authClient.useSession()
 const isLoggedIn = computed(() => !!session.value.data)
 const { isSelectionOpen, closeSelectionTool } = useBracketActions()
 const createBracketMutation = useCreateBracket()
-const dialogRef = ref<HTMLDialogElement | null>(null)
 const pendingPicks = ref<Record<string, string>>({})
 
 const {
@@ -100,22 +99,10 @@ watch(templateError, (hasError) => {
   }
 })
 
-watch(isSelectionOpen, (shouldOpen) => {
-  if (shouldOpen) {
-    nextTick(() => {
-      dialogRef.value?.showModal()
-    })
-  }
-})
-
 onBeforeUnmount(() => {
   // Prevent event listener/memory leaks from the bracket library instance.
   bracketInstanceRef.value?.uninstall?.()
 })
-
-function closeDialog() {
-  closeSelectionTool()
-}
 
 function handlePick(match: Match, teamId: string) {
   const key = `${match.roundIndex}:${match.order}`
@@ -164,7 +151,6 @@ async function handleSave(roundIndex: number) {
     localStorage.removeItem(SELECTION_STATE_KEY)
     showToast('Bracket saved!', 'success')
     pendingPicks.value = {}
-    closeDialog()
   }
   catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to save bracket'
@@ -184,26 +170,25 @@ async function handleSave(roundIndex: number) {
     <template v-else>
       <div ref="bracketContainerRef" class="bracketry-wrapper" />
     </template>
-    <Transition name="modal" @after-leave="dialogRef?.close()">
-      <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">
-        <div class="selection-modal__content">
-          <button
-            class="selection-modal__close"
-            aria-label="Close"
-            @click="closeDialog"
-          >
-            <CloseIcon />
-          </button>
-          <SelectionTool
-            v-if="isSelectionOpen && tournamentData"
-            :data="tournamentData"
-            :save-loading="saveLoading"
-            @pick="handlePick"
-            @refresh="handleRefresh"
-            @save="handleSave"
-          />
-        </div>
-      </dialog>
-    </Transition>
+
+    <Dialog
+      v-model:visible="isSelectionOpen"
+      modal
+      header="Make Your Picks"
+      :style="{ width: '720px' }"
+      :breakpoints="{ '960px': '90vw', '640px': '96vw' }"
+      :closable="true"
+      :dismissable-mask="true"
+      @hide="closeSelectionTool"
+    >
+      <SelectionTool
+        v-if="isSelectionOpen && tournamentData"
+        :data="tournamentData"
+        :save-loading="saveLoading"
+        @pick="handlePick"
+        @refresh="handleRefresh"
+        @save="handleSave"
+      />
+    </Dialog>
   </main>
 </template>

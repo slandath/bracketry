@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { Button } from 'primevue'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { LogInIcon, UserIcon } from '../assets'
 import { authClient } from '../auth-client'
 import { useCurrentBracketOnLogin } from '../composables'
 import UserMenu from './UserMenu.vue'
@@ -37,14 +37,10 @@ function goToLogin() {
     <div class="header">
       <h1>{{ currentYear }} March Madness Bracket</h1>
       <div v-if="!show_user_icon" class="btn-container">
-        <button class="header-btn icon" title="Log In" @click="goToLogin">
-          <LogInIcon />
-        </button>
+        <Button icon="pi pi-sign-in" title="Log In" text @click="goToLogin" />
       </div>
       <div v-else class="btn-container">
-        <button class="header-btn icon" title="User menu" @click="toggleUserMenu">
-          <UserIcon />
-        </button>
+        <Button icon="pi pi-user" text title="User menu" style="color: #ffffff" @click="toggleUserMenu" />
       </div>
       <UserMenu
         v-if="session.data?.user"
@@ -52,6 +48,7 @@ function goToLogin() {
         :user="session.data.user"
         :has-bracket="hasBracket"
         @close="closeUserMenu"
+        @update:is-open="menuOpen = $event"
       />
     </div>
   </header>
