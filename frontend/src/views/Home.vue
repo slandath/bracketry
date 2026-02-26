@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { CloseIcon } from '../assets'
 import { authClient } from '../auth-client'
 import SelectionTool from '../components/SelectionTool.vue'
-import { useActiveTemplateOnLogin, useCurrentBracketOnLogin } from '../composables'
+import { useActiveTemplateOnLogin, useBracketActions, useCurrentBracketOnLogin } from '../composables'
 import { createBracket } from '../lib/lib'
 
 const tournamentData = ref<Data | null>(null)
@@ -14,7 +14,7 @@ const bracketInstanceRef = ref<BracketInstance>()
 const router = useRouter()
 const session = authClient.useSession()
 const isLoggedIn = computed(() => !!session.value.data)
-const isSelectionOpen = ref<boolean>(false)
+const { isSelectionOpen, closeSelectionTool } = useBracketActions()
 const dialogRef = ref<HTMLDialogElement | null>(null)
 const pendingPicks = ref<Record<string, string>>({})
 
@@ -97,22 +97,21 @@ watch(templateError, (hasError) => {
   }
 })
 
+watch(isSelectionOpen, (shouldOpen) => {
+  if (shouldOpen) {
+    nextTick(() => {
+      dialogRef.value?.showModal()
+    })
+  }
+})
+
 onBeforeUnmount(() => {
   // Prevent event listener/memory leaks from the bracket library instance.
   bracketInstanceRef.value?.uninstall?.()
 })
 
-function openDialog() {
-  if (!isLoggedIn.value)
-    return
-  isSelectionOpen.value = true
-  nextTick(() => {
-    dialogRef.value?.showModal()
-  })
-}
-
 function closeDialog() {
-  isSelectionOpen.value = false
+  closeSelectionTool()
 }
 
 function handlePick(match: Match, teamId: string) {
@@ -150,14 +149,6 @@ function handleSave() {
     </div>
     <template v-else>
       <div ref="bracketContainerRef" class="bracketry-wrapper" />
-      <div class="button-container">
-        <button v-if="isLoggedIn" class="open-selection-btn" @click="openDialog">
-          Make Picks
-        </button>
-        <button class="open-selection-btn">
-          Evaluate Bracket
-        </button>
-      </div>
     </template>
     <Transition name="modal" @after-leave="dialogRef?.close()">
       <dialog v-if="isSelectionOpen" ref="dialogRef" class="selection-modal">

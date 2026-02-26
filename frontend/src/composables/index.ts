@@ -1,5 +1,6 @@
 export { useActiveTemplateOnLogin } from './useActiveTemplateOnLogin'
 export { useAuthRedirect } from './useAuthRedirect'
+export { useBracketActions } from './useBracketActions'
 export {
   useBrackets,
   useCreateBracket,

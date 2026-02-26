@@ -13,7 +13,7 @@
   cursor: pointer;
   display: flex;
   background-color: transparent;
-  color: white;
+  color: black;
 
   &:hover {
     opacity: 0.9;
@@ -26,17 +26,33 @@
   right: 0;
   width: 280px;
   height: 100vh;
-  background-color: $primary;
+  background-color: white;
+  color: black;
   z-index: 1000;
   font-size: 1rem;
   padding: 1rem;
-  opacity: 0.95;
 }
 
 .btn-container {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+}
+
+.open-selection-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: $primary;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  margin: 1rem auto;
+
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .overlay {
