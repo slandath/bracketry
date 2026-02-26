@@ -32,10 +32,17 @@ function cloneBracketData(data: Data): Data {
     return JSON.parse(JSON.stringify(data)) as Data
   }
 }
+function isBracketCompatible(stored: Data, source: Data) {
+  const storedMatches = stored.matches ?? []
+  const sourceMatches = source.matches ?? []
+  if (storedMatches.length !== sourceMatches.length)
+    return false
+  return storedMatches.every(sm => sourceMatches.some(tm => tm.roundIndex === sm.roundIndex && tm.order === sm.order))
+}
 
 onMounted(() => {
   const stored = loadFromStorage()
-  if (stored && stored.matches?.some(m => m.prediction)) {
+  if (stored && isBracketCompatible(stored, props.data) && stored.matches?.some(m => m.prediction)) {
     savedBracketData.value = cloneBracketData(stored)
   }
   else {
@@ -142,7 +149,7 @@ async function handleSaveAll() {
 
       if (import.meta.env.DEV) {
         const persisted = loadFromStorage()
-        const isSaved = verifyRoundPicksPersisted(persisted, roundPicks)
+        const isSaved = !!persisted && verifyRoundPicksPersisted(persisted, roundPicks)
         if (!isSaved) {
           console.error('[SelectionTool] Round picks were not persisted to localStorage', {
             round: currentRound.value,

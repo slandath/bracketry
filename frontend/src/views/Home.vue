@@ -150,7 +150,10 @@ async function handleSave(roundIndex: number) {
 
   // Final round: load complete bracket from localStorage and submit to DB
   const savedBracket = loadFromStorage()
-
+  if (!savedBracket || !Array.isArray(savedBracket.matches) || savedBracket.matches.length === 0) {
+    showToast('No saved picks found.  Please confirm your picks again.', 'error')
+    return
+  }
   saveLoading.value = true
   try {
     await createBracketMutation.mutateAsync({
