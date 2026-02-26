@@ -21,7 +21,7 @@ const emit = defineEmits<{
 
 const selectionState = useSelectionState(
   () => props.data,
-  () => props.roundNames,
+  () => props.roundNames || {},
 )
 
 const {
@@ -143,7 +143,7 @@ async function handleSaveAll() {
           <button
             type="button"
             class="selection-tool__reset-btn"
-            :disabled="isSaving || Object.keys(pendingPicks).length === 0"
+            :disabled="isSaving || Object.keys(selectionState.pendingPicks.value).length === 0"
             @click="handleReset"
           >
             Reset
