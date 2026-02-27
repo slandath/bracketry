@@ -198,7 +198,7 @@ async function handleSaveAll() {
         )
         if (match) {
           match.prediction = teamId
-          if (roundIndex > 1) {
+          if (roundIndex > 0) {
             match.matchStatus = 'Predicted'
           }
         }
