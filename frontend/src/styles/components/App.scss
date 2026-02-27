@@ -6,3 +6,80 @@
   max-height: calc(95vh - 8rem);
   gap: 1rem;
 }
+
+.dialog-container {
+  display: flex;
+  min-width: 0;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+
+  .p-dialog {
+    width: 100% !important;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .p-dialog-header,
+  .p-dialog-content,
+  .p-dialog-footer {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+
+  .p-dialog-content {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  // Force all children to shrink
+  > * {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  // Handle SelectionTool elements specifically
+  .selection-tool-wrapper {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+
+    .p-progressbar {
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .p-panel {
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .p-button {
+      max-width: 100%;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .p-stepper {
+      min-width: 0;
+      max-width: 100%;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .dialog-container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .dialog-container {
+    max-width: 960px;
+  }
+}

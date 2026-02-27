@@ -151,6 +151,7 @@ async function handleSave(roundIndex: number) {
     localStorage.removeItem(SELECTION_STATE_KEY)
     showToast('Bracket saved!', 'success')
     pendingPicks.value = {}
+    closeSelectionTool()
   }
   catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to save bracket'
@@ -175,10 +176,10 @@ async function handleSave(roundIndex: number) {
       v-model:visible="isSelectionOpen"
       modal
       header="Make Your Picks"
-      :style="{ width: '720px' }"
       :breakpoints="{ '960px': '90vw', '640px': '96vw' }"
       :closable="true"
       :dismissable-mask="true"
+      class="dialog-container"
       @hide="closeSelectionTool"
     >
       <SelectionTool
