@@ -6,42 +6,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background-color: $primary;
-  color: white;
   max-height: 4rem;
 }
 
 .header h1 {
   @media (max-width: 600px) {
     display: none;
-  }
-}
-
-.icon {
-  display: flex;
-  align-items: center;
-  color: $primary;
-}
-
-.header-btn {
-  font-size: 1rem;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  background-color: transparent;
-  color: white;
-
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
-.btn-container {
-  display: flex;
-  gap: 1rem;
-
-  @media (max-width: 600px) {
-    margin-left: auto;
   }
 }
