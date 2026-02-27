@@ -151,6 +151,7 @@ async function handleSave(roundIndex: number) {
     localStorage.removeItem(SELECTION_STATE_KEY)
     showToast('Bracket saved!', 'success')
     pendingPicks.value = {}
+    closeSelectionTool()
   }
   catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to save bracket'
@@ -158,7 +159,6 @@ async function handleSave(roundIndex: number) {
   }
   finally {
     saveLoading.value = false
-    closeSelectionTool()
   }
 }
 </script>
