@@ -42,18 +42,17 @@ async function handleSignOut() {
   <Drawer
     :visible="isOpen"
     position="right"
-    :header="props.user?.name"
     @update:visible="$emit('update:isOpen', $event)"
   >
-    <p>{{ props.user?.email }}</p>
-    <div class="btn-container">
-      <Button :disabled="hasBracket" @click="openSelectionTool(); emit('close')">
-        {{ hasBracket ? 'Picks Made!' : 'Make Picks' }}
-      </Button>
-      <Button label="Evaluate Bracket" @click="triggerEvaluate(); emit('close')" />
-    </div>
-    <div class="btn-container" style="margin-top: auto;">
-      <Button icon="pi pi-sign-out" text aria-label="Sign out" @click="handleSignOut" />
-    </div>
+    <template #header>
+      {{ props.user?.name }}
+    </template>
+    <Button :label="hasBracket ? 'Picks Made!' : 'Make Picks'" :disabled="hasBracket" icon="pi pi-pencil" size="large" @click="openSelectionTool(); emit('close')" />
+    <Button label="Evaluate Bracket" size="large" @click="triggerEvaluate(); emit('close')" />
+    <template #footer>
+      <div class="btn-container">
+        <Button icon="pi pi-sign-out" aria-label="Sign out" label="Log Out" size="large" @click="handleSignOut" />
+      </div>
+    </template>
   </Drawer>
 </template>
