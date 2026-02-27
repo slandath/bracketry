@@ -87,7 +87,7 @@ const rounds = computed(() => {
   for (let i = 0; i <= maxRound.value; i++) {
     roundArray.push({
       index: i,
-      name: names.value[i - 1] || `Round ${i}`,
+      name: names.value[i] || `Round ${i + 1}`,
     })
   }
   return roundArray
@@ -257,8 +257,8 @@ async function handleSaveAll() {
               <div
                 class="selection-tool__step-label"
                 :class="{
-                  'is-active': round.index === currentRound + 1,
-                  'is-complete': round.index < currentRound + 1,
+                  'is-active': round.index === currentRound,
+                  'is-complete': round.index < currentRound,
                 }"
               />
             </Step>

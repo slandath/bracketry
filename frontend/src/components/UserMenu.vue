@@ -45,8 +45,10 @@ async function handleSignOut() {
     position="right"
     @update:visible="$emit('update:isOpen', $event)"
   >
-    <Button :label="hasBracket ? 'Complete' : 'Make Picks'" :disabled="hasBracket" :icon="hasBracket ? 'pi pi-check' : 'pi pi-pencil'" size="large" @click="openSelectionTool(); emit('close')" />
-    <Button label="Evaluate Bracket" size="large" @click="triggerEvaluate(); emit('close')" />
+    <div class="button-container">
+      <Button :label="hasBracket ? 'Complete' : 'Make Picks'" :disabled="hasBracket" :icon="hasBracket ? 'pi pi-check' : 'pi pi-pencil'" size="large" @click="openSelectionTool(); emit('close')" />
+      <Button label="Evaluate Bracket" size="large" @click="triggerEvaluate(); emit('close')" />
+    </div>
     <template #footer>
       <div class="btn-container">
         <Button icon="pi pi-sign-out" aria-label="Sign out" label="Log Out" size="large" @click="handleSignOut" />
