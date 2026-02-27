@@ -22,6 +22,7 @@ const Preset = definePreset(Material, {
       800: '#003d4d',
       900: '#00261a',
       950: '#001a33',
+
     },
     colorScheme: {
       light: {

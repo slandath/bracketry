@@ -198,6 +198,9 @@ async function handleSaveAll() {
         )
         if (match) {
           match.prediction = teamId
+          if (roundIndex > 1) {
+            match.matchStatus = 'Predicted'
+          }
         }
       })
       const dataWithAdvanceWinners = advanceWinnersToNextRound(updatedData, currentRound.value)
@@ -294,9 +297,10 @@ async function handleSaveAll() {
 
         <div class="selection-tool__match-list">
           <Panel
-            :collapsed="false"
+            :collapsed="true"
             :toggleable="false"
             class="selection-tool__team-panel"
+            style="cursor: pointer"
             :class="leftPanelClass"
             @click="handleLeftCardClick"
           >
@@ -315,7 +319,7 @@ async function handleSaveAll() {
                   </div>
                 </div>
                 <span v-if="currentPick === left?.id" class="selection-tool__selected-label">
-                  Selected
+                  <i class="pi pi-check" style="font-size: 1.5rem" />
                 </span>
               </div>
             </template>
@@ -328,10 +332,11 @@ async function handleSaveAll() {
           </div>
 
           <Panel
-            :collapsed="false"
+            :collapsed="true"
             :toggleable="false"
             class="selection-tool__team-panel"
             :class="rightPanelClass"
+            style="cursor: pointer"
             @click="handleRightCardClick"
           >
             <template #header>
@@ -349,7 +354,7 @@ async function handleSaveAll() {
                   </div>
                 </div>
                 <span v-if="currentPick === right?.id" class="selection-tool__selected-label">
-                  Selected
+                  <i class="pi pi-check" style="font-size: 1.5rem" />
                 </span>
               </div>
             </template>

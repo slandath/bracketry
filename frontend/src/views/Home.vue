@@ -158,6 +158,7 @@ async function handleSave(roundIndex: number) {
   }
   finally {
     saveLoading.value = false
+    closeSelectionTool()
   }
 }
 </script>
@@ -175,10 +176,10 @@ async function handleSave(roundIndex: number) {
       v-model:visible="isSelectionOpen"
       modal
       header="Make Your Picks"
-      :style="{ width: '720px' }"
       :breakpoints="{ '960px': '90vw', '640px': '96vw' }"
       :closable="true"
       :dismissable-mask="true"
+      class="dialog-container"
       @hide="closeSelectionTool"
     >
       <SelectionTool
