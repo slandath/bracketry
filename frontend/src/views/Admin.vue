@@ -167,15 +167,17 @@ onMounted(fetchTemplates)
         v-slot="$form"
         :initial-values
         :resolver="zodResolver(templateSchema)"
-        class="flex flex-col gap-4"
+        class="form-stack"
         @submit="onFormSubmit"
       >
-        <div class="flex flex-col gap-1">
+        <div>
           <InputNumber
+            input-id="withoutgrouping"
             name="year"
             placeholder="Year"
             :min="2000"
             :max="2100"
+            :use-grouping="false"
             fluid
           />
           <Message v-if="$form.year?.invalid" severity="error" size="small" variant="simple">
@@ -183,7 +185,7 @@ onMounted(fetchTemplates)
           </Message>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div>
           <InputText
             name="name"
             placeholder="Tournament Name"
@@ -194,7 +196,7 @@ onMounted(fetchTemplates)
           </Message>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div>
           <Textarea
             name="jsonData"
             placeholder="Paste template JSON here"
@@ -206,7 +208,7 @@ onMounted(fetchTemplates)
           </Message>
         </div>
 
-        <div class="flex justify-end gap-2">
+        <div class="form-actions">
           <Button label="Cancel" severity="secondary" type="button" @click="cancelCreate" />
           <Button label="Create" type="submit" />
         </div>
