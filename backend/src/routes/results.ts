@@ -1,10 +1,16 @@
 import type { FastifyInstance } from 'fastify'
 import type { Match } from '../types/bracket.schema.js'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 import { tournament_results, tournament_templates } from '../db/schema.js'
 import { db } from '../index.js'
+import { MatchSchema } from '../types/bracket.schema.js'
 import { getAdminOrThrow, getSessionOrThrow } from '../utils/auth.js'
 import { NotFoundError } from '../utils/errors.js'
+
+const UpdateResultsSchema = z.object({
+  matches: z.array(MatchSchema),
+})
 
 /**
  * GET /:id/results - Get tournament results
@@ -40,7 +46,13 @@ export async function resultsRoutes(server: FastifyInstance): Promise<void> {
   server.put('/:id/results', async (request, reply) => {
     const _user = await getAdminOrThrow(request)
     const { id } = request.params as { id: string }
-    const { matches } = request.body as { matches: Match[] }
+
+    const validation = UpdateResultsSchema.safeParse(request.body)
+    if (!validation.success) {
+      return reply.status(400).send({ error: 'Invalid request body', details: validation.error.errors })
+    }
+
+    const { matches } = validation.data
 
     // Verify template exists
     const [template] = await db

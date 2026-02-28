@@ -111,7 +111,7 @@ export const tournament_results = pgTable('tournament_results', {
   matches: jsonb('matches').notNull(),
   created_at: timestamp('created_at').defaultNow().notNull(),
   updated_at: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
-}, table => [index('tournamentResults_templateId_idx').on(table.template_id)])
+}, table => [uniqueIndex('tournamentResults_templateId_idx').on(table.template_id)])
 
 export const brackets = pgTable('brackets', {
   id: uuid('id').primaryKey(),

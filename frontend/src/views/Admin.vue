@@ -144,7 +144,11 @@ async function onResultsSubmit(event: FormSubmitEvent) {
   const { matchesJson } = event.values as { matchesJson: string }
 
   try {
-    const parsedData = JSON.parse(matchesJson) as { matches: unknown[] }
+    const parsedData = JSON.parse(matchesJson)
+    if (typeof parsedData !== 'object' || parsedData === null || !Array.isArray(parsedData.matches)) {
+      showToast('Invalid JSON structure: missing or non-array matches', 'error')
+      return
+    }
     if (!templateForResults.value) {
       showToast('No template selected', 'error')
       return

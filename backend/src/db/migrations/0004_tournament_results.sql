@@ -6,4 +6,4 @@ CREATE TABLE "tournament_results" (
   "updated_at" timestamp NOT NULL DEFAULT now()
 );
 
-CREATE INDEX "tournamentResults_templateId_idx" ON "tournament_results"("template_id");
+CREATE UNIQUE INDEX "tournamentResults_templateId_idx" ON "tournament_results"("template_id");

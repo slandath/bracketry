@@ -9,7 +9,7 @@ import healthRoutes from './routes/health.js'
 import { resultsRoutes } from './routes/results.js'
 import templateRoutes from './routes/templates.js'
 import { auth } from './utils/auth.js'
-import { ForbiddenError, UnauthorizedError } from './utils/errors.js'
+import { ForbiddenError, NotFoundError, UnauthorizedError } from './utils/errors.js'
 import 'dotenv/config'
 
 function getAllowedOrigins(): string | string[] {
@@ -87,6 +87,9 @@ export async function buildApp(): Promise<FastifyInstance> {
     }
     if (error instanceof ForbiddenError) {
       return reply.forbidden(error.message)
+    }
+    if (error instanceof NotFoundError) {
+      return reply.notFound(error.message)
     }
     request.log.error(error)
     return reply.internalServerError('Something went wrong')
