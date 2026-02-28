@@ -133,15 +133,15 @@ export interface SessionUser {
   emailVerified: boolean
   image?: string | null
   role: UserRole
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
 
 export interface SessionInfo {
   id: string
-  createdAt: Date
-  updatedAt: Date
-  expiresAt: Date
+  createdAt: string
+  updatedAt: string
+  expiresAt: string
   token: string
   ipAddress?: string | null
   userAgent?: string | null

@@ -66,8 +66,11 @@ export default async function templateRoutes(app: FastifyInstance) {
       if (!template) {
         return reply.status(404).send({ error: 'Template not found' })
       }
-      await db.update(tournament_templates).set({ is_active: false }).where(eq(tournament_templates.year, template.year))
-      await db.update(tournament_templates).set({ is_active: true }).where(eq(tournament_templates.id, id))
+      const year = template.year
+      await db.transaction(async (tx) => {
+        await tx.update(tournament_templates).set({ is_active: false }).where(eq(tournament_templates.year, year))
+        await tx.update(tournament_templates).set({ is_active: true }).where(eq(tournament_templates.id, id))
+      })
       return reply.status(200).send({ message: 'Template activated' })
     }
     catch (error) {
