@@ -40,6 +40,8 @@ export {
  */
 export { loadFromStorage, saveToStorage, STORAGE_KEY } from './useBracketStorage'
 
+export { useEvaluateBracket } from './useEvaluateBracket'
+
 /**
  * Manages the state of the bracket selection interface.
  * Handles navigation between rounds/matches, team selection, and keyboard shortcuts.
@@ -53,7 +55,6 @@ export { SELECTION_STATE_KEY, useSelectionState } from './useSelectionState'
  * - useActiveTemplate: Fetches the currently active tournament template
  */
 export { useActiveTemplate, useTemplates } from './useTemplates'
-
 /**
  * Typed session wrapper for better-auth.
  * Provides type-safe access to session data including user role.

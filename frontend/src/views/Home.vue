@@ -4,7 +4,7 @@ import Dialog from 'primevue/dialog'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import SelectionTool from '../components/SelectionTool.vue'
-import { loadFromStorage, SELECTION_STATE_KEY, useActiveTemplateOnLogin, useBracketActions, useCreateBracket, useCurrentBracketOnLogin, useTypedSession } from '../composables'
+import { loadFromStorage, SELECTION_STATE_KEY, useActiveTemplateOnLogin, useBracketActions, useCreateBracket, useCurrentBracketOnLogin, useEvaluateBracket, useTypedSession } from '../composables'
 import { showToast } from '../composables/useToast'
 import { createBracket } from '../lib/lib'
 
@@ -159,6 +159,8 @@ async function handleSave(roundIndex: number) {
     saveLoading.value = false
   }
 }
+
+useEvaluateBracket(bracketInstanceRef, currentBracketData)
 </script>
 
 <template>
