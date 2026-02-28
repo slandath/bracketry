@@ -11,26 +11,29 @@ export function useEvaluateBracket(
   const templateId = computed(() =>
     currentBracketData.value?.bracket?.template_id)
   const loading = ref(false)
-  
+
   // Watch for bracket data and instance to be ready
   watch([currentBracketData, bracketInstanceRef], async ([bracketData, instance]) => {
     // Only evaluate if we have both bracket data and the bracket instance
     if (!bracketData?.bracket || !instance) {
       return
     }
-    
+
     const id = templateId.value
-    if (!id) return
-    
+    if (!id)
+      return
+
     loading.value = true
     try {
       const resultsResponse = await getTemplateResults(id)
       const actualResults = resultsResponse.results as Match[]
       const userBracket = bracketData.bracket.data as Data
-      if (!userBracket?.matches) return
-      
+      if (!userBracket?.matches)
+        return
+
       const mergedData = evaluateUserPicks(userBracket, actualResults)
-      if (!mergedData?.matches) return
+      if (!mergedData?.matches)
+        return
 
       const matchUpdates = mergedData.matches
       if (matchUpdates.length > 0) {
