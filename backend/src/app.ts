@@ -6,6 +6,7 @@ import fastifySensible from '@fastify/sensible'
 import Fastify from 'fastify'
 import bracketRoutes from './routes/brackets.js'
 import healthRoutes from './routes/health.js'
+import { resultsRoutes } from './routes/results.js'
 import templateRoutes from './routes/templates.js'
 import { auth } from './utils/auth.js'
 import { ForbiddenError, UnauthorizedError } from './utils/errors.js'
@@ -78,6 +79,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(healthRoutes, { prefix: '/health' })
   await app.register(bracketRoutes, { prefix: '/api/brackets' })
   await app.register(templateRoutes, { prefix: '/api/templates' })
+  await app.register(resultsRoutes, { prefix: '/api/templates' })
 
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof UnauthorizedError) {

@@ -24,10 +24,15 @@ const emit = defineEmits<{
   activate: [id: string]
   requestDelete: [template: Template]
   create: []
+  editResults: [template: Template]
 }>()
 
 function activate(id: string) {
   emit('activate', id)
+}
+
+function editResults(template: Template) {
+  emit('editResults', template)
 }
 
 function download(template: Template) {
@@ -81,6 +86,11 @@ function confirmDelete(template: Template) {
                 icon="pi pi-check"
                 severity="success"
                 @click="activate(slotProps.data.id)"
+              />
+              <Button
+                v-tooltip.top="'Edit results'"
+                icon="pi pi-pencil"
+                @click="editResults(slotProps.data)"
               />
               <Button
                 v-tooltip.top="'Download template'"

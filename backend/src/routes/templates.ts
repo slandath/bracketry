@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify'
 import { randomUUID } from 'node:crypto'
 import { eq } from 'drizzle-orm'
-import { tournament_templates } from '../db/schema.js'
+import { tournament_results, tournament_templates } from '../db/schema.js'
 import { db } from '../index.js'
 import { safeValidateBracketData } from '../types/bracket.schema.js'
 import { safeValidateTemplateData } from '../types/template.schema.js'
@@ -102,13 +102,37 @@ export default async function templateRoutes(app: FastifyInstance) {
       }
       const validatedData = validationResult.data
       const UUID = randomUUID()
-      const [template] = await db.insert(tournament_templates).values({
-        id: UUID,
-        year: body.year,
-        name: body.name,
-        data: validatedData,
-        is_active: body.is_active ?? false,
-      }).returning()
+
+      // Create skeleton matches from template data (remove scores/winners)
+      const skeletonMatches = validatedData.data.matches?.map((match: { id: string, roundIndex: number, order: number, sides: Array<{ teamId?: string }> }) => ({
+        id: match.id,
+        roundIndex: match.roundIndex,
+        order: match.order,
+        sides: match.sides?.map(side => ({ teamId: side.teamId })) || [],
+        matchStatus: 'Scheduled',
+        isLive: false,
+        prediction: null,
+        result: null,
+      })) || []
+
+      // Use transaction to create both template and results atomically
+      const [template] = await db.transaction(async (tx) => {
+        const [newTemplate] = await tx.insert(tournament_templates).values({
+          id: UUID,
+          year: body.year,
+          name: body.name,
+          data: validatedData.data,
+          is_active: body.is_active ?? false,
+        }).returning()
+
+        await tx.insert(tournament_results).values({
+          template_id: UUID,
+          matches: skeletonMatches,
+        })
+
+        return [newTemplate]
+      })
+
       return reply.status(201).send(template)
     }
     catch (error) {

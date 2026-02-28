@@ -119,8 +119,23 @@ export async function createTemplate(params: { year: number, name: string, data:
 }
 
 /**
- * DELETE /api/templates/:id - Delete a tournament template
+ * PUT /api/templates/:id/results - Update tournament results
+ * Requires admin role
  */
+export async function updateTemplateResults(id: string, matches: unknown[]): Promise<{ message: string, results: unknown[] }> {
+  return fetchFromAPI(`/api/templates/${encodeURIComponent(id)}/results`, {
+    method: 'PUT',
+    body: JSON.stringify({ matches }),
+  })
+}
+
+/**
+ * GET /api/templates/:id/results - Get tournament results
+ */
+export async function getTemplateResults(id: string): Promise<{ results: unknown[] }> {
+  return fetchFromAPI(`/api/templates/${encodeURIComponent(id)}/results`)
+}
+
 export async function deleteTemplate(id: string): Promise<void> {
   return fetchFromAPI(`/api/templates/${encodeURIComponent(id)}`, {
     method: 'DELETE',
