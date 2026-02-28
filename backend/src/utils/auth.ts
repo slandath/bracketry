@@ -50,6 +50,14 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 24 * 7,
     },
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: 'string',
+        input: false,
+      },
+    },
+  },
   plugins: [
     admin({
       adminUserIds: process.env.ADMIN_USER_IDS?.split(',') ?? [],
