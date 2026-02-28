@@ -10,10 +10,15 @@ export const TemplateSchema = z.object({
   is_active: z.boolean(),
 })
 
+const BracketDataInputSchema = z.union([
+  BracketDataSchema,
+  z.object({ data: BracketDataSchema }).transform(d => d.data),
+])
+
 export const CreateTemplateSchema = z.object({
   year: z.number(),
   name: z.string(),
-  data: BracketDataSchema,
+  data: BracketDataInputSchema,
   is_active: z.boolean().default(false),
 })
 
