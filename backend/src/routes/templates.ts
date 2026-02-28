@@ -6,8 +6,13 @@ import { db } from '../index.js'
 import { safeValidateBracketData } from '../types/bracket.schema.js'
 import { safeValidateTemplateData } from '../types/template.schema.js'
 import { getAdminOrThrow, getSessionOrThrow } from '../utils/auth.js'
+import { ForbiddenError, UnauthorizedError } from '../utils/errors.js'
 
 export default async function templateRoutes(app: FastifyInstance) {
+  /**
+   * GET / - List all tournament templates
+   * Requires authentication (session)
+   */
   app.get('/', async (request, reply) => {
     try {
       await getSessionOrThrow(request)
@@ -17,13 +22,17 @@ export default async function templateRoutes(app: FastifyInstance) {
       })
     }
     catch (error) {
-      if (error instanceof Error && error.message === 'Unauthorized') {
-        return reply.status(401).send({ error: 'Unauthorized' })
+      if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
+        throw error
       }
-      console.error('Error fetching templates:', error)
-      return reply.status(500).send({ error: 'Internal server error' })
+      request.log.error(error)
+      return reply.internalServerError('Something went wrong')
     }
   })
+  /**
+   * GET /active - Get the currently active tournament template
+   * Requires authentication (session)
+   */
   app.get('/active', async (request, reply) => {
     try {
       await getSessionOrThrow(request)
@@ -36,13 +45,47 @@ export default async function templateRoutes(app: FastifyInstance) {
       })
     }
     catch (error) {
-      if (error instanceof Error && error.message === 'Unauthorized') {
-        return reply.status(401).send({ error: 'Unauthorized' })
+      if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
+        throw error
       }
-      console.error('Error fetching template:', error)
-      return reply.status(500).send({ error: 'Internal server error' })
+      request.log.error(error)
+      return reply.internalServerError('Something went wrong')
     }
   })
+
+  /**
+   * PATCH /:id/activate - Set a template as active (for a given year)
+   * Deactivates all other templates for the same year
+   * Requires admin role
+   */
+  app.patch('/:id/activate', async (request, reply) => {
+    try {
+      await getAdminOrThrow(request)
+      const { id } = request.params as { id: string }
+      const [template] = await db.select().from(tournament_templates).where(eq(tournament_templates.id, id))
+      if (!template) {
+        return reply.status(404).send({ error: 'Template not found' })
+      }
+      const year = template.year
+      await db.transaction(async (tx) => {
+        await tx.update(tournament_templates).set({ is_active: false }).where(eq(tournament_templates.year, year))
+        await tx.update(tournament_templates).set({ is_active: true }).where(eq(tournament_templates.id, id))
+      })
+      return reply.status(200).send({ message: 'Template activated' })
+    }
+    catch (error) {
+      if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
+        throw error
+      }
+      request.log.error(error)
+      return reply.internalServerError('Something went wrong')
+    }
+  })
+
+  /**
+   * POST / - Create a new tournament template
+   * Requires admin role
+   */
   app.post('/', async (request, reply) => {
     try {
       await getAdminOrThrow(request)
@@ -69,16 +112,17 @@ export default async function templateRoutes(app: FastifyInstance) {
       return reply.status(201).send(template)
     }
     catch (error) {
-      if (error instanceof Error && error.message === 'Unauthorized') {
-        return reply.status(401).send({ error: 'Unauthorized' })
+      if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
+        throw error
       }
-      if (error instanceof Error && error.message === 'Forbidden') {
-        return reply.status(403).send({ error: 'Forbidden' })
-      }
-      console.error('Error writing to database:', error)
-      return reply.status(500).send({ error: 'Internal server error' })
+      request.log.error(error)
+      return reply.internalServerError('Something went wrong')
     }
   })
+  /**
+   * PUT /:id - Update an existing tournament template
+   * Requires admin role
+   */
   app.put('/:id', async (request, reply) => {
     try {
       await getAdminOrThrow(request)
@@ -111,17 +155,18 @@ export default async function templateRoutes(app: FastifyInstance) {
       return reply.status(204).send()
     }
     catch (error) {
-      if (error instanceof Error && error.message === 'Unauthorized') {
-        return reply.status(401).send({ error: 'Unauthorized' })
+      if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
+        throw error
       }
-      if (error instanceof Error && error.message === 'Forbidden') {
-        return reply.status(403).send({ error: 'Forbidden' })
-      }
-      console.error('Error writing to database:', error)
-      return reply.status(500).send({ error: 'Internal server error' })
+      request.log.error(error)
+      return reply.internalServerError('Something went wrong')
     }
   })
 
+  /**
+   * DELETE /:id - Delete a tournament template
+   * Requires admin role
+   */
   app.delete('/:id', async (request, reply) => {
     try {
       await getAdminOrThrow(request)
@@ -133,14 +178,11 @@ export default async function templateRoutes(app: FastifyInstance) {
       return reply.status(204).send()
     }
     catch (error) {
-      if (error instanceof Error && error.message === 'Unauthorized') {
-        return reply.status(401).send({ error: 'Unauthorized' })
+      if (error instanceof UnauthorizedError || error instanceof ForbiddenError) {
+        throw error
       }
-      if (error instanceof Error && error.message === 'Forbidden') {
-        return reply.status(403).send({ error: 'Forbidden' })
-      }
-      console.error('Error writing to database:', error)
-      return reply.status(500).send({ error: 'Internal server error' })
+      request.log.error(error)
+      return reply.internalServerError('Something went wrong')
     }
   })
 }

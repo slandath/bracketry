@@ -2,22 +2,21 @@ import type { FastifyInstance } from 'fastify'
 import process from 'node:process'
 import cors from '@fastify/cors'
 import rateLimit from '@fastify/rate-limit'
+import fastifySensible from '@fastify/sensible'
 import Fastify from 'fastify'
 import bracketRoutes from './routes/brackets.js'
 import healthRoutes from './routes/health.js'
 import templateRoutes from './routes/templates.js'
 import { auth } from './utils/auth.js'
+import { ForbiddenError, UnauthorizedError } from './utils/errors.js'
 import 'dotenv/config'
 
 function getAllowedOrigins(): string | string[] {
   const corsOrigin = process.env.CORS_ORIGIN
-
   if (!corsOrigin) {
     return 'http://localhost:5173'
   }
-
   const origins = corsOrigin.split(',').map(origin => origin.trim())
-
   return origins.length === 1 ? origins[0] : origins
 }
 
@@ -26,6 +25,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     logger: true,
     trustProxy: true,
   })
+  await app.register(fastifySensible)
   await app.register(cors, {
     origin: getAllowedOrigins(),
     credentials: true,
@@ -79,8 +79,20 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(bracketRoutes, { prefix: '/api/brackets' })
   await app.register(templateRoutes, { prefix: '/api/templates' })
 
+  app.setErrorHandler((error, request, reply) => {
+    if (error instanceof UnauthorizedError) {
+      return reply.unauthorized(error.message)
+    }
+    if (error instanceof ForbiddenError) {
+      return reply.forbidden(error.message)
+    }
+    request.log.error(error)
+    return reply.internalServerError('Something went wrong')
+  })
+
   app.get('/', async () => {
     return { hello: 'world' }
   })
+
   return app
 }

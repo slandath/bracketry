@@ -5,6 +5,7 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { admin } from 'better-auth/plugins'
 import * as schema from '../db/schema.js'
 import { db } from '../index.js'
+import { ForbiddenError, UnauthorizedError } from './errors.js'
 
 const required = ['BETTER_AUTH_SECRET', 'BETTER_AUTH_URL', 'FRONTEND_URL', 'GITHUB_CLIENT_ID', 'GITHUB_CLIENT_SECRET', 'AUTH_POST_LOGIN_URL', 'AUTH_ERROR_URL']
 for (const key of required) {
@@ -50,6 +51,17 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 24 * 7,
     },
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: 'enum',
+        options: ['user', 'admin'],
+        required: false,
+        defaultValue: 'user',
+        input: false,
+      },
+    },
+  },
   plugins: [
     admin({
       adminUserIds: process.env.ADMIN_USER_IDS?.split(',') ?? [],
@@ -60,16 +72,16 @@ export const auth = betterAuth({
 export async function getAdminOrThrow(request: FastifyRequest): Promise<NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>> {
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session)
-    throw new Error('Unauthorized')
+    throw new UnauthorizedError('Unauthorized')
   if (session.user.role !== 'admin')
-    throw new Error('Forbidden')
+    throw new ForbiddenError('Forbidden')
   return session
 }
 
 export async function getSessionOrThrow(request: FastifyRequest): Promise<NonNullable<Awaited<ReturnType<typeof auth.api.getSession>>>> {
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session) {
-    throw new Error('Unauthorized')
+    throw new UnauthorizedError('Unauthorized')
   }
   return session
 }

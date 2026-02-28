@@ -123,6 +123,44 @@ export interface Template {
   updated_at?: string
 }
 
+// Better-Auth session types
+export type UserRole = 'admin' | 'user'
+
+export interface SessionUser {
+  id: string
+  name: string
+  email: string
+  emailVerified: boolean
+  image?: string | null
+  role: UserRole
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SessionInfo {
+  id: string
+  createdAt: string
+  updatedAt: string
+  expiresAt: string
+  token: string
+  ipAddress?: string | null
+  userAgent?: string | null
+}
+
+export interface SessionData {
+  user: SessionUser
+  session: SessionInfo
+}
+
+// Typed session composable return type
+export interface TypedSession {
+  data: import('vue').ComputedRef<SessionData | null>
+  isPending: import('vue').ComputedRef<boolean>
+  isLoggedIn: import('vue').ComputedRef<boolean>
+  role: import('vue').ComputedRef<UserRole | null>
+  user: import('vue').ComputedRef<SessionData['user'] | null>
+}
+
 // API response wrappers
 export interface BracketsResponse {
   brackets: Bracket[]

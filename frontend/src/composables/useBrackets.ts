@@ -4,6 +4,10 @@ import { computed } from 'vue'
 import { createBracket, getBrackets, getCurrentBracket, updateBracket } from '../api'
 import { authClient } from '../auth-client'
 
+/**
+ * Fetches all brackets for the current user.
+ * @returns Query result containing the list of user brackets
+ */
 export function useBrackets() {
   return useQuery({
     queryKey: ['brackets'],
@@ -11,6 +15,11 @@ export function useBrackets() {
   })
 }
 
+/**
+ * Fetches the current user's active bracket.
+ * Cached for 5 minutes to reduce API calls.
+ * @returns Query result containing the current bracket data
+ */
 export function useCurrentBracket() {
   return useQuery({
     queryKey: ['bracket', 'current'],
@@ -19,6 +28,11 @@ export function useCurrentBracket() {
   })
 }
 
+/**
+ * Fetches the current bracket only when the user is logged in.
+ * Cached for 5 minutes to reduce API calls.
+ * @returns Query result containing the current bracket data
+ */
 export function useCurrentBracketOnLogin() {
   const session = authClient.useSession()
   const enabled = computed(() => !!session.value.data)
@@ -31,6 +45,11 @@ export function useCurrentBracketOnLogin() {
   })
 }
 
+/**
+ * Mutation to create a new bracket.
+ * Invalidates the brackets and bracket queries on success.
+ * @returns Mutation result with create function
+ */
 export function useCreateBracket() {
   const queryClient = useQueryClient()
   return useMutation({
@@ -45,6 +64,11 @@ export function useCreateBracket() {
   })
 }
 
+/**
+ * Mutation to update an existing bracket.
+ * Invalidates the brackets and bracket queries on success.
+ * @returns Mutation result with update function
+ */
 export function useUpdateBracket() {
   const queryClient = useQueryClient()
   return useMutation({

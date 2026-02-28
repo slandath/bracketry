@@ -1,6 +1,9 @@
 import type { Data, Match } from '../lib/data/types'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
+/**
+ * LocalStorage key used for persisting selection state (current round and match index).
+ */
 export const SELECTION_STATE_KEY = 'bracketry:selection:state'
 
 const defaultRoundNames: Record<number, string> = {
@@ -12,6 +15,15 @@ const defaultRoundNames: Record<number, string> = {
   5: 'Championship',
 }
 
+/**
+ * Manages the state of the bracket selection interface.
+ * Handles navigation between rounds/matches, team selection, and keyboard shortcuts.
+ * Persists the current position (round and match index) to localStorage.
+ *
+ * @param data - Function that returns the tournament Data
+ * @param roundNames - Optional function that returns custom round names
+ * @returns Selection state and navigation methods
+ */
 export function useSelectionState(data: () => Data, roundNames?: () => Record<number, string>) {
   const pendingPicks = ref<Record<string, string>>({})
   const isSaving = ref(false)
