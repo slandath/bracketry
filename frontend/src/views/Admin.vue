@@ -1,17 +1,48 @@
 <script setup lang="ts">
+import type { FormSubmitEvent } from '@primevue/forms'
 import type { Template } from '../lib/data/types'
+import { Form } from '@primevue/forms'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
+import InputNumber from 'primevue/inputnumber'
+import InputText from 'primevue/inputtext'
+import Message from 'primevue/message'
+import Textarea from 'primevue/textarea'
 import { onMounted, ref } from 'vue'
-import { activateTemplate, deleteTemplate, getTemplates } from '../api'
+import { z } from 'zod'
+import { activateTemplate, createTemplate, deleteTemplate, getTemplates, updateTemplateResults } from '../api'
 import Templates from '../components/Templates.vue'
 import { showToast } from '../composables/useToast'
 import '../styles/components/Admin.scss'
+
+const templateSchema = z.object({
+  year: z.number().min(2000).max(2100),
+  name: z.string().min(1, 'Name is required'),
+  jsonData: z.string().min(1, 'JSON data is required'),
+})
+
+const resultsSchema = z.object({
+  matchesJson: z.string().min(1, 'Match results JSON is required'),
+})
 
 const templates = ref<Template[]>([])
 const loading = ref(true)
 const deleteDialogVisible = ref(false)
 const templateToDelete = ref<Template | null>(null)
+const createDialogVisible = ref(false)
+const editResultsDialogVisible = ref(false)
+const templateForResults = ref<Template | null>(null)
+
+const initialValues = {
+  year: null as number | null,
+  name: '',
+  jsonData: '',
+}
+
+const resultsInitialValues = {
+  matchesJson: '',
+}
 
 async function fetchTemplates() {
   try {
@@ -69,6 +100,84 @@ function cancelDelete() {
   templateToDelete.value = null
 }
 
+function openCreateDialog() {
+  createDialogVisible.value = true
+}
+
+function openEditResultsDialog(template: Template) {
+  templateForResults.value = template
+  editResultsDialogVisible.value = true
+}
+
+async function onFormSubmit(event: FormSubmitEvent) {
+  if (!event.valid)
+    return
+
+  const { year, name, jsonData } = event.values as { year: number, name: string, jsonData: string }
+
+  try {
+    const parsedData = JSON.parse(jsonData)
+    await createTemplate({
+      year,
+      name,
+      data: parsedData,
+    })
+    showToast('Template created', 'success')
+    createDialogVisible.value = false
+    await fetchTemplates()
+  }
+  catch (error) {
+    if (error instanceof SyntaxError) {
+      showToast('Invalid JSON', 'error')
+    }
+    else {
+      showToast('Failed to create template', 'error')
+      console.error('Error creating template:', error)
+    }
+  }
+}
+
+async function onResultsSubmit(event: FormSubmitEvent) {
+  if (!event.valid)
+    return
+
+  const { matchesJson } = event.values as { matchesJson: string }
+
+  try {
+    const parsedData = JSON.parse(matchesJson)
+    if (typeof parsedData !== 'object' || parsedData === null || !Array.isArray(parsedData.matches)) {
+      showToast('Invalid JSON structure: missing or non-array matches', 'error')
+      return
+    }
+    if (!templateForResults.value) {
+      showToast('No template selected', 'error')
+      return
+    }
+    await updateTemplateResults(templateForResults.value.id, parsedData.matches)
+    showToast('Results updated successfully', 'success')
+    editResultsDialogVisible.value = false
+    templateForResults.value = null
+  }
+  catch (error) {
+    if (error instanceof SyntaxError) {
+      showToast('Invalid JSON', 'error')
+    }
+    else {
+      showToast('Failed to update results', 'error')
+      console.error('Error updating results:', error)
+    }
+  }
+}
+
+function cancelCreate() {
+  createDialogVisible.value = false
+}
+
+function cancelEditResults() {
+  editResultsDialogVisible.value = false
+  templateForResults.value = null
+}
+
 onMounted(fetchTemplates)
 </script>
 
@@ -83,6 +192,8 @@ onMounted(fetchTemplates)
       :templates="templates"
       @activate="handleActivate"
       @request-delete="handleRequestDelete"
+      @create="openCreateDialog"
+      @edit-results="openEditResultsDialog"
     />
 
     <Dialog
@@ -97,6 +208,96 @@ onMounted(fetchTemplates)
         <Button label="Cancel" severity="secondary" @click="cancelDelete" />
         <Button label="Delete" severity="danger" @click="confirmDelete" />
       </template>
+    </Dialog>
+
+    <Dialog
+      v-model:visible="createDialogVisible"
+      header="Create New Tournament"
+      :modal="true"
+      :style="{ width: '30rem' }"
+    >
+      <Form
+        v-slot="$form"
+        :initial-values
+        :resolver="zodResolver(templateSchema)"
+        class="form-stack"
+        @submit="onFormSubmit"
+      >
+        <div>
+          <InputNumber
+            input-id="withoutgrouping"
+            name="year"
+            placeholder="Year"
+            :min="2000"
+            :max="2100"
+            :use-grouping="false"
+            fluid
+          />
+          <Message v-if="$form.year?.invalid" severity="error" size="small" variant="simple">
+            {{ $form.year.error?.message }}
+          </Message>
+        </div>
+
+        <div>
+          <InputText
+            name="name"
+            placeholder="Tournament Name"
+            fluid
+          />
+          <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">
+            {{ $form.name.error?.message }}
+          </Message>
+        </div>
+
+        <div>
+          <Textarea
+            name="jsonData"
+            placeholder="Paste template JSON here"
+            rows="10"
+            fluid
+          />
+          <Message v-if="$form.jsonData?.invalid" severity="error" size="small" variant="simple">
+            {{ $form.jsonData.error?.message }}
+          </Message>
+        </div>
+
+        <div class="form-actions">
+          <Button label="Cancel" severity="secondary" type="button" @click="cancelCreate" />
+          <Button label="Create" type="submit" />
+        </div>
+      </Form>
+    </Dialog>
+
+    <Dialog
+      v-model:visible="editResultsDialogVisible"
+      header="Edit Tournament Results"
+      :modal="true"
+      :style="{ width: '40rem' }"
+    >
+      <Form
+        v-slot="$form"
+        :initial-values="resultsInitialValues"
+        :resolver="zodResolver(resultsSchema)"
+        class="form-stack"
+        @submit="onResultsSubmit"
+      >
+        <div>
+          <Textarea
+            name="matchesJson"
+            placeholder="Paste match results JSON here"
+            rows="15"
+            fluid
+          />
+          <Message v-if="$form.matchesJson?.invalid" severity="error" size="small" variant="simple">
+            {{ $form.matchesJson.error?.message }}
+          </Message>
+        </div>
+
+        <div class="form-actions">
+          <Button label="Cancel" severity="secondary" type="button" @click="cancelEditResults" />
+          <Button label="Save Results" type="submit" />
+        </div>
+      </Form>
     </Dialog>
   </div>
 </template>

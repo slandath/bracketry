@@ -45,19 +45,13 @@ export const auth = betterAuth({
   advanced: {
     cookiePrefix: 'bracketry',
     useSecureCookies: process.env.NODE_ENV === 'production',
-    cookie: {
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7,
-    },
   },
   user: {
     additionalFields: {
       role: {
-        type: 'enum',
-        options: ['user', 'admin'],
-        required: false,
+        type: 'string',
         defaultValue: 'user',
+        required: false,
         input: false,
       },
     },
@@ -73,7 +67,8 @@ export async function getAdminOrThrow(request: FastifyRequest): Promise<NonNulla
   const session = await auth.api.getSession({ headers: request.headers })
   if (!session)
     throw new UnauthorizedError('Unauthorized')
-  if (session.user.role !== 'admin')
+  const userWithRole = session.user as typeof session.user & { role: string }
+  if (userWithRole.role !== 'admin')
     throw new ForbiddenError('Forbidden')
   return session
 }

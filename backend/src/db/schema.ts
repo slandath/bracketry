@@ -1,4 +1,4 @@
-import { relations } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { boolean, index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 export const user = pgTable('user', {
@@ -105,6 +105,14 @@ export const tournament_templates = pgTable('tournament_templates', {
   updated_at: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
 })
 
+export const tournament_results = pgTable('tournament_results', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  template_id: uuid('template_id').notNull().references(() => tournament_templates.id, { onDelete: 'cascade' }),
+  matches: jsonb('matches').notNull(),
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  updated_at: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+}, table => [uniqueIndex('tournamentResults_templateId_idx').on(table.template_id)])
+
 export const brackets = pgTable('brackets', {
   id: uuid('id').primaryKey(),
   user_id: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
@@ -117,6 +125,11 @@ export const brackets = pgTable('brackets', {
 
 export const tournamentTemplateRelations = relations(tournament_templates, ({ many }) => ({
   brackets: many(brackets),
+  results: many(tournament_results),
+}))
+
+export const tournamentResultsRelations = relations(tournament_results, ({ one }) => ({
+  template: one(tournament_templates, { fields: [tournament_results.template_id], references: [tournament_templates.id] }),
 }))
 
 export const bracketRelations = relations(brackets, ({ one }) => ({

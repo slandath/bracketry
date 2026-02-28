@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import type { Template } from '../lib/data/types'
+import { ButtonGroup } from 'primevue'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import Tag from 'primevue/tag'
 import Toolbar from 'primevue/toolbar'
+import Tooltip from 'primevue/tooltip'
 import { showToast } from '../composables/useToast'
+
+defineOptions({
+  directives: {
+    Tooltip,
+  },
+})
 
 defineProps<{
   templates: Template[]
@@ -15,10 +23,16 @@ defineProps<{
 const emit = defineEmits<{
   activate: [id: string]
   requestDelete: [template: Template]
+  create: []
+  editResults: [template: Template]
 }>()
 
 function activate(id: string) {
   emit('activate', id)
+}
+
+function editResults(template: Template) {
+  emit('editResults', template)
 }
 
 function download(template: Template) {
@@ -48,7 +62,7 @@ function confirmDelete(template: Template) {
           <h2>Tournaments</h2>
         </template>
         <template #end>
-          <Button label="New Tournament" icon="pi pi-plus" />
+          <Button label="New Tournament" icon="pi pi-plus" @click="emit('create')" />
         </template>
       </Toolbar>
 
@@ -65,20 +79,31 @@ function confirmDelete(template: Template) {
         </Column>
         <Column header="Actions">
           <template #body="slotProps">
-            <Button
-              v-if="!slotProps.data.is_active"
-              icon="pi pi-check"
-              @click="activate(slotProps.data.id)"
-            />
-            <Button
-              icon="pi pi-download"
-              @click="download(slotProps.data)"
-            />
-            <Button
-              icon="pi pi-trash"
-              severity="danger"
-              @click="confirmDelete(slotProps.data)"
-            />
+            <ButtonGroup>
+              <Button
+                v-if="!slotProps.data.is_active"
+                v-tooltip.top="'Set as active'"
+                icon="pi pi-check"
+                severity="success"
+                @click="activate(slotProps.data.id)"
+              />
+              <Button
+                v-tooltip.top="'Edit results'"
+                icon="pi pi-pencil"
+                @click="editResults(slotProps.data)"
+              />
+              <Button
+                v-tooltip.top="'Download template'"
+                icon="pi pi-download"
+                @click="download(slotProps.data)"
+              />
+              <Button
+                v-tooltip.top="'Delete template'"
+                icon="pi pi-trash"
+                severity="danger"
+                @click="confirmDelete(slotProps.data)"
+              />
+            </ButtonGroup>
           </template>
         </Column>
       </DataTable>
