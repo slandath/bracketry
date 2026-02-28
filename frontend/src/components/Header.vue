@@ -36,7 +36,6 @@ function closeUserMenu() {
       <UserMenu
         v-if="session.data?.user"
         :is-open="menuOpen"
-        :user="session.data.user"
         :has-bracket="hasBracket"
         @close="closeUserMenu"
         @update:is-open="menuOpen = $event"

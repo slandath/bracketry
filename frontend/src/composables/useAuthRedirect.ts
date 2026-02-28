@@ -3,6 +3,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { authClient } from '../auth-client'
 import { showToast } from './useToast'
 
+/**
+ * Handles redirecting users after successful authentication.
+ * Supports both query parameter redirects and sessionStorage redirects.
+ * Checks for redirect targets and navigates the user after login.
+ */
 export function useAuthRedirect() {
   const session = authClient.useSession()
   const router = useRouter()

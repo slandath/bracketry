@@ -3,21 +3,17 @@ import { Drawer } from 'primevue'
 import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
 import { authClient } from '../auth-client'
-import { useBracketActions } from '../composables/useBracketActions'
+import { useBracketActions, useTypedSession } from '../composables'
 import { showToast } from '../composables/useToast'
 import '../styles/components/UserMenu.scss'
 
-interface User {
-  name: string
-  email: string
-}
-
 interface Props {
   isOpen: boolean
-  user?: User
   hasBracket?: boolean
 }
-const props = withDefaults(defineProps<Props>(), { user: undefined, hasBracket: false })
+
+withDefaults(defineProps<Props>(), { hasBracket: false })
+
 const emit = defineEmits<{
   'close': []
   'update:isOpen': [value: boolean]
@@ -25,6 +21,12 @@ const emit = defineEmits<{
 
 const router = useRouter()
 const { openSelectionTool, triggerEvaluate } = useBracketActions()
+const { data: resolvedSession, role } = useTypedSession()
+
+function navigateToAdmin() {
+  router.push('/admin')
+  emit('close')
+}
 
 async function handleSignOut() {
   try {
@@ -41,11 +43,12 @@ async function handleSignOut() {
 <template>
   <Drawer
     :visible="isOpen"
-    :header="props.user?.name"
+    :header="resolvedSession?.user?.name"
     position="right"
     @update:visible="$emit('update:isOpen', $event)"
   >
     <div class="button-container">
+      <Button v-if="role === 'admin'" label="Admin" icon="pi pi-cog" size="large" @click="navigateToAdmin" />
       <Button :label="hasBracket ? 'Complete' : 'Make Picks'" :disabled="hasBracket" :icon="hasBracket ? 'pi pi-check' : 'pi pi-pencil'" size="large" @click="openSelectionTool(); emit('close')" />
       <Button label="Evaluate Bracket" size="large" @click="triggerEvaluate(); emit('close')" />
     </div>
