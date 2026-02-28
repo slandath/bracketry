@@ -15,6 +15,7 @@ defineProps<{
 const emit = defineEmits<{
   activate: [id: string]
   requestDelete: [template: Template]
+  create: []
 }>()
 
 function activate(id: string) {
@@ -48,7 +49,7 @@ function confirmDelete(template: Template) {
           <h2>Tournaments</h2>
         </template>
         <template #end>
-          <Button label="New Tournament" icon="pi pi-plus" />
+          <Button label="New Tournament" icon="pi pi-plus" @click="emit('create')" />
         </template>
       </Toolbar>
 
