@@ -3,9 +3,8 @@ import type { BracketInstance, Data, Match } from '../lib/data/types'
 import Dialog from 'primevue/dialog'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { authClient } from '../auth-client'
 import SelectionTool from '../components/SelectionTool.vue'
-import { loadFromStorage, SELECTION_STATE_KEY, useActiveTemplateOnLogin, useBracketActions, useCreateBracket, useCurrentBracketOnLogin } from '../composables'
+import { loadFromStorage, SELECTION_STATE_KEY, useActiveTemplateOnLogin, useBracketActions, useCreateBracket, useCurrentBracketOnLogin, useTypedSession } from '../composables'
 import { showToast } from '../composables/useToast'
 import { createBracket } from '../lib/lib'
 
@@ -14,8 +13,7 @@ const bracketContainerRef = ref<HTMLElement | null>(null)
 const bracketInstanceRef = ref<BracketInstance>()
 const saveLoading = ref(false)
 const router = useRouter()
-const session = authClient.useSession()
-const isLoggedIn = computed(() => !!session.value.data)
+const { isLoggedIn, isPending } = useTypedSession()
 const { isSelectionOpen, closeSelectionTool } = useBracketActions()
 const createBracketMutation = useCreateBracket()
 const pendingPicks = ref<Record<string, string>>({})
@@ -65,10 +63,10 @@ const resolvedTournamentData = computed<Data | null>(() => {
   return normalizeTemplateData(templateData.value?.template?.data)
 })
 
-watch([isLoggedIn, () => session.value.isPending], ([loggedIn, isPending]) => {
+watch([isLoggedIn, isPending], ([loggedIn, pending]) => {
   // Guard route access: redirect only after auth session initialization
   // finishes, then clear any in-memory bracket for logged-out users.
-  if (!loggedIn && !isPending) {
+  if (!loggedIn && !pending) {
     tournamentData.value = null
     router.push('/login')
   }
