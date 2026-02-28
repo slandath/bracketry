@@ -7,12 +7,12 @@ import { getAdminOrThrow, getSessionOrThrow } from '../utils/auth.js'
 import { NotFoundError } from '../utils/errors.js'
 
 /**
- * GET /api/templates/:id/results - Get tournament results
- * PUT /api/templates/:id/results - Update tournament results
+ * GET /:id/results - Get tournament results
+ * PUT /:id/results - Update tournament results
  */
 export async function resultsRoutes(server: FastifyInstance): Promise<void> {
   /**
-   * GET /api/templates/:id/results
+   * GET /:id/results
    * Returns the results (matches with scores) for a tournament template
    */
   server.get('/:id/results', async (request, reply) => {
@@ -33,7 +33,7 @@ export async function resultsRoutes(server: FastifyInstance): Promise<void> {
   })
 
   /**
-   * PUT /api/templates/:id/results
+   * PUT /:id/results
    * Updates the tournament results
    * Requires admin role
    */
@@ -97,6 +97,15 @@ export async function resultsRoutes(server: FastifyInstance): Promise<void> {
   })
 }
 
+/**
+ * Merges match updates into existing match data.
+ * Updates are applied by match ID, preserving other match properties.
+ * Allows partial updates - only specified fields (sides, matchStatus, result) are overwritten.
+ *
+ * @param existingMatches - The current matches array from the database
+ * @param updates - The matches array with updates from the request
+ * @returns A new matches array with updates merged into existing data
+ */
 function mergeMatchUpdates(
   existingMatches: Match[],
   updates: Match[],

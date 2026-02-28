@@ -126,6 +126,7 @@ Access the application:
 [![fastify](https://img.shields.io/badge/Fastify-000000?style=for-the-badge&logo=fastify&logoColor=white)](https://github.com/fastify/fastify)
 [![postgresql](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=ffffff)](https://github.com/prettier/prettier)
+[![primevue](https://img.shields.io/badge/PrimeVue-10B981?style=for-the-badge&logo=primevue&logoColor=white)](https://github.com/primefaces/primevue)
 [![sass](https://img.shields.io/badge/Sass-CC6699?style=for-the-badge&logo=Sass&logoColor=white)](https://github.com/sass/dart-sass)
 [![tanstack-query](https://img.shields.io/badge/Tanstack_Query-FF4154?style=for-the-badge&logo=tanstack&logoColor=white)](https://github.com/TanStack/query)
 [![typescript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=FFF)](https://github.com/microsoft/TypeScript)
