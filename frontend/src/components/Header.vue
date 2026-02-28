@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Button } from 'primevue'
 import { computed, ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useCurrentBracketOnLogin, useTypedSession } from '../composables'
 import UserMenu from './UserMenu.vue'
 import '../styles/components/Header.scss'
@@ -27,7 +28,9 @@ function closeUserMenu() {
   <header>
     <div class="header">
       <div v-if="show_user_icon">
-        <h1>{{ currentYear }} March Madness Bracket</h1>
+        <RouterLink to="/" class="header-link">
+          <h1>{{ currentYear }} March Madness Bracket</h1>
+        </RouterLink>
       </div>
       <div v-if="show_user_icon" class="btn-container">
         <Button :label="sessionData?.user?.name ?? 'User'" icon="pi pi-user" title="User menu" size="large" @click="toggleUserMenu" />

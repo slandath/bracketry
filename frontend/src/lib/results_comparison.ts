@@ -1,24 +1,22 @@
 import type { BracketScore, Data, Match } from './data/types'
 
-const STORAGE_KEY = 'bracketry:tournament:v1'
-
-async function evaluateUserPicks() {
-  try {
-    const item = localStorage.getItem(STORAGE_KEY)
-    if (!item)
-      return
-    const userBracket: Data = JSON.parse(item)
-    const response = await fetch('/results.json')
-    const gameScores: Data = await response.json()
-    const mergedData = (userBracket.matches || []).map((prediction: Match) => ({
+function evaluateUserPicks(
+  userBracket: Data,
+  actualResults: Match[],
+): Data | null {
+  const mergedMatches = (userBracket.matches || []).map((prediction: Match) => {
+    const resultMatch = actualResults.find(m => m.id === prediction.id)
+    if (!resultMatch || !resultMatch.result)
+      return null
+    return {
       ...prediction,
-      ...(gameScores.matches || []).find(m => m.id === prediction.id),
-    }))
-    return { ...userBracket, matches: mergedData }
-  }
-  catch (error) {
-    console.error('Failed to load bracket data', error)
-  }
+      result: resultMatch.result,
+      sides: resultMatch.sides || prediction.sides,
+      matchStatus: resultMatch.matchStatus || prediction.matchStatus,
+    }
+  }).filter(Boolean) as Match[]
+
+  return { ...userBracket, matches: mergedMatches }
 }
 
 function scoreUserPics(matchArray: Match[]) {

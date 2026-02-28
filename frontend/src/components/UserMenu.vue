@@ -20,7 +20,7 @@ const emit = defineEmits<{
 }>()
 
 const router = useRouter()
-const { openSelectionTool, triggerEvaluate } = useBracketActions()
+const { openSelectionTool } = useBracketActions()
 const { data: resolvedSession, role } = useTypedSession()
 
 function navigateToAdmin() {
@@ -50,7 +50,6 @@ async function handleSignOut() {
     <div class="button-container">
       <Button v-if="role === 'admin'" label="Admin" icon="pi pi-cog" size="large" @click="navigateToAdmin" />
       <Button :label="hasBracket ? 'Complete' : 'Make Picks'" :disabled="hasBracket" :icon="hasBracket ? 'pi pi-check' : 'pi pi-pencil'" size="large" @click="openSelectionTool(); emit('close')" />
-      <Button label="Evaluate Bracket" size="large" @click="triggerEvaluate(); emit('close')" />
     </div>
     <template #footer>
       <div class="btn-container">
