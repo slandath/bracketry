@@ -22,20 +22,31 @@ export async function fetchFromAPI(endpoint: string, options?: RequestInit) {
   return response.json()
 }
 
-// Health check example
+/**
+ * GET /health - Check API health status
+ */
 export async function checkHealth() {
   return fetchFromAPI('/health')
 }
 
-// Brackets
+/**
+ * GET /api/brackets - List all brackets for the current user
+ */
 export async function getBrackets(): Promise<BracketsResponse> {
   return await fetchFromAPI('/api/brackets')
 }
 
+/**
+ * GET /api/brackets/:id - Get a specific bracket by ID
+ */
 export async function getBracket(id: string): Promise<BracketResponse> {
   return fetchFromAPI(`/api/brackets/${encodeURIComponent(id)}`)
 }
 
+/**
+ * GET /api/brackets/current - Get the current user's active bracket
+ * Returns null if no bracket exists
+ */
 export async function getCurrentBracket(): Promise<BracketResponse | null> {
   try {
     return await fetchFromAPI('/api/brackets/current')
@@ -48,6 +59,9 @@ export async function getCurrentBracket(): Promise<BracketResponse | null> {
   }
 }
 
+/**
+ * POST /api/brackets - Create a new bracket
+ */
 export async function createBracket(params: { template_id: string, data: Data, is_public?: boolean }): Promise<Bracket> {
   return fetchFromAPI('/api/brackets', {
     method: 'POST',
@@ -55,6 +69,9 @@ export async function createBracket(params: { template_id: string, data: Data, i
   })
 }
 
+/**
+ * PUT /api/brackets/:id - Update an existing bracket
+ */
 export async function updateBracket(id: string, data: { data?: Data, is_public?: boolean }): Promise<Bracket> {
   return fetchFromAPI(`/api/brackets/${encodeURIComponent(id)}`, {
     method: 'PUT',
@@ -62,11 +79,35 @@ export async function updateBracket(id: string, data: { data?: Data, is_public?:
   })
 }
 
-// Templates
+/**
+ * GET /api/templates - List all tournament templates
+ */
 export async function getTemplates(): Promise<TemplatesResponse> {
   return fetchFromAPI('/api/templates')
 }
 
+/**
+ * GET /api/templates/active - Get the currently active tournament template
+ */
 export async function getActiveTemplate(): Promise<{ template: Template }> {
   return fetchFromAPI('/api/templates/active')
+}
+
+/**
+ * PATCH /api/templates/:id/activate - Set a template as active
+ * Deactivates all other templates for the same year
+ */
+export async function activateTemplate(id: string): Promise<{ message: string }> {
+  return fetchFromAPI(`/api/templates/${encodeURIComponent(id)}/activate`, {
+    method: 'PATCH',
+  })
+}
+
+/**
+ * DELETE /api/templates/:id - Delete a tournament template
+ */
+export async function deleteTemplate(id: string): Promise<void> {
+  return fetchFromAPI(`/api/templates/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  })
 }
