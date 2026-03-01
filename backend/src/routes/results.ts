@@ -49,7 +49,7 @@ export async function resultsRoutes(server: FastifyInstance): Promise<void> {
 
     const validation = UpdateResultsSchema.safeParse(request.body)
     if (!validation.success) {
-      return reply.status(400).send({ error: 'Invalid request body', details: validation.error.errors })
+      return reply.status(400).send({ error: 'Invalid request body', details: validation.error.issues })
     }
 
     const { matches } = validation.data
