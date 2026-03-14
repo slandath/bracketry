@@ -76,7 +76,7 @@ pnpm --filter @bracketry/backend db:studio     # Open Drizzle Studio
   - Enable `strict: true` in TypeScript
   - Explicit return types for exported functions
   - Use interfaces for object shapes
-  - Prefer `unknown` over `any`
+  - Never use `any`
 
 - **Error Handling:**
   - `console.warn` for recoverable issues
@@ -115,30 +115,6 @@ pnpm --filter @bracketry/backend db:studio     # Open Drizzle Studio
   - `id`, `roundIndex`, `order`, `sides`, `matchStatus`, `prediction`, `result`, `isLive` (optional)
 - When adding fields, update both frontend types and backend schemas
 - JSON templates: use `null` (not empty strings) for nullable fields
-
-## Project Structure
-
-```
-bracketry/
-├── frontend/                    # Vue 3 + Vite
-│   ├── src/
-│   │   ├── lib/data/           # Types and validation
-│   │   ├── components/         # Vue components
-│   │   ├── composables/        # Tanstack Query composables
-│   │   ├── views/              # Page components
-│   │   └── *.vue
-├── backend/                     # Fastify API
-│   ├── src/
-│   │   ├── routes/             # API routes
-│   │   ├── plugins/            # Fastify plugins
-│   │   ├── db/                 # Drizzle schema/migrations
-│   │   ├── types/              # Zod schemas
-│   │   ├── app.ts              # Fastify app factory
-│   │   └── server.ts           # Entry point
-├── package.json                 # Root workspace
-├── pnpm-workspace.yaml
-└── AGENTS.md
-```
 
 ## Auth Integration (Better-Auth)
 
