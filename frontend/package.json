@@ -48,6 +48,7 @@
     "vue": "^3.5.22"
   },
   "overrides": {
-    "immutable": ">=5.1.5"
+    "immutable": ">=5.1.5",
+    "minimatch": ">=3.1.3"
   }
 }
