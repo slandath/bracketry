@@ -42,12 +42,23 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     },
   },
+  account: {
+    skipStateCookieCheck: false,
+  },
   advanced: {
-    cookiePrefix: 'bracketry',
+    cookiePrefix: 'bballBracket',
     useSecureCookies: process.env.NODE_ENV === 'production',
+    cookies: {
+      state: {
+        attributes: {
+          sameSite: 'none',
+          secure: true,
+        },
+      },
+    },
     defaultCookieAttributes: process.env.NODE_ENV === 'production'
       ? {
-          sameSite: 'none',
+          sameSite: 'lax',
           secure: true,
         }
       : {
