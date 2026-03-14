@@ -43,7 +43,7 @@ export const auth = betterAuth({
     },
   },
   account: {
-    skipStateCookieCheck: true,
+    skipStateCookieCheck: false,
   },
   advanced: {
     cookiePrefix: 'bballBracket',

@@ -29,6 +29,22 @@
       "when": 1771578640239,
       "tag": "0003_messy_night_thrasher",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1773511633365,
+      "tag": "0004_tournament_results",
+      "hash": "2bc0091170c34912fe807c0dd5f0cb6a1c6c500d7ac293a1c700b9e2f1889ab2",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1773511634365,
+      "tag": "0005_user_ban_fields",
+      "hash": "03afa370277c245beee437fc10ffe69aa8b41440cc5ca135bd850a7b7971d8a2",
+      "breakpoints": true
     }
   ]
 }
