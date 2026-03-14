@@ -72,7 +72,7 @@ export function useCreateBracket() {
 export function useUpdateBracket() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, data}: { id: string, data: { data: Data } }) => updateBracket(id, data),
+    mutationFn: ({ id, data }: { id: string, data: { data: Data } }) => updateBracket(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['brackets'] })
       queryClient.invalidateQueries({ queryKey: ['bracket'] })
